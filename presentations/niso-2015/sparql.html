@@ -82,7 +82,26 @@ WHERE
    <div class="item">
      <div class="row">
        <div class="col-md-8 col-md-offset-2">
-         
+         <h2>Listing all resources of a specific type</h2>
+<p class="lead">
+Using the "English Language" example. Where english is both a <strong>Subject</strong> 
+and a <strong>Language</strong>. It doesn't matter the main URI isn't in the Subject format 
+</p>
+<code>
+&lt;http://id.loc.gov/authorities/subjects/sh85043413&gt;
+</code>
+<p class="lead">
+Simple SPARQL query to find all subjects resources would still return the proper URI:
+</p>
+<code>
+<pre style="font-size: 1.3em;" >
+SELECT ?URI 
+WHERE
+{
+	?URI 		rdf:type	bfe:LocSubject .
+}
+</pre>
+</code>
        </div>
      </div>
    </div>
@@ -101,6 +120,12 @@ WHERE
 </div>
 
 
+ <script>
+ $('.carousel').carousel({
+    interval: false;
+  })
+
+ </script>
 
 
 <div class="btn-group pull-right" role="group" aria-label="...">
