@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="800"
+   height="200"
+   id="svg3007"
+   version="1.1"
+   inkscape:version="0.48.5 r10040">
+  <defs
+     id="defs3009" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="34.060548"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="962"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3012">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-852.36218)">
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Hack;-inkscape-font-specification:Hack"
+       x="37.142857"
+       y="889.50507"
+       id="text3015"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3017"
+         x="37.142857"
+         y="889.50507">&lt;http://myNameSpace.org/english&gt;</tspan><tspan
+         sodipodi:role="line"
+         x="37.142857"
+         y="914.50507"
+         id="tspan3019"> rdf:type bf:Language,</tspan><tspan
+         sodipodi:role="line"
+         x="37.142857"
+         y="939.50507"
+         id="tspan3021">   bf:Topic,</tspan><tspan
+         sodipodi:role="line"
+         x="37.142857"
+         y="964.50507"
+         id="tspan3023">   bfe:LocSubject,</tspan><tspan
+         sodipodi:role="line"
+         x="37.142857"
+         y="989.50507"
+         id="tspan3025">   &lt;http://id.loc.gov/vocabulary/iso639-1/iso639-1_Language&gt;, </tspan><tspan
+         sodipodi:role="line"
+         x="37.142857"
+         y="1014.5051"
+         id="tspan3027">   &lt;http://id.loc.gov/vocabulary/iso639-2/iso639-2_Language&gt;.</tspan></text>
+  </g>
+</svg>

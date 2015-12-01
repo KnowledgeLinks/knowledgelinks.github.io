@@ -38,40 +38,106 @@ NISO/NFAIS Virtual Conference - The Semantic Web: What's New and Cool
  
  
 <div class="row">
- <section class="col-md-11 pull-left">
-  <div class="jumbotron">
-   <h2><small>NISO/NFAIS Virtual Conference The Semantic Web: What's New and Cool</small></h2>
-   <h1 itemprop="https://schema.org/name">Implementing a BIBFRAME Catalog</h1>
-   <img src="/images/bf-logo.png" class="img-rounded">
+ <div class="col-md-8">
+  <section class="jumbotron">
+   <h2 class="text-danger">BIBFRAME Triplestore &amp; Search</h2>
+   <h1>Resource Description Framework (RDF)</h1>
+  </section>
+ </div>
+</div>
+ 
+<div id="rdf-carousel" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="rdf-carousel" data-slide-to="0" class="active"></li>
+    <li data-target="rdf-carousel" data-slide-to="1"></li>
+    <li data-target="rdf-carousel" data-slide-to="2"></li>
+    <li data-target="rdf-carousel" data-slide-to="3"></li>
+
+  </ol>
+
+  <div class="carousel-inner" role="listbox">
+   <div class="item active">
+     <div class="row">
+       <div class="col-md-8 col-md-offset-2">
+         <h2>RDF is one method of implementing Linked Data.</h2>
+<p class="lead">What we can do with it?</p>
+<ul class="lead">
+ <li>Build RDF vocabularies to describe the how the information stored</li>
+ <li>Combine multiple uses into one source object</li>
+ <li>Provide linkage to data from other sources</li>
+</ul>
+       </div>
+     </div>
+   </div> 
+   <div class="item">
+     <div class="row">
+       <div class="col-md-8 col-md-offset-2">
+        <h2>RDF Vocabularies! How important are they?</h2>
+    <p class="lead">Answer??? They are <strong>Very</strong> important&hellip;and 
+     <strong>Not</strong> as important as we make them out to be.</p>
+    <ul class="lead">
+     <li>They are primary tool to allow for a machine readable description of the data</li>
+     <li>Not as important as we make them to be??? Why not?
+       <ul class="lead">
+        <li>They are a data tool</li>
+        <li>Therefore so long as we know what the vocabulary 
+         means we can easily translate from one vocabulary to another.</li>
+       </ul>
+     </li>
+    </ul>
+       </div>
+     </div> 
+   </div>
+   <div class="item">
+     <div class="row">
+       <div class="col-md-8 col-md-offset-2">
+         <h2>Challenge of moving from MARC to RDF</h2>
+<ul class="lead">
+ <li>BIBFRAME RDF Vocabulary</li> 
+ <li>MARC Records</li>
+ <li>Reference Data stored in multiple tables with fixed usages</li>
+ <li>Converting that data to RDF</li>
+ <li>Legacy concepts during transfer</li>
+</ul>
+       </div>
+      </div> 
+   </div>
+   <div class="item">
+     <div class="row">
+       <div class="col-md-8 col-md-offset-2">
+          <h2>Combining multiple uses into one source object</h2>
+  <p class="lead">
+   In relational databases important concepts/resources have been replicated/duplicated across multiple tables
+  </p>
+  <p class="lead">
+   De-duplication of that data back to a single resource
+  </p> 
+  <p class="lead">
+   Why???
+  </p>
+  <ul class="lead">
+   <li>Relational database design ? RDF/Graph Database design</li>
+   <li>RDF/Graph Databases are RELATIONAL</li>
+  </ul>
+       </div>
+     </div>
+   </div>
   </div>
- </section>
+  <a class="left carousel-control" href="#rdf-carousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#rdf-carousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+  
 </div>
-<div class="row">
-  <section class="col-md-6">
-    
-    <p class="lead" itemtype="https://schema.org/Person">
-    <strong itemprop="https://schema.org/name">Dr. Mike Stabile</strong><br>
-    President, Knowledgelinks.io</p>
-  </section>
-  <section class="col-md-6">
-    <p class="lead" itemtype="https://schema.org/Person">
-    <img src="/images/jeremy-nelson-pycon-jp-2015.png" 
-         alt="Jeremy Nelson" 
-         style="width: 140px;height: auto"
-         class="img-thumbnail pull-left">
-    <strong itemprop="https://schema.org/name">Jeremy Nelson</strong><br>
-    Metadata and Systems Librarian, Colorado College<br>
-    CIO, Knowledgelinks.io<br>
-    <a href="mailto:jeremy.nelson@coloradocollege.edu">email</a><br>
-    Twitter: <a href="https://twitter.com/jermnelson">@jermnelson</a> 
-    </p>
-    
-  </section>
-</div>
+
 
 
 <div class="btn-group pull-right" role="group" aria-label="...">
-  <a href="" 
+  <a href="bibframe-2.0.html" 
      type="button" class="btn btn-warning btn-lg">
      <span class="glyphicon glyphicon-chevron-left"></span>
      Previous</a>
@@ -95,7 +161,7 @@ NISO/NFAIS Virtual Conference - The Semantic Web: What's New and Cool
       <li><a href="summary.html">Summary</a></li> 
      </ul>
   </div>
-    <a href="bibframe-overview.html" type="button" 
+    <a href="languages.html" type="button" 
      class="btn btn-primary btn-lg">Next
     <span class="glyphicon glyphicon-chevron-right"></span>
   </a>
