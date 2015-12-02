@@ -59,6 +59,10 @@ Once found you get all the information about the resource regardless of usage!!!
  Simple SPARQL query to find a resource and all its information regardless of URI used:
 </p>
 <code>
+&lt;http://id.loc.gov/authorities/subjects/sh85043413&gt;  --Insert into the query below
+</code>
+<p></p>
+<code>
 <pre style="font-size: 1.2em">
 SELECT ?URI ?p ?o
 WHERE
@@ -68,7 +72,9 @@ WHERE
 }
 </pre>
 </code>
-
+<code>
+Returns-- &lt;http://myNameSpace.org/english&gt; ?p ?o
+</code>
        </div>
      </div>
    </div>
@@ -94,6 +100,9 @@ WHERE
 	?URI 		rdf:type	bfe:LocSubject .
 }
 </pre>
+</code>
+<code>
+&lt;http://myNameSpace.org/english&gt;
 </code>
        </div>
      </div>
