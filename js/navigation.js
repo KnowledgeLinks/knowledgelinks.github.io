@@ -1,1 +1,1 @@
-$('#kl-nav').load("http://knowledgelinks.io/navigation.html");
+$('#kl-nav').load("/navigation.html");
