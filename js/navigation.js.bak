@@ -1,1 +1,1 @@
-$('#kl-nav').load("./navigation.html");
+$('#kl-nav').load("/navigation.html");
