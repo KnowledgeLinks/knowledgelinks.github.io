@@ -5,6 +5,8 @@ $('#kl-nav').load("/navigation.html");
 var url = $.url();
 $(document).ready(function(){
 	$(".navbar").find('a').each( function () {
+		console.log(url.attr('source'))
+		console.log($(this).attr('href'))
 		if (url.attr('source') == $(this).attr('href')) {
 			$(this).closest( "li" ).addClass("active")
 		} else {
