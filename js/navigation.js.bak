@@ -11,4 +11,5 @@ $(document).ready(function(){
 			$(this).closest( "li" ).removeClass("active")
 		}
 	});
+	alert("ran nav")
 });
