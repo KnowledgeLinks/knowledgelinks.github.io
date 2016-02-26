@@ -1,0 +1,864 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>KnowledgeLinks.io</title>
+    <!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="container">
+<!-- <img style="float:left;height:64px;padding-top:5px;padding-right:10px;" src="./images/KL-logo-blue.png">   --> 
+<div id="kl-nav"></div>
+<div class="row">
+ <section class="col-md-12 pull-left">
+  <div class="well">
+  	<div xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:kds="http://knowledgelinks.io/ns/data-structures/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     class="rdf2rdfa">
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/addOnCss"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="Css classes to add to a particular property"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Add-on css classes"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/applicationAction"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Action to be performed by application form generator"/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/FormInstanceClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="This class is used to describe how a field should behave during a specific instance of a form."/>
+            <div property="rdfs:label" content="Form Instance Class"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/FormClass"/>
+         </div>
+      </div>
+      <div property="rdfs:label" content="Application Action"/>
+      <div rel="rdfs:range">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/ApplicationActionClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="Class used to define actions performed by the application on form generation"/>
+            <div property="rdfs:label" content="Application Action Class"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/InternalClass"/>
+         </div>
+      </div>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/basePermissions"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="Base level permissions"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/UserGroup"/>
+      <div property="rdfs:label" content="Base Permissions"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/PermissionsClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+   <div class="description" about="http://knowledgelinks.io/ns/data-structures/baseUrl"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="string to prepend in a &#34;urlSub&#34; or &#34;lookupUrlSub&#34; call"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="Base URL"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/jsonProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/classUri"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="The URI of the class of the property in the form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormClass"/>
+      <div property="rdfs:label" content="Class URI"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/ControlledClass"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/defaultVal"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="specifies the default value for the property"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="default value"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2000/01/rdf-schema#literal"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/properties"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/fieldType"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="The type of field to be used in a form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Field type"/>
+      <div rel="rdfs:range">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/FieldClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="Class used for defining the different field types/classes. i.e. a text field"/>
+            <div property="rdfs:label" content="Field Class/Type"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/FormClass"/>
+         </div>
+      </div>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formDefault"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="The property to add the default descriptions on how a form should use the property."/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Form property/field"/>
+      <div rel="rdfs:range">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="This class describes how a property should be formated in a form."/>
+            <div property="rdfs:label" content="Form Propert Class"/>
+            <div rel="rdfs:subClassOf">
+               <div class="description"
+                    about="http://knowledgelinks.io/ns/data-structures/FormClass"
+                    typeof="rdf:Class">
+                  <div property="rdfs:comment"
+                       content="Class is used to define an application/web form."/>
+                  <div property="rdfs:label" content="Form Class"/>
+                  <div rel="rdfs:subClassOf"
+                       resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formFieldName"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Name to be used as the identifier/id name in the form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Form field name"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formFieldOrder"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="The order the in which the field should appear in the specified form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Form Field Order"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formInstance"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="A special(override) insturctions for an instance of a form. i.e. new form, edit form, display form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Form Instance"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/FormInstanceClass"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formInstanceType"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Specifies which form instance type. i.e. kds:NewForm, kds:EditForm, kds:DisplayForm"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormInstanceClass"/>
+      <div property="rdfs:label" content="Form Instance Type"/>
+      <div rel="rdfs:range">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/FormInstanceTypeClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="Class for defining the differnt types of form instances. i.e. new, edit, display"/>
+            <div property="rdfs:label" content="Form Instance Type Class"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/InternalClass"/>
+         </div>
+      </div>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formInstructions"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="States default form instructions."/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormClass"/>
+      <div property="rdfs:label" content="Form Instructions"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/FormInstructionsClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/properties"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formLabelName"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="The field label to be used in the form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Form Label"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formLayoutRow"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="specifies which row in the form the field should be displayed"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Form Row"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/formProperty"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="A property grouping for all properties used in the kds form descripition."/>
+      <div property="rdfs:label" content="Form Property"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/form_Method"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="Method for the Form 'GET', 'POST'"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormInstructionsClass"/>
+      <div property="rdfs:label" content="Form Method"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/form_enctype"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="enctype for the form"/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/FormInstructionsClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="This object stores the initial form parameters."/>
+            <div property="rdfs:label" content="Form Instructions Class"/>
+         </div>
+      </div>
+      <div property="rdfs:label" content="form enctype"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/hasPassword"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="User's account password object"/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/UserClass"
+              typeof="kds:ControlledClass">
+            <div rel="rdf:type" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+            <div property="rdfs:comment" content="An object for storing a user information"/>
+            <div property="rdfs:label" content="User Object"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/SecurityClass"/>
+         </div>
+      </div>
+      <div property="rdfs:label" content="User's password"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/PasswordClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/hasPerson"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="Reference to the user's personal information"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/UserGroup"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/UserClass"/>
+      <div property="rdfs:label" content="Personal Info"/>
+      <div rel="rdfs:range" resource="https://schema.org/Person"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/hasProperty"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="The property to add defined properties to the form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormClass"/>
+      <div property="rdfs:label" content="Form property/field"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description" about="http://knowledgelinks.io/ns/data-structures/json"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="The property contains instructions on how to format the property for a json object"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="json format"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/properties"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/jsonDefault"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="The property contains the default instructions on how to format the property for a json object"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Default json format"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/properties"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/jsonObjName"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="The name to be used in the json return for the object portion i.e. {&#34;jsonObjName&#34;: .... }"/>
+      <div rel="rdfs:domain">
+         <div class="description" about="http://knowledgelinks.io/ns/data-structures/json"
+              typeof="rdf:Property"/>
+      </div>
+      <div property="rdfs:label" content="json name"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/jsonProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/jsonProperty"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Property group for properties used to describe a JSON transforation via SPARQL query."/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="json property"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/jsonValFormat"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="-The type of lookup to be used."/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/JsonClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="Object store instuctions on how to build a json object"/>
+            <div property="rdfs:label" content="json Class"/>
+            <div rel="rdfs:subClassOf">
+               <div class="description"
+                    about="http://knowledgelinks.io/ns/data-structures/InternalClass"
+                    typeof="rdf:Class">
+                  <div property="rdfs:comment"
+                       content="Sub-classes of this class are for only internal usage within the vocabulary."/>
+                  <div property="rdfs:label" content="Internal Vocabulary Class"/>
+                  <div rel="rdfs:subClassOf"
+                       resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div property="rdfs:label" content="json lookup"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/jsonProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/keyCombo"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Object of the triple should store a property that in combination with another entry makes a primary key for the class."/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/KeyObject"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="Object for storing a primary key comibination. Should be a blank node to the primaryKey property"/>
+            <div property="rdfs:label" content="Primary Key group"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/InternalClass"/>
+         </div>
+      </div>
+      <div property="rdfs:label" content="Key combo"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/classProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/lookupReturnField"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="used with &#34;lookup&#34; call to specify which property field value will be returned"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="Lookup Return Field"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/jsonProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/overrideCss"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="If present will override the CSS of any inherited CSS classes."/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Override CSS classes"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/parseType"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="&#34;afterLastSlash&#34; is the only available option: used with &#34;subjectCalc&#34;"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="Parse Type"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/jsonProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/password"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="User's account password"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/PasswordClass"/>
+      <div property="rdfs:label" content="password"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/permissions"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Permissions for a item. Can be applied application wide down to the property level."/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Permissions"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/PermissionsClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/propertySecurity"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/primaryKey"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Primary key for the subject class. Primary key entails uniqueness and a required property/properties"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/ControlledClass"/>
+      <div property="rdfs:label" content="Primary Key"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/KeyObject"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/classProperty"/>
+   </div>
+   <div class="description" about="http://knowledgelinks.io/ns/data-structures/propUri"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="The URI of the property/field in the form"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormPropertyClass"/>
+      <div property="rdfs:label" content="Property URI"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/propertyAddOnCss"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="add on Css for each form element"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormInstructionsClass"/>
+      <div property="rdfs:label" content="Property add-on Css"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/propertyField"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Specifies which property to use in the subject graph (optional)"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="property field"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/jsonProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/propertyProcessing"
+        typeof="kds:Property">
+      <div property="rdfs:comment"
+           content="States a method that property should be proccessed with"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Property processing"/>
+      <div rel="rdfs:range">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/PropertyProcessor"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="Object instructions on how to proccess a property before saving to the triplestore."/>
+            <div property="rdfs:label" content="Property Processor"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/InternalClass"/>
+         </div>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/propertySecurity"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Security to be provided to property application wide"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Property Security"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/SecurityClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/propertyValidation"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Validation rule to apply to the property before saving"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Validation Rule"/>
+      <div rel="rdfs:range">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/Validator"
+              typeof="rdf:Class">
+            <div property="rdfs:comment" content="Object for defining a validation rule"/>
+            <div property="rdfs:label" content="Validator"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/FormClass"/>
+         </div>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/requiredByDomain"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="States whether the class in the object position requires the property"/>
+      <div rel="rdfs:domain"
+           resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div property="rdfs:label" content="Required"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/classProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/requiredFormField"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="States if the form requires the field"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/FormClass"/>
+      <div property="rdfs:label" content="Required"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/properties"/>
+   </div>
+   <div class="description" about="http://knowledgelinks.io/ns/data-structures/salt"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="Salt used for hashing an item/password"/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/PasswordClass"
+              typeof="kds:ControlledClass">
+            <div rel="rdf:type" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+            <div property="rdfs:comment"
+                 content="An object that stores a hashed password and its salt"/>
+            <div property="rdfs:label" content="Password Object"/>
+            <div rel="rdfs:subClassOf">
+               <div class="description"
+                    about="http://knowledgelinks.io/ns/data-structures/SecurityClass"
+                    typeof="rdf:Class">
+                  <div property="rdfs:comment" content="Class for grouping security features"/>
+                  <div property="rdfs:label" content="Security class"/>
+                  <div rel="rdfs:subClassOf"
+                       resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div property="rdfs:label" content="Salt"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/selectBoundValue"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="query field/Value to bind to the Select list"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-resources/SelectField"/>
+      <div property="rdfs:label" content="Select Bound Value"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/selectDisplay"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="query field/Value to Display to the Select list"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-resources/SelectField"/>
+      <div property="rdfs:label" content="Select Display Value"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/selectQuery"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="Query String or query file(format as file://) to retrieve the options"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-resources/SelectField"/>
+      <div property="rdfs:label" content="Select Options Query"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/formProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/specifiedPermissions"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="Base level permissions"/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/UserGroup"
+              typeof="kds:ControlledClass">
+            <div rel="rdf:type" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+            <div property="rdfs:comment" content="A class for defining a group of users."/>
+            <div property="rdfs:label" content="User group"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://knowledgelinks.io/ns/data-structures/SecurityClass"/>
+         </div>
+      </div>
+      <div property="rdfs:label" content="Specified Permissions"/>
+      <div rel="rdfs:range"
+           resource="http://knowledgelinks.io/ns/data-structures/PermissionsClass"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/storageType"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="How the class should be saved. &#34;object&#34; create a new iri / &#34;blanknode&#34; store as a blank node to a property / "/>
+      <div rel="rdfs:domain">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/ControlledClass"
+              typeof="rdf:Class">
+            <div property="rdfs:comment"
+                 content="A class controlled by the knowledgelinks data structures framework."/>
+            <div property="rdfs:label" content="Controlled Class"/>
+            <div rel="rdfs:subClassOf"
+                 resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+         </div>
+      </div>
+      <div property="rdfs:label" content="storage type"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/classProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/unionUrl"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="string to be prepended to the afterLastSlash return of the subject URI"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="Union Url"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/jsonProperty"/>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/urlendfld"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="the field value to append to a &#34;urlSub&#34; or &#34;lookupUrlSub&#34; call"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="URL end field"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/jsonProperty"/>
+   </div>
+   <div class="description" about="http://knowledgelinks.io/ns/data-structures/useFor"
+        typeof="rdf:Property">
+      <div property="rdfs:comment"
+           content="specifies which class the json value items should be applied to"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/JsonClass"/>
+      <div property="rdfs:label" content="use for"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Class"/>
+      <div rel="rdfs:subPropertyOf">
+         <div class="description"
+              about="http://knowledgelinks.io/ns/data-structures/jsonProperty"
+              typeof="rdf:Property"/>
+      </div>
+   </div>
+   <div class="description"
+        about="http://knowledgelinks.io/ns/data-structures/userName"
+        typeof="rdf:Property">
+      <div property="rdfs:comment" content="Individual's username"/>
+      <div rel="rdfs:domain"
+           resource="http://knowledgelinks.io/ns/data-structures/UserClass"/>
+      <div property="rdfs:label" content="Username"/>
+      <div rel="rdfs:range" resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <div rel="rdfs:subPropertyOf"
+           resource="http://knowledgelinks.io/ns/data-structures/securityProperty"/>
+   </div>
+</div>
+
+  </div>
+ </section>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-url-parser/2.3.1/purl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-url-parser/2.3.1/purl.min.js"></script>
+<script src="/js/navigation.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70910607-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>
