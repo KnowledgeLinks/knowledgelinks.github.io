@@ -1,0 +1,9 @@
+.pull-right {
+	padding-top: 30px;   
+}
+.carousel {
+	min-height: 475px;
+}
+.img-thumbnail {
+	margin-right: 10px;
+}

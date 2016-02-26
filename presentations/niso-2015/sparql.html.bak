@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+  <meta property="og:title" content="Implementing a BIBFRAME Catalog" />
+  <meta property="og:type" content="article" />
+  <meta property="og:article:author" content="Jeremy Nelson" />
+  <meta property="og:article:author" content="Mike Stabile" />
+  <meta property="og:article:published_time" content="2015-12-2" />
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>KnowledgeLinks.io 
+NISO/NFAIS Virtual Conference - The Semantic Web: What's New and Cool
+</title>
+    <script defer async src="//hypothes.is/embed.js"></script> 
+
+    <!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+		<link rel="stylesheet" href="/css/presentations.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="container">
+  
+  <img src="/images/alt-logo.svg" 
+     alt="alternative logo"
+     style="float:left;height:100px;padding-top:5px;padding-right:10px;">
+
+ <h3>KnowledgeLinks.io <small>Presentations</small></h3>
+
+   <h2 class="text-danger">BIBFRAME Triplestore &amp; Search</h2>
+<h1>SPARQL Examples</h1>
+
+<div id="sparql-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+  <ol class="carousel-indicators">
+    <li data-target="sparql-carousel" data-slide-to="0" class="active"></li>
+    <li data-target="sparql-carousel" data-slide-to="1"></li>
+
+  </ol>
+
+  <div class="carousel-inner" role="listbox">
+   <div class="item active">
+     <div class="row">
+       <div class="col-md-8 col-md-offset-2">
+         <h2>Querying for a resource</h2>
+<p class="lead">
+Once resources are de-duplicated if becomes quite simple to find them. 
+Once found you get all the information about the resource regardless of usage!!!
+</p>
+<p class="lead">
+ Simple SPARQL query to find a resource and all its information regardless of URI used:
+</p>
+<code>
+&lt;http://id.loc.gov/authorities/subjects/sh85043413&gt;  --Insert into the query below
+</code>
+<p></p>
+<code>
+<pre style="font-size: 1.2em">
+SELECT ?URI ?p ?o
+WHERE
+{
+	?URI 	owl:sameAs 	<span style="color: red;">&lt;any aliased URI&gt;</span> .
+	?URI		?p			?o
+}
+</pre>
+</code>
+<code>
+Returns-- &lt;http://myNameSpace.org/english&gt; ?p ?o
+</code>
+       </div>
+     </div>
+   </div>
+   <div class="item">
+     <div class="row">
+       <div class="col-md-8 col-md-offset-2">
+         <h2>Listing all resources of a specific type</h2>
+<p class="lead">
+Using the "English Language" example. Where english is both a <strong>Subject</strong> 
+and a <strong>Language</strong>. It doesn't matter that the main URI isn't in the Subject format. 
+</p>
+<code>
+&lt;http://id.loc.gov/authorities/subjects/sh85043413&gt;
+</code>
+<p class="lead">
+Simple SPARQL query to find all subjects resources would still return the proper URI:
+</p>
+<code>
+<pre style="font-size: 1.3em;" >
+SELECT ?URI 
+WHERE
+{
+	?URI 		rdf:type	bfe:LocSubject .
+}
+</pre>
+</code>
+<code>
+&lt;http://myNameSpace.org/english&gt;
+</code>
+       </div>
+     </div>
+   </div>
+
+  </div>
+
+  <a class="left carousel-control" href="#sparql-carousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#sparql-carousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+
+</div>
+
+
+ <script>
+ $('.carousel').carousel({
+    interval: false;
+  })
+
+ </script>
+
+
+<div class="btn-group pull-right" role="group" aria-label="...">
+  <a href="languages.html" 
+     type="button" class="btn btn-warning btn-lg">
+     <span class="glyphicon glyphicon-chevron-left"></span>
+     Previous</a>
+  <a href="/presentations/niso-2015/" type="button" class="btn btn-default btn-lg">
+    <span class="glyphicon glyphicon-home"></span>
+  </a>
+  <div class="btn-group">
+     <button class="btn btn-info dropdown-toggle btn-lg" data-toggle="dropdown">
+     Slides <span class="caret"></span>
+     </button>
+     <ul class="dropdown-menu">
+      <li><a href="bibframe-overview.html">BIBFRAME Vocabulary</a></li>
+      <li><a href="bibcat.html">BIBCAT - BIBFRAME Catalog</a></li>
+      <li><a href="bibframe-2.0.html">BIBFRAME 2.0</a></li>
+      <li class="divider"></li>
+      <li>&nbsp;BIBFRAME Triplestore &amp; Search</li>
+      <li><a href="rdf.html">RDF</a></li>
+      <li><a href="languages.html">Languages</a></li>
+      <li><a href="sparql.html">SPARQL Examples</a></li>
+      <li><a href="summary.html">Summary</a></li> 
+     </ul>
+  </div>
+    <a href="summary.html" type="button" 
+     class="btn btn-primary btn-lg">Next
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+
+ <a class="lead" href="mailto:knowledgelinks.io@gmail.com">contact</a>
+<!-- <img src="./images/alt-logo.svg" alt="alternative logo"> -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70910607-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>
