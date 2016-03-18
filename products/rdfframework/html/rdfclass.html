@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RdfClass Class &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="RdfProperty Class" href="rdfproperty.html"/>
+        <link rel="prev" title="RdfFramework Class" href="rdfframeworkclass.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframeworkclass.html">RdfFramework Class</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">RdfClass Class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfproperty.html">RdfProperty Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfdatatype.html">RdfDataType Class</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>RdfClass Class</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/rdfclass.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-rdfframework.rdfclass">
+<span id="rdfclass-class"></span><h1>RdfClass Class<a class="headerlink" href="#module-rdfframework.rdfclass" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rdfframework.rdfclass.RdfClass">
+<em class="property">class </em><code class="descclassname">rdfframework.rdfclass.</code><code class="descname">RdfClass</code><span class="sig-paren">(</span><em>json_obj</em>, <em>class_name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>RDF Class for an RDF Class object.
+Used for manipulating and validating an RDF Class subject</p>
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.get_property">
+<code class="descname">get_property</code><span class="sig-paren">(</span><em>prop_uri</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.get_property"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.get_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method returns the property json object</p>
+<dl class="docutils">
+<dt>keyword Args:</dt>
+<dd>prop_name: The Name of the property
+prop_uri: The URI of the property
+** the PropName or URI is required</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.list_dependant">
+<code class="descname">list_dependant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.list_dependant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.list_dependant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a set of properties that are dependent upon the
+creation of another object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.list_properties">
+<code class="descname">list_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.list_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.list_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a set of the properties used for the class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.list_required">
+<code class="descname">list_required</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.list_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.list_required" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a set of the required properties for the class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.new_uri">
+<code class="descname">new_uri</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.new_uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.new_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>* to be written *</strong>
+generates a new URI</p>
+<blockquote>
+<div>&#8211; for fedora generates the container and returns the URI
+&#8211; for blazegraph process will need to be created</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>rdf_obj</em>, <em>validation_status=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method validates and saves passed data for the class</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>rdf_obj &#8211; Current RDF Form class fields
+validationS</dd>
+<dt>valid_required_props = self._validate_required_properties(</dt>
+<dd>rdf_obj,
+old_form_data)</dd>
+<dt>validDependancies = self._validate_dependant_props(</dt>
+<dd>rdf_obj,
+old_form_data)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.validate_obj_data">
+<code class="descname">validate_obj_data</code><span class="sig-paren">(</span><em>rdf_obj</em>, <em>old_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.validate_obj_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.validate_obj_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will validate whether the supplied object data
+meets the class requirements and returns the results</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.rdfclass.RdfClass.validate_primary_key">
+<code class="descname">validate_primary_key</code><span class="sig-paren">(</span><em>rdf_obj</em>, <em>old_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/rdfclass.html#RdfClass.validate_primary_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.rdfclass.RdfClass.validate_primary_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>query to see if PrimaryKey is Valid</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rdfproperty.html" class="btn btn-neutral float-right" title="RdfProperty Class" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rdfframeworkclass.html" class="btn btn-neutral" title="RdfFramework Class" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

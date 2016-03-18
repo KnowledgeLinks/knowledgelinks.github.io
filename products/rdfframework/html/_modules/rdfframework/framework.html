@@ -1,0 +1,1369 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.framework &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframeworkclass.html">RdfFramework Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfclass.html">RdfClass Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfproperty.html">RdfProperty Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfdatatype.html">RdfDataType Class</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.framework</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.framework</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mike Stabile, Jeremy Nelson&quot;</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">werkzeug.datastructures</span> <span class="kn">import</span> <span class="n">MultiDict</span>
+<span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">fw_config</span><span class="p">,</span> <span class="n">iri</span><span class="p">,</span> <span class="n">is_not_null</span><span class="p">,</span> <span class="n">make_list</span><span class="p">,</span> \
+        <span class="n">remove_null</span><span class="p">,</span> <span class="n">clean_iri</span><span class="p">,</span> <span class="n">make_triple</span><span class="p">,</span> <span class="n">convert_spo_to_dict</span><span class="p">,</span> \
+        <span class="n">render_without_request</span><span class="p">,</span> <span class="n">code_timer</span><span class="p">,</span> <span class="n">create_namespace_obj</span><span class="p">,</span> \
+        <span class="n">convert_obj_to_rdf_namespace</span><span class="p">,</span> <span class="n">pyuri</span><span class="p">,</span> <span class="n">nouri</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">iris_to_strings</span><span class="p">,</span> \
+        <span class="n">JSON_LOCATION</span> 
+<span class="kn">from</span> <span class="nn">rdfframework.processors</span> <span class="kn">import</span> <span class="n">clean_processors</span><span class="p">,</span> <span class="n">run_processor</span>
+<span class="kn">from</span> <span class="nn">rdfframework.sparql</span> <span class="kn">import</span> <span class="n">get_data</span>
+<span class="kn">from</span> <span class="nn">.rdfproperty</span> <span class="kn">import</span> <span class="n">RdfProperty</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">current_app</span><span class="p">,</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="nn">flask.ext.login</span> <span class="kn">import</span> <span class="n">login_user</span><span class="p">,</span> <span class="n">current_user</span>
+<span class="kn">from</span> <span class="nn">rdfframework.security</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">rdfframework.forms</span> <span class="kn">import</span> <span class="n">rdf_framework_form_factory</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<div class="viewcode-block" id="RdfFramework"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework">[docs]</a><span class="k">class</span> <span class="nc">RdfFramework</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; base class for Knowledge Links&#39; Graph database RDF vocabulary</span>
+<span class="sd">        framework&#39;&#39;&#39;</span>
+
+    <span class="n">rdf_class_dict</span> <span class="o">=</span> <span class="p">{}</span>       <span class="c1"># stores the Triplestore defined class defintions </span>
+    <span class="n">class_initialized</span> <span class="o">=</span> <span class="bp">False</span> <span class="c1"># used to state if the the class was properly</span>
+                              <span class="c1">#     initialized with RDF definitions</span>
+    <span class="n">rdf_form_dict</span> <span class="o">=</span> <span class="p">{}</span>        <span class="c1"># stores the Triplestore defined form definitions</span>
+    <span class="n">forms_initialized</span> <span class="o">=</span> <span class="bp">False</span> <span class="c1"># used to state if the form definitions have</span>
+                              <span class="c1">#     been initialized</span>
+    <span class="n">rdf_app_dict</span> <span class="o">=</span> <span class="p">{}</span>         <span class="c1"># stors the the Triplestore definged application</span>
+                              <span class="c1">#     settings</span>
+    <span class="n">app_initialized</span> <span class="o">=</span> <span class="bp">False</span>   <span class="c1"># states if the application has been initialized</span>
+    <span class="n">value_processors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">apis_initialized</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">reset</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;JSON cache directory not found.</span><span class="se">\n</span><span class="s2">Creating directory&quot;</span><span class="p">)</span>
+            <span class="n">reset</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;app_query.json&quot;</span><span class="p">)):</span>
+            <span class="n">reset</span> <span class="o">=</span> <span class="bp">True</span> 
+        <span class="c1"># verify that the server core is up and running</span>
+        <span class="n">servers_up</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">servers_up</span> <span class="o">=</span> <span class="n">verify_server_core</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">servers_up</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Sever core not initialized --- Framework Not loaded&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">servers_up</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;*** Loading Framework ***&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_rdf_data</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_app</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generate_classes</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generate_forms</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generate_apis</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;*** Framework Loaded ***&quot;</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="RdfFramework.load_default_data"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.load_default_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_default_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; reads default data in the fw_config and attempts to add it </span>
+<span class="sd">            to the server core i.e. inital users and organizations&#39;&#39;&#39;</span>
+        <span class="c1"># test to see if the default data was already loaded</span>
+        <span class="n">sparql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">            SELECT ?default_loaded </span>
+<span class="s1">            WHERE {</span>
+<span class="s1">                ?uri kds:defaultLoaded ?default_loaded .</span>
+<span class="s1">            }&#39;&#39;&#39;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+                                 <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_prefix</span><span class="p">()</span> <span class="o">+</span> <span class="n">sparql</span><span class="p">,</span>
+                                       <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bindings&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># if not loaded save the data</span>
+            <span class="n">data_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;FRAMEWORK_DEFAULT&#39;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">:</span>
+                <span class="n">form_class</span> <span class="o">=</span> <span class="n">rdf_framework_form_factory</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;form_path&#39;</span><span class="p">])</span>
+                <span class="n">form_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;form_data&#39;</span><span class="p">]</span>
+                <span class="n">form</span> <span class="o">=</span> <span class="n">form_class</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                    <span class="n">prop</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="c1"># tag the repositry that the data has been loaded</span>
+            <span class="n">save_data</span> <span class="o">=</span> <span class="s1">&#39; &lt;&gt; kds:defaultLoaded &quot;true&quot;^^xsd:string&#39;</span>
+            <span class="n">save_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_prefix</span><span class="p">(</span><span class="s2">&quot;turtle&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">save_data</span>
+            <span class="n">responce</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REPOSITORY_URL&quot;</span><span class="p">),</span>
+                           <span class="n">data</span><span class="o">=</span><span class="n">save_query</span><span class="p">,</span>
+                           <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-type&quot;</span><span class="p">:</span> <span class="s2">&quot;text/turtle&quot;</span><span class="p">})</span></div>
+            
+<div class="viewcode-block" id="RdfFramework.user_authentication"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.user_authentication">[docs]</a>    <span class="k">def</span> <span class="nf">user_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; reads the object for authentication information and sets the</span>
+<span class="sd">            flask userclass information &#39;&#39;&#39;</span>
+            
+        <span class="c1"># find the username and password</span>
+        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">kds_propUri</span> <span class="o">==</span> <span class="s2">&quot;kds_userName&quot;</span><span class="p">:</span>
+                <span class="n">_username</span> <span class="o">=</span> <span class="n">fld</span>
+            <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">kds_propUri</span> <span class="o">==</span> <span class="s2">&quot;kds_password&quot;</span><span class="p">:</span>
+                <span class="n">_password</span> <span class="o">=</span> <span class="n">fld</span>
+        <span class="c1"># get the stored information</span>
+        <span class="n">subject_lookup</span> <span class="o">=</span> <span class="n">_username</span>
+        <span class="n">query_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_obj_data</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">,</span> 
+                                       <span class="n">subject_lookup</span><span class="o">=</span><span class="n">_username</span><span class="p">,</span>
+                                       <span class="n">lookup_related</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                       <span class="n">processor_mode</span><span class="o">=</span><span class="s2">&quot;verify&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_password</span><span class="o">.</span><span class="n">password_verified</span><span class="p">:</span>
+            <span class="n">person_info</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">user_obj</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">user_uri</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">query_data</span><span class="p">[</span><span class="s1">&#39;query_data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s2">&quot;&lt;schema_Person&gt;&quot;</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">)):</span>
+                    <span class="n">person_info</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="n">user_uri</span> <span class="o">=</span> <span class="n">subject</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">person_info</span><span class="p">:</span>
+                <span class="n">user_obj</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="n">_username</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                            <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="n">person_info</span><span class="p">[</span><span class="s1">&#39;schema_email&#39;</span><span class="p">],</span> 
+                            <span class="s1">&#39;full_name&#39;</span><span class="p">:</span> <span class="n">person_info</span><span class="p">[</span><span class="s1">&#39;schema_givenName&#39;</span><span class="p">]</span> <span class="o">+</span>
+                                         <span class="n">person_info</span><span class="p">[</span><span class="s1">&#39;schema_familyName&#39;</span><span class="p">],</span>
+                            <span class="s1">&#39;user_uri&#39;</span><span class="p">:</span> <span class="n">user_uri</span><span class="p">}</span>      
+            <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">user_obj</span><span class="p">)</span>
+            <span class="c1">#login_user(new_user)</span>
+            <span class="c1">#print(current_user.is_authenticated())</span>
+            <span class="c1">#print(&quot;framework ------------ &quot;, current_user.is_authenticated)</span>
+            <span class="c1">#pp.pprint(current_user.__dict__)</span>
+            <span class="c1">#pp.pprint(current_app.__dict__)</span>
+            
+            <span class="c1">#current_app.login_manager.login_user(new_user)</span>
+            <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_state</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
+            <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_results</span> <span class="o">=</span> <span class="n">new_user</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;The supplied credentials could not be verified&quot;</span>
+            <span class="n">_username</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">_password</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+            <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_state</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span></div>
+
+<div class="viewcode-block" id="RdfFramework.form_exists"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.form_exists">[docs]</a>    <span class="k">def</span> <span class="nf">form_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Tests to see if the form and instance is valid&#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">form_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_list</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_list</span><span class="p">[</span><span class="n">form_path</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></div>
+            
+<div class="viewcode-block" id="RdfFramework.api_exists"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.api_exists">[docs]</a>    <span class="k">def</span> <span class="nf">api_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Tests to see if the form and instance is valid&#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">api_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_list</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_list</span><span class="p">[</span><span class="n">api_path</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span></div>
+
+<div class="viewcode-block" id="RdfFramework.get_form_path"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_form_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_form_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_uri</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; reads through the list of defined APIs and returns the path &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">form_path</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;form_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">form_uri</span> <span class="ow">and</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;instance_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">instance</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">form_path</span></div>
+    
+<div class="viewcode-block" id="RdfFramework.get_api_path"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_api_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_api_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_uri</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; reads through the list of defined forms and returns the path &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">api_path</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;api_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">api_uri</span> <span class="ow">and</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;instance_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">instance</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">api_path</span></div>
+                                
+<div class="viewcode-block" id="RdfFramework.get_form_name"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_form_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_form_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_uri</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;returns the form name for a form &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">form_uri</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">form_uri</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span></div>
+            
+<div class="viewcode-block" id="RdfFramework.get_api_name"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_api_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_api_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_uri</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;returns the API name for an API &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">api_uri</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">api_uri</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>   </div>
+                 
+<div class="viewcode-block" id="RdfFramework.save_object_with_subobj"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.save_object_with_subobj">[docs]</a>    <span class="k">def</span> <span class="nf">save_object_with_subobj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="n">old_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; finds the subform field and appends the parent form attributes</span>
+<span class="sd">           to the subform entries and individually sends the augmented</span>
+<span class="sd">           subform to the main save_form property&#39;&#39;&#39;</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>   
+        <span class="n">_parent_fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">_parent_field_list</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_state</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;-----------------------&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">Recipient</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">Recipient</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">Recipient</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;-----------------------&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_field</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_field</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;FieldList&#39;</span><span class="p">:</span>
+                <span class="n">_parent_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_field</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_parent_field_list</span> <span class="o">=</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">[:]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">_field</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_field</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;FieldList&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_entry</span> <span class="ow">in</span> <span class="n">_field</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+                    <span class="c1">#if DEBUG:</span>
+                    <span class="c1">#    print(&quot;__________\n&quot;,_entry.__dict__)</span>
+                    <span class="k">if</span> <span class="n">_entry</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;FormField&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="p">,</span><span class="s2">&quot;subjectUri&quot;</span><span class="p">):</span>
+                            <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">data_subject_uri</span> <span class="o">=</span> \
+                                    <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">subjectUri</span><span class="o">.</span><span class="n">data</span>
+                            <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">data_class_uri</span> <span class="o">=</span> \
+                                    <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">subjectUri</span><span class="o">.</span><span class="n">kds_classUri</span>
+                            <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">remove_prop</span><span class="p">(</span><span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">subjectUri</span><span class="p">)</span>
+                            
+                            <span class="c1"># ------------------------------------------</span>
+                            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;subjectUri: &quot;</span><span class="p">,</span><span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">subjectUri</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                                    <span class="k">print</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">_field</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                                    <span class="k">print</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">,</span> <span class="n">fld</span><span class="p">)</span>
+                            <span class="c1"># -------------------------------------------</span>
+                            
+                        <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">add_props</span><span class="p">(</span><span class="n">_parent_fields</span><span class="p">)</span>
+                        <span class="n">save_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_obj</span><span class="p">(</span><span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">old_data</span><span class="p">)</span>
+                        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">save_result</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">_entry</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">save_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+                            <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_state</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span>
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_subject_uri</span> <span class="o">=</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">data_subject_uri</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">:</span><span class="n">result</span><span class="p">}</span> </div>
+            
+<div class="viewcode-block" id="RdfFramework.save_obj"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.save_obj">[docs]</a>    <span class="k">def</span> <span class="nf">save_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="n">old_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Recieves RDF_formfactory form, validates and saves the data</span>
+
+<span class="sd">         *** Steps ***</span>
+<span class="sd">         - determine if subform is present</span>
+<span class="sd">         - group fields by class</span>
+<span class="sd">         - validate the form data for class requirements</span>
+<span class="sd">         - determine the class save order. classes with no dependant properties</span>
+<span class="sd">           saved first</span>
+<span class="sd">         - send data to classes for processing</span>
+<span class="sd">         - send data to classes for saving</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START RdfFramework.save_obj --------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">old_data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">old_obj_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_obj_data</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">)</span>
+            <span class="n">rdf_obj</span><span class="o">.</span><span class="n">query_data</span> <span class="o">=</span> <span class="n">old_obj_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;query_data&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">old_obj_data</span> <span class="o">=</span> <span class="n">old_data</span>
+        
+        <span class="k">if</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">has_subobj</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_object_with_subobj</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">,</span> <span class="n">old_obj_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">is_subobj</span><span class="p">:</span>
+            
+            <span class="n">missing_data</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">class_uri</span><span class="p">,</span> <span class="n">dep_prop_list</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">reverse_dependancies</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">dep_prop</span> <span class="ow">in</span> <span class="n">dep_prop_list</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span> <span class="o">==</span> <span class="n">dep_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">)</span> \
+                                <span class="ow">and</span> <span class="n">class_uri</span> <span class="o">!=</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">data_class_uri</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+                                <span class="n">new_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_obj_data</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">,</span> <span class="n">subject_uri</span> <span class="o">=</span> \
+                                        <span class="n">prop</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">class_uri</span><span class="o">=</span><span class="n">class_uri</span><span class="p">)</span> 
+                                <span class="n">q_data_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">new_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;query_data&#39;</span><span class="p">))</span>
+                                <span class="k">for</span> <span class="n">q_data</span> <span class="ow">in</span> <span class="n">q_data_list</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">q_data</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_data</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">q_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                                            <span class="k">for</span> <span class="n">sub</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">q_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                                                <span class="k">if</span> <span class="n">iri</span><span class="p">(</span><span class="n">class_uri</span><span class="p">)</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">)):</span>
+                                                    <span class="n">missing_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">sub</span><span class="p">:</span><span class="n">data</span><span class="p">})</span>
+            <span class="n">old_obj_data</span><span class="p">[</span><span class="s1">&#39;query_data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">missing_data</span><span class="p">)</span>       
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">set_obj_data</span><span class="p">(</span><span class="n">query_data</span><span class="o">=</span><span class="n">old_obj_data</span><span class="p">[</span><span class="s1">&#39;query_data&#39;</span><span class="p">])</span>
+        <span class="c1">#print(&quot;~~~~~~~~~ _old_form_data: &quot;, _old_form_data)</span>
+        <span class="c1"># validate the form data for class requirements (required properties,</span>
+        <span class="c1"># security, valid data types etc)</span>
+        
+        <span class="n">_validation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_obj_by_class_reqs</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_validation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;success&#39;</span><span class="p">):</span>
+            <span class="n">rdf_obj</span><span class="o">.</span><span class="n">reset_fields</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%%%%%</span><span class="s2">% validation in save_form</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">_validation</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">_validation</span>
+        <span class="c1"># determine class save order</span>
+        <span class="n">_form_by_classes</span> <span class="o">=</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">class_grouping</span>
+        <span class="n">_class_save_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_save_order</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;class save order:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>\
+                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_class_save_order</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+        
+        <span class="n">_reverse_dependancies</span> <span class="o">=</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">reverse_dependancies</span>
+        <span class="n">_id_class_uri</span> <span class="o">=</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">data_class_uri</span>
+        <span class="c1"># save class data</span>
+        <span class="n">_data_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">id_value</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">_class_save_order</span><span class="p">:</span>
+            <span class="n">_status</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">_status</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_rdf_class</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">)</span>
+            <span class="n">_data_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;rdfClass&quot;</span><span class="p">:</span><span class="n">_rdf_class</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span><span class="n">_status</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;status ----------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_status</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+                <span class="n">_update_class</span> <span class="o">=</span> <span class="n">_reverse_dependancies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_rdf_class</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">if</span> <span class="n">_rdf_class</span> <span class="o">==</span> <span class="n">_id_class_uri</span><span class="p">:</span>
+                    <span class="n">id_value</span> <span class="o">=</span> <span class="n">clean_iri</span><span class="p">(</span>\
+                            <span class="n">_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lastSave&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;objectValue&quot;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">_update_class</span><span class="p">:</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                            <span class="n">rdf_obj</span><span class="o">.</span><span class="n">class_grouping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))):</span>
+                        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_propUri</span> <span class="o">==</span>  <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propUri&#39;</span><span class="p">):</span>
+                            <span class="n">found</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="n">_form_by_classes</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> \
+                                <span class="n">_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lastSave&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;objectValue&quot;</span><span class="p">)</span>
+                            <span class="n">_form_by_classes</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">editable</span> <span class="o">=</span> \
+                                    <span class="bp">True</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                        <span class="n">prop_json</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">)</span>\
+                                <span class="p">)</span><span class="o">.</span><span class="n">kds_properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propUri&#39;</span><span class="p">))</span>
+                        <span class="n">prop_json</span><span class="p">[</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">)</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lastSave&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;objectValue&quot;</span><span class="p">)</span>
+                        <span class="n">new_prop</span> <span class="o">=</span> <span class="n">RdfProperty</span><span class="p">(</span><span class="n">prop_json</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+                                    
+                        <span class="n">_form_by_classes</span><span class="p">[</span><span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>\
+                                <span class="n">new_prop</span><span class="p">)</span>
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_state</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>                        
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_subject_uri</span> <span class="o">=</span> <span class="n">id_value</span>
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_results</span> <span class="o">=</span> <span class="n">_data_results</span>
+        <span class="k">return</span>  <span class="n">rdf_obj</span></div>
+
+<div class="viewcode-block" id="RdfFramework.get_prefix"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_prefix">[docs]</a>    <span class="k">def</span> <span class="nf">get_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_type</span><span class="o">=</span><span class="s2">&quot;sparql&quot;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Generates a string of the rdf namespaces listed used in the</span>
+<span class="sd">            framework</span>
+
+<span class="sd">            formatType: &quot;sparql&quot; or &quot;turtle&quot;</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">_return_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ns_obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">format_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;sparql&quot;</span><span class="p">:</span>
+                <span class="n">_return_str</span> <span class="o">+=</span> <span class="s2">&quot;PREFIX {0}: {1}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_prefix</span><span class="p">,</span> <span class="n">iri</span><span class="p">(</span><span class="n">_ns</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">format_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;turtle&quot;</span><span class="p">:</span>
+                <span class="n">_return_str</span> <span class="o">+=</span> <span class="s2">&quot;@prefix {0}: {1} .</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_prefix</span><span class="p">,</span> <span class="n">iri</span><span class="p">(</span><span class="n">_ns</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_return_str</span></div>
+
+    <span class="k">def</span> <span class="nf">get_class_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_of_classes</span><span class="p">):</span>
+        <span class="n">_class_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">_dependant_classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">_independant_classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">_class_dependancies</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_reverse_dependancies</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_class_set</span> <span class="o">=</span> <span class="n">remove_null</span><span class="p">(</span><span class="n">_class_set</span><span class="p">)</span>
+        <span class="c1"># cycle through all of the rdf classes</span>
+        <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">set_of_classes</span><span class="p">:</span>
+            <span class="c1"># get the instance of the RdfClass</span>
+            <span class="n">_current_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_rdf_class</span><span class="p">)</span>
+            <span class="n">_current_class_dependancies</span> <span class="o">=</span> <span class="n">_current_class</span><span class="o">.</span><span class="n">list_dependant</span><span class="p">()</span>
+            <span class="c1"># add the dependant properties to the class depenancies dictionay</span>
+            <span class="n">_class_dependancies</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">]</span> <span class="o">=</span> <span class="n">_current_class_dependancies</span>
+            <span class="k">for</span> <span class="n">_reverse_class</span> <span class="ow">in</span> <span class="n">_current_class_dependancies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_reverse_dependancies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_reverse_class</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                        <span class="s2">&quot;kds_classUri&quot;</span><span class="p">,</span> <span class="s2">&quot;missing&quot;</span><span class="p">)),</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">_reverse_dependancies</span><span class="p">[</span><span class="n">_reverse_class</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_classUri&quot;</span><span class="p">,</span> \
+                            <span class="s2">&quot;missing&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">_reverse_dependancies</span><span class="p">[</span>\
+                        <span class="n">_reverse_class</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_classUri&quot;</span><span class="p">,</span> <span class="s2">&quot;missing&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>\
+                                <span class="p">{</span><span class="s2">&quot;kds_classUri&quot;</span><span class="p">:</span><span class="n">_rdf_class</span><span class="p">,</span>
+                                 <span class="s2">&quot;kds_propUri&quot;</span><span class="p">:</span><span class="n">_reverse_class</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)})</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_current_class</span><span class="o">.</span><span class="n">list_dependant</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">_dependant_classes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_current_class</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_independant_classes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_current_class</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;dep_classes&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">_dependant_classes</span><span class="p">),</span>
+                <span class="s2">&quot;indep_classes&quot;</span> <span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">_independant_classes</span><span class="p">),</span>
+                <span class="s2">&quot;dependancies&quot;</span> <span class="p">:</span> <span class="n">_class_dependancies</span><span class="p">,</span>
+                <span class="s2">&quot;reverse_dependancies&quot;</span> <span class="p">:</span> <span class="n">_reverse_dependancies</span><span class="p">}</span>
+    
+<div class="viewcode-block" id="RdfFramework.get_obj_data"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_obj_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_obj_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; returns the data for the current form paramters</span>
+<span class="sd">        **keyword arguments</span>
+<span class="sd">        subject_uri: the URI for the subject</span>
+<span class="sd">        class_uri: the rdf class of the subject</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START get_obj_data ---------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class_uri&quot;</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">data_class_uri</span><span class="p">)</span>
+        <span class="n">_lookup_class_uri</span> <span class="o">=</span> <span class="n">_class_uri</span>
+        <span class="n">subject_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject_uri&quot;</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">data_subject_uri</span><span class="p">)</span>
+        <span class="n">_subobj_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_data_list</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_list&quot;</span><span class="p">,</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">_parent_field</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">processor_mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;processor_mode&quot;</span><span class="p">,</span><span class="s2">&quot;load&quot;</span><span class="p">)</span>
+        <span class="n">subject_lookup</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject_lookup&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">))</span>
+        <span class="c1"># if there is no subject_uri exit the function</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">subject_lookup</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;query_data&#39;</span><span class="p">:{}}</span>
+        <span class="c1"># test to see if a subobj is in the form</span>
+        <span class="k">if</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">has_subobj</span><span class="p">:</span>
+            <span class="n">_sub_rdf_obj</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="c1"># find the subform field </span>
+            <span class="k">for</span> <span class="n">_field</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;FieldList&#39;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_entry</span> <span class="ow">in</span> <span class="n">_field</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">_entry</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;FormField&#39;</span><span class="p">:</span>
+                            <span class="n">_sub_rdf_obj</span> <span class="o">=</span> <span class="n">_entry</span><span class="o">.</span><span class="n">form</span>
+                            <span class="n">_sub_rdf_obj</span><span class="o">.</span><span class="n">is_subobj</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="n">_parent_field</span> <span class="o">=</span> <span class="n">_field</span><span class="o">.</span><span class="n">name</span>
+            <span class="c1"># if the subform exists recursively call this method to get the</span>
+            <span class="c1"># subform data</span>
+            <span class="k">if</span> <span class="n">_sub_rdf_obj</span><span class="p">:</span>
+                <span class="n">_subform_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_obj_data</span><span class="p">(</span><span class="n">_sub_rdf_obj</span><span class="p">,</span>
+                                                  <span class="n">subject_uri</span><span class="o">=</span><span class="n">subject_uri</span><span class="p">,</span>
+                                                  <span class="n">class_uri</span><span class="o">=</span><span class="n">_lookup_class_uri</span><span class="p">)</span>
+        <span class="n">_query_data</span> <span class="o">=</span> <span class="n">convert_spo_to_dict</span><span class="p">(</span><span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span>\
+                    <span class="n">get_data</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)),</span> <span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">xsd_load</span><span class="p">)</span>
+        <span class="n">rdf_obj</span><span class="o">.</span><span class="n">query_data</span> <span class="o">=</span> <span class="n">_query_data</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">_query_data</span><span class="p">)</span>
+        <span class="c1"># compare the return results with the form fields and generate a</span>
+        <span class="c1"># formData object</span>
+        
+        <span class="n">_obj_data_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_item</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_query_data</span><span class="p">):</span>
+            <span class="n">_obj_data</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="n">_prop_uri</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_propUri</span>
+                <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_classUri</span>
+                <span class="n">_data_value</span> <span class="o">=</span> <span class="bp">None</span> 
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_prop</span><span class="p">,</span> <span class="s1">&#39;kds_fieldType&#39;</span><span class="p">):</span>
+                    <span class="n">_field_type</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_field_type</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_fieldType</span>
+                <span class="k">if</span> <span class="s2">&quot;subform&quot;</span> <span class="ow">in</span> <span class="n">_field_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">make_list</span><span class="p">(</span>\
+                            <span class="n">_subform_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;obj_data&quot;</span><span class="p">))):</span>
+                        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="n">_obj_key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_prop</span><span class="o">.</span><span class="n">kds_formFieldName</span><span class="p">,</span>
+                                                     <span class="n">i</span><span class="p">,</span>
+                                                    <span class="n">_key</span><span class="p">)</span>
+                            <span class="n">_obj_data</span><span class="p">[</span><span class="n">_obj_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_value</span> 
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">prop_query_data</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="k">if</span> <span class="n">_class_uri</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;kds_NoClass&quot;</span><span class="p">]:</span>
+                        <span class="k">for</span> <span class="n">_subject</span> <span class="ow">in</span> <span class="n">_item</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">_class_uri</span> <span class="ow">in</span> <span class="n">_item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_subject</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">):</span>
+                                <span class="n">prop_query_data</span> <span class="o">=</span> <span class="n">_item</span><span class="p">[</span><span class="n">_subject</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">)</span>
+                                <span class="c1">#_prop.query_data = _item[_subject].get(_prop_uri)</span>
+                                <span class="c1">#_prop.subject_uri = _subject</span>
+                                <span class="n">_data_value</span> <span class="o">=</span> <span class="n">_item</span><span class="p">[</span><span class="n">_subject</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">_processor</span> <span class="ow">in</span> <span class="n">clean_processors</span><span class="p">(</span>\
+                            <span class="p">[</span><span class="n">make_list</span><span class="p">(</span><span class="n">_prop</span><span class="o">.</span><span class="n">kds_processors</span><span class="p">)],</span>
+                            <span class="n">_prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                        <span class="n">run_processor</span><span class="p">(</span><span class="n">_processor</span><span class="p">,</span> 
+                                      <span class="n">rdf_obj</span><span class="p">,</span> 
+                                      <span class="n">_prop</span><span class="p">,</span> 
+                                      <span class="n">processor_mode</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> 
+                            <span class="k">if</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_propUri</span> <span class="o">==</span> <span class="s2">&quot;schema_image&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_propUri</span> <span class="o">==</span> <span class="s2">&quot;kds_StaticValue&quot;</span><span class="p">:</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_returnValue</span>
+                        <span class="n">prop_old_data</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_returnValue</span>
+                    <span class="k">if</span> <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">,</span> <span class="s2">&quot; __ &quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">_prop</span><span class="p">),</span> <span class="s2">&quot;--pro--&quot;</span><span class="p">,</span> <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span><span class="p">)</span>
+                        <span class="n">prop_old_data</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">prop_old_data</span> <span class="o">=</span> <span class="n">prop_query_data</span>
+                    <span class="k">if</span> <span class="n">prop_old_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_prop</span><span class="p">,</span><span class="s2">&quot;kds_formFieldName&quot;</span><span class="p">):</span>
+                            <span class="n">_obj_data</span><span class="p">[</span><span class="n">_prop</span><span class="o">.</span><span class="n">kds_formFieldName</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_old_data</span> 
+                        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_prop</span><span class="p">,</span><span class="s2">&quot;kds_apiFieldName&quot;</span><span class="p">):</span>
+                            <span class="n">_obj_data</span><span class="p">[</span><span class="n">_prop</span><span class="o">.</span><span class="n">kds_apiFieldName</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_old_data</span>
+                            
+            <span class="n">_obj_data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MultiDict</span><span class="p">(</span><span class="n">_obj_data</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_obj_data_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">_obj_data_dict</span> <span class="o">=</span> <span class="n">_obj_data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">_obj_data_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">_obj_data_dict</span> <span class="o">=</span> <span class="n">_obj_data_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_obj_data_dict</span> <span class="o">=</span> <span class="n">MultiDict</span><span class="p">()</span>
+        <span class="n">_obj_data</span> <span class="o">=</span> <span class="n">iris_to_strings</span><span class="p">(</span><span class="n">_obj_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;**** return value: ---------------------------- </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">({</span><span class="s2">&quot;obj_data&quot;</span><span class="p">:</span><span class="n">_obj_data_dict</span><span class="p">,</span>
+                             <span class="s2">&quot;obj_json&quot;</span><span class="p">:</span><span class="n">_obj_data</span><span class="p">,</span>
+                             <span class="s2">&quot;query_data&quot;</span><span class="p">:</span><span class="n">_query_data</span><span class="p">,</span>
+                             <span class="s2">&quot;form_class_uri&quot;</span><span class="p">:</span><span class="n">_lookup_class_uri</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END get_obj_data ---------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;obj_data&quot;</span><span class="p">:</span><span class="n">_obj_data_dict</span><span class="p">,</span>
+                <span class="s2">&quot;obj_json&quot;</span><span class="p">:</span><span class="n">_obj_data</span><span class="p">,</span>
+                <span class="s2">&quot;query_data&quot;</span><span class="p">:</span><span class="n">_query_data</span><span class="p">,</span>
+                <span class="s2">&quot;form_class_uri&quot;</span><span class="p">:</span><span class="n">_lookup_class_uri</span><span class="p">}</span></div>
+                    
+    <span class="k">def</span> <span class="nf">_make_form_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; creates an indexed dictionary of available forms and attaches</span>
+<span class="sd">            it to the Framework as form_list attribute&#39;&#39;&#39;</span>
+        <span class="n">_form_list</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_link_list</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_form</span><span class="p">,</span> <span class="n">_details</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_form_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">_form_instr</span> <span class="o">=</span> <span class="n">_details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formInstructions&#39;</span><span class="p">,{})</span>
+            <span class="n">_form_url</span> <span class="o">=</span> <span class="n">_form_instr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s2">&quot;kds_formUrl&quot;</span><span class="p">,</span><span class="n">nouri</span><span class="p">(</span><span class="n">_form</span><span class="p">))</span> 
+            <span class="n">_instance_list</span> <span class="o">=</span> <span class="n">_form_instr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s1">&#39;kds_formInstance&#39;</span><span class="p">,{})</span>    
+            <span class="k">for</span> <span class="n">_instance</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_instance_list</span><span class="p">):</span>
+                <span class="n">_instance_url</span> <span class="o">=</span> <span class="n">_instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                <span class="s2">&quot;kds_instanceUrl&quot;</span><span class="p">,</span>
+                                <span class="n">nouri</span><span class="p">(</span><span class="n">_instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formInstanceType&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">_instance_url</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+                    <span class="n">_key</span> <span class="o">=</span> <span class="n">_form_url</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_key</span> <span class="o">=</span> <span class="s2">&quot;{}/{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_form_url</span><span class="p">,</span> <span class="n">_instance_url</span><span class="p">)</span>
+                <span class="n">_form_title</span> <span class="o">=</span> <span class="n">_instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formTitle&#39;</span><span class="p">,</span>
+                        <span class="n">_form_instr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formTitle&quot;</span><span class="p">,</span><span class="n">nouri</span><span class="p">(</span><span class="n">_form</span><span class="p">)))</span>
+                <span class="n">_instance_name</span> <span class="o">=</span> <span class="n">nouri</span><span class="p">(</span><span class="n">_instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formInstanceType&#39;</span><span class="p">))</span>
+                <span class="n">_name_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">_form_title</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">_instance_name</span><span class="p">:</span>
+                    <span class="n">_name_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_instance_name</span><span class="p">)</span>
+                <span class="n">_form_list</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>\
+                        <span class="s1">&#39;form_uri&#39;</span><span class="p">:</span><span class="n">_form</span><span class="p">,</span> 
+                        <span class="s1">&#39;instance_uri&#39;</span><span class="p">:</span><span class="n">_instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formInstanceType&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;form_title&#39;</span><span class="p">:</span><span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_name_list</span><span class="p">)}</span>
+                <span class="n">_link_list</span><span class="p">[</span><span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_name_list</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">link_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">_link_list</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="c1">#print(self.link_list)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form_list</span> <span class="o">=</span> <span class="n">_form_list</span>
+    
+    <span class="k">def</span> <span class="nf">_make_api_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; creates an indexed dictionary of available APIs and attaches</span>
+<span class="sd">            it to the Framework as api_list attribute&#39;&#39;&#39;</span>
+        <span class="n">_api_list</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_api</span><span class="p">,</span> <span class="n">_details</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_api_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">_api_url</span> <span class="o">=</span> <span class="n">_details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiInstructions&#39;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s2">&quot;kds_apiUrl&quot;</span><span class="p">,</span><span class="n">nouri</span><span class="p">(</span><span class="n">_api</span><span class="p">))</span> 
+            <span class="n">_extension</span> <span class="o">=</span> <span class="n">_details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiInstructions&#39;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s1">&#39;kds_apiUrlExtension&#39;</span><span class="p">)</span>    
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_extension</span><span class="p">:</span>
+                <span class="n">_key</span> <span class="o">=</span> <span class="n">_api_url</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_key</span> <span class="o">=</span> <span class="s2">&quot;{}|{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_api_url</span><span class="p">,</span> <span class="n">_extension</span><span class="p">)</span>
+            <span class="n">_api_list</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>\
+                    <span class="s1">&#39;api_uri&#39;</span><span class="p">:</span><span class="n">_api</span><span class="p">,</span> 
+                    <span class="s1">&#39;extension&#39;</span><span class="p">:</span><span class="n">_extension</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_list</span> <span class="o">=</span> <span class="n">_api_list</span>
+        
+    <span class="k">def</span> <span class="nf">_load_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; queries the rdf definitions and sets the framework attributes</span>
+<span class="sd">            for the application defaults &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_initialized</span> <span class="o">!=</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">_app_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_application_defaults</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ns_obj</span> <span class="o">=</span> <span class="n">create_namespace_obj</span><span class="p">(</span><span class="n">_app_json</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdf_app_dict</span> <span class="o">=</span> <span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">_app_json</span><span class="p">,</span>
+                                                             <span class="bp">self</span><span class="o">.</span><span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">%s</span><span class="s2"> objects&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rdf_app_dict</span><span class="p">))</span>
+            <span class="c1"># add the security attribute</span>
+            <span class="c1"># add the app attribute</span>
+            <span class="n">_key_string</span> <span class="o">=</span> <span class="s2">&quot;kds_applicationSecurity&quot;</span>
+            <span class="k">for</span> <span class="n">_app_section</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_app_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_section_key</span> <span class="ow">in</span> <span class="n">_app_section</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">_section_key</span> <span class="o">==</span> <span class="n">_key_string</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">app_security</span> <span class="o">=</span> <span class="n">_app_section</span><span class="p">[</span><span class="n">_section_key</span><span class="p">]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">_app_section</span>
+                            <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="c1"># add attribute for a list of property processors that</span>
+            <span class="c1"># will generate a property value when run</span>
+            <span class="n">_value_processors</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_processor</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">rdf_app_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_PropertyProcessor&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_resultType&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;propertyValue&quot;</span><span class="p">:</span>
+                    <span class="n">_value_processors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_processor</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value_processors</span> <span class="o">=</span> <span class="n">_value_processors</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app_initialized</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">_generate_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; generates a python RdfClass for each defined rdf class in</span>
+<span class="sd">            the app vocabulary &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_initialized</span> <span class="o">!=</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">_class_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_rdf_class_defintions</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdf_class_dict</span> <span class="o">=</span> <span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">_class_json</span><span class="p">,</span>
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">%s</span><span class="s2"> objects&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rdf_class_dict</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">class_initialized</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">kds_saveLocation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_saveLocation&quot;</span><span class="p">,</span><span class="s2">&quot;triplestore&quot;</span><span class="p">)</span>
+            <span class="n">kds_subjectPattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_subjectPattern&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;!--baseUrl,/,ns,/,!--classPrefix,/,!--className,/,!--uuid&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_class_dict</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">_rdf_class</span><span class="p">,</span>
+                        <span class="n">RdfClass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rdf_class_dict</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">],</span>
+                                 <span class="n">_rdf_class</span><span class="p">,</span>
+                                 <span class="n">kds_saveLocation</span><span class="o">=</span><span class="n">kds_saveLocation</span><span class="p">,</span>
+                                 <span class="n">kds_subjectPattern</span><span class="o">=</span><span class="n">kds_subjectPattern</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_generate_forms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; adds the dictionary of form definitions as an attribute of</span>
+<span class="sd">            this class. The form python class uses this dictionary to</span>
+<span class="sd">            create a python form class at the time of calling. &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forms_initialized</span> <span class="o">!=</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">_form_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_rdf_form_defintions</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdf_form_dict</span> <span class="o">=</span> <span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">_form_json</span><span class="p">,</span>
+                                                              <span class="bp">self</span><span class="o">.</span><span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">%s</span><span class="s2"> objects&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rdf_form_dict</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_make_form_list</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">form_initialized</span> <span class="o">=</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">_generate_apis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; adds the dictionary of api definitions as an attribute of</span>
+<span class="sd">            this class. The api python class uses this dictionary to</span>
+<span class="sd">            create a python api class at the time of calling. &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apis_initialized</span> <span class="o">!=</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">_api_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_rdf_api_defintions</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdf_api_dict</span> <span class="o">=</span> <span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">_api_json</span><span class="p">,</span>
+                                                              <span class="bp">self</span><span class="o">.</span><span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">%s</span><span class="s2"> objects&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rdf_api_dict</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_make_api_list</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apis_initialized</span> <span class="o">=</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">_load_application_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Queries the triplestore for settings defined for the application in</span>
+<span class="sd">            the kl_app.ttl file&#39;&#39;&#39;</span>
+        
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Loading application defaults&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="n">_sparql</span> <span class="o">=</span> <span class="n">render_without_request</span><span class="p">(</span>
+                <span class="s2">&quot;jsonApplicationDefaults.rq&quot;</span><span class="p">,</span>
+                <span class="n">graph</span><span class="o">=</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RDF_DEFINITION_GRAPH&#39;</span><span class="p">))</span>
+            <span class="n">_form_list</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+                                       <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">_sparql</span><span class="p">,</span> 
+                                             <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+            <span class="n">_string_defs</span> <span class="o">=</span> <span class="n">_form_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s1">&#39;results&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bindings&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;app&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_string_defs</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;app_query.json&quot;</span><span class="p">),</span> 
+                <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">file_obj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">_string_defs</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;app_query.json&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">_json_defs</span>
+            
+    <span class="k">def</span> <span class="nf">_load_rdf_class_defintions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Queries the triplestore for list of classes used in the app as</span>
+<span class="sd">            defined in the kl_app.ttl file&#39;&#39;&#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Loading rdf class definitions&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="n">_sparql</span> <span class="o">=</span> <span class="n">render_without_request</span><span class="p">(</span><span class="s2">&quot;jsonRDFclassDefinitions.rq&quot;</span><span class="p">,</span>
+                                             <span class="n">graph</span><span class="o">=</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                                    <span class="s1">&#39;RDF_DEFINITION_GRAPH&#39;</span><span class="p">))</span>
+            <span class="n">_class_list</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+                                        <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">_sparql</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+            <span class="n">_raw_json</span> <span class="o">=</span> <span class="n">_class_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s1">&#39;results&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bindings&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;klClasses&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="n">_string_defs</span> <span class="o">=</span> <span class="n">_raw_json</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;hasProperty&quot;:&#39;</span><span class="p">,</span> <span class="s1">&#39;properties&quot;:&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span><span class="s2">&quot;class_query.json&quot;</span><span class="p">),</span> 
+                <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">file_obj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">_string_defs</span> <span class="p">)</span>
+            <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_string_defs</span><span class="p">)</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;class_query.json&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">_json_defs</span>
+
+    <span class="k">def</span> <span class="nf">_load_rdf_form_defintions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Queries the triplestore for list of forms used in the app as</span>
+<span class="sd">            defined in the kl_app.ttl file&#39;&#39;&#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Loading form definitions&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="n">_sparql</span> <span class="o">=</span> <span class="n">render_without_request</span><span class="p">(</span><span class="s2">&quot;jsonFormQueryTemplate.rq&quot;</span><span class="p">,</span>
+                                             <span class="n">graph</span><span class="o">=</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                                    <span class="s1">&#39;RDF_DEFINITION_GRAPH&#39;</span><span class="p">))</span>
+            <span class="n">_form_list</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+                                       <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">_sparql</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+            <span class="n">_raw_json</span> <span class="o">=</span> <span class="n">_form_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bindings&#39;</span>\
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;appForms&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="n">_string_defs</span> <span class="o">=</span> <span class="n">_raw_json</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;hasProperty&quot;:&#39;</span><span class="p">,</span> <span class="s1">&#39;properties&quot;:&#39;</span><span class="p">)</span>
+            
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;form_query.json&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">file_obj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">_string_defs</span><span class="p">)</span>
+            <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_string_defs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;form_query.json&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">_json_defs</span>
+
+    <span class="k">def</span> <span class="nf">_load_rdf_api_defintions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; Queries the triplestore for list of forms used in the app as</span>
+<span class="sd">            defined in the kl_app.ttl file&#39;&#39;&#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Loading api definitions&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="n">_sparql</span> <span class="o">=</span> <span class="n">render_without_request</span><span class="p">(</span><span class="s2">&quot;jsonApiQueryTemplate.rq&quot;</span><span class="p">,</span>
+                                             <span class="n">graph</span><span class="o">=</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                                    <span class="s1">&#39;RDF_DEFINITION_GRAPH&#39;</span><span class="p">))</span>
+            <span class="n">_api_list</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+                                       <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">_sparql</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+            <span class="n">_raw_json</span> <span class="o">=</span> <span class="n">_api_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bindings&#39;</span>\
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;appApis&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="n">_string_defs</span> <span class="o">=</span> <span class="n">_raw_json</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;hasProperty&quot;:&#39;</span><span class="p">,</span> <span class="s1">&#39;properties&quot;:&#39;</span><span class="p">)</span>
+            <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_string_defs</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;api_query.json&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">file_obj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">_string_defs</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">JSON_LOCATION</span><span class="p">,</span> <span class="s2">&quot;api_query.json&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">_json_defs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">_json_defs</span>
+        
+    <span class="k">def</span> <span class="nf">_validate_obj_by_class_reqs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;This method will cycle thhrought the objects rdf classes and</span>
+<span class="sd">           call the classes validate_form_data method and return the results&#39;&#39;&#39;</span>
+
+        <span class="n">_validation_results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_validation_errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">:</span>
+            <span class="n">_current_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_rdf_class</span><span class="p">)</span>
+            <span class="n">_validation_results</span> <span class="o">=</span> <span class="n">_current_class</span><span class="o">.</span><span class="n">validate_obj_data</span><span class="p">(</span>\
+                    <span class="n">rdf_obj</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">],</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">query_data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_validation_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+                <span class="n">_validation_errors</span> <span class="o">+=</span> <span class="n">_validation_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;errors&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_validation_errors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_error</span> <span class="ow">in</span> <span class="n">_validation_errors</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;errorData&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                        <span class="s2">&quot;kds_propUri&quot;</span><span class="p">,</span> <span class="p">[])):</span>
+                    <span class="n">_obj_prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rdf_obj</span><span class="p">,</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_obj_prop</span><span class="p">,</span> <span class="s2">&quot;errors&quot;</span><span class="p">):</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                <span class="s2">&quot;formErrorMessage&quot;</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">_obj_prop</span><span class="p">,</span> <span class="s2">&quot;errors&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">_error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                <span class="s2">&quot;formErrorMessage&quot;</span><span class="p">)])</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">:</span><span class="n">rdf_obj</span><span class="p">,</span> <span class="s2">&quot;errors&quot;</span><span class="p">:</span> \
+                        <span class="n">_validation_errors</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_get_save_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Cycle through the classes and determine in what order they need</span>
+<span class="sd">           to be saved</span>
+<span class="sd">           1. Classes who&#39;s properties don&#39;t rely on another class</span>
+<span class="sd">           2. Classes that that depend on classes in step 1</span>
+<span class="sd">           3. Classes stored as blanknodes of Step 2 &#39;&#39;&#39;</span>
+
+        <span class="n">_save_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">_save_last</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">indep_classes</span><span class="p">:</span>
+            <span class="n">_save_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_rdf_class</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">dep_classes</span><span class="p">:</span>
+            <span class="n">_dependant</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">for</span> <span class="n">_dep_class</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">dependancies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_dep_class</span> <span class="o">!=</span> <span class="n">_rdf_class</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">dependancies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_dep_class</span><span class="p">,</span> <span class="p">[]):</span>
+                        <span class="c1">#print(_class_name, &quot; d:&quot;, _dep_class, &quot; r:&quot;, _rdf_class, &quot; p:&quot;,</span>
+                              <span class="c1">#_prop.get(&#39;classUri&#39;))</span>
+                        <span class="k">if</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">_rdf_class</span><span class="p">:</span>
+                            <span class="n">_dependant</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_dependant</span><span class="p">:</span>
+                <span class="n">_save_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_rdf_class</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_save_last</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_rdf_class</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_save_order</span> <span class="o">+</span> <span class="n">_save_last</span>
+    
+    <span class="k">def</span> <span class="nf">_load_rdf_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; loads the RDF/turtle application data to the triplestore &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="n">base_url</span> <span class="o">=</span> <span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ORGANIZATION&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">)</span>
+            <span class="n">triplestore_url</span> <span class="o">=</span> <span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">)</span>
+            <span class="c1"># Strip off trailing forward slash for TTL template</span>
+            <span class="k">if</span> <span class="n">base_url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                <span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># if the extensions exist in the triplestore drop the graph</span>
+            <span class="n">stmt</span> <span class="o">=</span> <span class="s2">&quot;DROP GRAPH &lt;http://knowledgelinks.io/ns/application-framework/&gt;;&quot;</span>
+            <span class="n">drop_extensions</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">triplestore_url</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;update&quot;</span><span class="p">:</span> <span class="n">stmt</span><span class="p">})</span>
+            <span class="c1"># render the extensions with the base URL</span>
+            <span class="c1"># must use a ***NON FLASK*** routing since flask is not completely</span>
+            <span class="c1"># initiated</span>
+            <span class="n">rdf_resource_templates</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;kds-app.ttl&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kds-vocab.ttl&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kds-resources.ttl&quot;</span><span class="p">]</span>
+            <span class="n">rdf_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">rdf_resource_templates</span><span class="p">:</span>
+                <span class="n">rdf_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">render_without_request</span><span class="p">(</span>
+                        <span class="n">template</span><span class="p">,</span>
+                        <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">))</span>
+            <span class="c1"># load the extensions in the triplestore</span>
+            <span class="n">context_uri</span> <span class="o">=</span> <span class="s2">&quot;http://knowledgelinks.io/ns/application-framework/&quot;</span> 
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rdf_data</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                    <span class="n">url</span><span class="o">=</span><span class="n">triplestore_url</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;text/turtle&quot;</span><span class="p">},</span>
+                    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;context-uri&quot;</span><span class="p">:</span> <span class="n">context_uri</span><span class="p">},</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;</span> <span class="mi">399</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot load extensions {} into {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">rdf_resource_templates</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">triplestore_url</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">%s</span><span class="s2"> file loaded&quot;</span> <span class="o">%</span> <span class="n">rdf_resource_templates</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                      
+    <span class="c1"># possible deletion: no longer in use. Commented out till certian                </span>
+    <span class="sd">&quot;&quot;&quot;def get_form_data(self, rdf_form, **kwargs):</span>
+<span class="sd">        &#39;&#39;&#39; returns the data for the current form paramters</span>
+
+<span class="sd">        **keyword arguments</span>
+<span class="sd">        subject_uri: the URI for the subject</span>
+<span class="sd">        class_uri: the rdf class of the subject</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        _class_uri = kwargs.get(&quot;class_uri&quot;, rdf_form.data_class_uri)</span>
+<span class="sd">        _lookup_class_uri = _class_uri</span>
+<span class="sd">        #if hasattr(rdf_form,&quot;subjectUri&quot;):</span>
+<span class="sd">        #    subject_uri = rdf_form.subjectUri.data</span>
+<span class="sd">        #else:</span>
+<span class="sd">        subject_uri = kwargs.get(&quot;subject_uri&quot;, rdf_form.data_subject_uri)</span>
+<span class="sd">        _subform_data = {}</span>
+<span class="sd">        _data_list = kwargs.get(&quot;data_list&quot;,False)</span>
+<span class="sd">        _parent_field = None</span>
+<span class="sd">        # test to see if a subform is in the form</span>
+<span class="sd">        if rdf_form.has_subform:</span>
+<span class="sd">            _sub_rdf_form = None</span>
+<span class="sd">            # find the subform field </span>
+<span class="sd">            for _field in rdf_form:</span>
+<span class="sd">            #print(_field.__dict__,&quot;\n********************\n&quot;)</span>
+<span class="sd">                if _field.type == &#39;FieldList&#39;:</span>
+<span class="sd">                    for _entry in _field.entries:</span>
+<span class="sd">                        print(&quot;__________\n&quot;,_entry.__dict__)</span>
+<span class="sd">                        if _entry.type == &#39;FormField&#39;:</span>
+<span class="sd">                            _sub_rdf_form = _entry.form</span>
+<span class="sd">                            _parent_field = _field.name</span>
+<span class="sd">            # if the subform exists recursively call this method to get the</span>
+<span class="sd">            # subform data</span>
+<span class="sd">            if _sub_rdf_form:</span>
+<span class="sd">                _subform_data = self.get_form_data(_sub_rdf_form,</span>
+<span class="sd">                                                   subject_uri=subject_uri,</span>
+<span class="sd">                                                   class_uri=_lookup_class_uri,</span>
+<span class="sd">                                                   data_list=True)</span>
+<span class="sd">        if DEBUG:      </span>
+<span class="sd">            print(&quot;tttttt subform data\n&quot;,json.dumps(_subform_data, indent=4))</span>
+
+<span class="sd">        _class_name = self.get_class_name(_class_uri)</span>
+
+<span class="sd">        subject_uri = kwargs.get(&quot;subject_uri&quot;, rdf_form.data_subject_uri)</span>
+<span class="sd">        #print(&quot;%%%%%%%%%%% subject_uri: &quot;,subject_uri)</span>
+<span class="sd">        _sparql_args = None</span>
+<span class="sd">        _class_links = self.get_form_class_links(rdf_form)</span>
+<span class="sd">        _sparql_constructor = dict.copy(_class_links[&#39;dependancies&#39;])</span>
+<span class="sd">        if DEBUG:</span>
+<span class="sd">            print(&quot;+++++++++++++++++++++++ Dependancies:\n&quot;, json.dumps(_sparql_constructor, indent=4))</span>
+<span class="sd">        _base_subject_finder = None</span>
+<span class="sd">        _linked_class = None</span>
+<span class="sd">        _linked_prop = False</span>
+<span class="sd">        _sparql_elements = []</span>
+<span class="sd">        if is_not_null(subject_uri):</span>
+<span class="sd">            # find the primary linkage between the supplied subjectId and</span>
+<span class="sd">            # other form classes</span>
+<span class="sd">            for _rdf_class in _sparql_constructor:</span>
+<span class="sd">                for _prop in _sparql_constructor[_rdf_class]:</span>
+<span class="sd">                    try:</span>
+<span class="sd">                        if _class_uri == _prop.get(&quot;classUri&quot;):</span>
+<span class="sd">                            _sparql_args = _prop</span>
+<span class="sd">                            _linked_class = _rdf_class</span>
+<span class="sd">                            _sparql_constructor[_rdf_class].remove(_prop)</span>
+<span class="sd">                            if _rdf_class != _lookup_class_uri:</span>
+<span class="sd">                                _linked_prop = True</span>
+
+<span class="sd">                    except:</span>
+<span class="sd">                        pass</span>
+<span class="sd">            # generate the triple pattern for linked class</span>
+<span class="sd">            if DEBUG:</span>
+<span class="sd">                print(&quot;+++++++++++++++++++++++ SPARQL Constructor:\n&quot;, json.dumps(_sparql_constructor, indent=4))</span>
+<span class="sd">            if _sparql_args:</span>
+<span class="sd">                # create a binding for multi-item results</span>
+<span class="sd">                if _data_list:</span>
+<span class="sd">                    _list_binding = &quot;BIND(?classID AS ?itemID) .&quot;</span>
+<span class="sd">                else:</span>
+<span class="sd">                    _list_binding = &#39;&#39;</span>
+<span class="sd">                _base_subject_finder = \</span>
+<span class="sd">                        &quot;BIND({} AS ?baseSub) .\n\t{}\n\t{}\n\t{}&quot;.format(</span>
+<span class="sd">                            iri(subject_uri),</span>
+<span class="sd">                            make_triple(&quot;?baseSub&quot;,</span>
+<span class="sd">                                        &quot;a&quot;,</span>
+<span class="sd">                                        iri(_lookup_class_uri)),</span>
+<span class="sd">                            make_triple(&quot;?classID&quot;,</span>
+<span class="sd">                                        iri(_sparql_args.get(&quot;propUri&quot;)),</span>
+<span class="sd">                                        &quot;?baseSub&quot;),</span>
+<span class="sd">                            _list_binding)</span>
+<span class="sd">               #print(&quot;base subject Finder:\n&quot;, _base_subject_finder)</span>
+<span class="sd">                if _linked_prop:</span>
+<span class="sd">                    if _data_list:</span>
+<span class="sd">                        _list_binding = &quot;BIND(?s AS ?itemID) .&quot;</span>
+<span class="sd">                    else:</span>
+<span class="sd">                        _list_binding = &#39;&#39;</span>
+<span class="sd">                    _sparql_elements.append(\</span>
+<span class="sd">                            &quot;BIND({} AS ?baseSub) .\n\t{}\n\t{}\n\t{}\n\t?s ?p ?o .&quot;.format(\</span>
+<span class="sd">                                    iri(subject_uri),</span>
+<span class="sd">                                    make_triple(&quot;?baseSub&quot;,</span>
+<span class="sd">                                                &quot;a&quot;,</span>
+<span class="sd">                                                iri(_lookup_class_uri)),</span>
+<span class="sd">                                    make_triple(&quot;?s&quot;,</span>
+<span class="sd">                                                iri(_sparql_args.get(&quot;propUri&quot;)),</span>
+<span class="sd">                                                &quot;?baseSub&quot;),</span>
+<span class="sd">                                    _list_binding))</span>
+<span class="sd">            # iterrate though the classes used in the form and generate the</span>
+<span class="sd">            # spaqrl triples to pull the data for that class</span>
+<span class="sd">            for _rdf_class in _sparql_constructor:</span>
+<span class="sd">                if _rdf_class == _class_name:</span>
+<span class="sd">                    if _data_list:</span>
+<span class="sd">                        _list_binding = &quot;BIND(?s AS ?itemID) .&quot;</span>
+<span class="sd">                    else:</span>
+<span class="sd">                        _list_binding = &#39;&#39;</span>
+<span class="sd">                    _sparql_elements.append(\</span>
+<span class="sd">                            &quot;\tBIND({} AS ?s) .\n\t{}\n\t{}\n\t?s ?p ?o .&quot;.format(</span>
+<span class="sd">                                iri(subject_uri),</span>
+<span class="sd">                                make_triple(&quot;?s&quot;, &quot;a&quot;, iri(_lookup_class_uri)),</span>
+<span class="sd">                                _list_binding))</span>
+<span class="sd">                for _prop in _sparql_constructor[_rdf_class]:</span>
+<span class="sd">                    if _rdf_class == _class_name:</span>
+<span class="sd">                        if _data_list:</span>
+<span class="sd">                            _list_binding = &quot;BIND(?s AS ?itemID) .&quot;</span>
+<span class="sd">                        else:</span>
+<span class="sd">                            _list_binding = &#39;&#39;</span>
+<span class="sd">                        #_sparql_elements.append(&quot;\t&quot;+make_triple(iri(str(\</span>
+<span class="sd">                                #subject_uri)), iri(_prop.get(&quot;propUri&quot;)), &quot;?s&quot;)+\</span>
+<span class="sd">                                # &quot;\n\t?s ?p ?o .&quot;)</span>
+<span class="sd">                        _sparql_arg = &quot;\tBIND({} AS ?baseSub) .\n\t{}\n\t{}\n\t{}\n\t?s ?p ?o .&quot;.format(\</span>
+<span class="sd">                                iri(subject_uri),</span>
+<span class="sd">                                make_triple(&quot;?baseSub&quot;,</span>
+<span class="sd">                                            &quot;a&quot;,</span>
+<span class="sd">                                            iri(_lookup_class_uri)),</span>
+<span class="sd">                                make_triple(&quot;?baseSub&quot;,</span>
+<span class="sd">                                            iri(_prop.get(&quot;propUri&quot;)),</span>
+<span class="sd">                                            &quot;?s&quot;),</span>
+<span class="sd">                                _list_binding)</span>
+<span class="sd">                        _sparql_elements.append(_sparql_arg)</span>
+<span class="sd">                    elif _rdf_class == _linked_class:</span>
+<span class="sd">                        _sparql_elements.append(</span>
+<span class="sd">                            &quot;\t{}\n\t{}\n\t?s ?p ?o .&quot;.format(</span>
+<span class="sd">                                _base_subject_finder,</span>
+<span class="sd">                                make_triple(&quot;?classID&quot;,</span>
+<span class="sd">                                            iri(_prop.get(&quot;propUri&quot;)),</span>
+<span class="sd">                                            &quot;?s&quot;)</span>
+<span class="sd">                                )</span>
+<span class="sd">                            )</span>
+
+
+<span class="sd">                    &#39;&#39;&#39;**** The case where an ID looking up a the triples for</span>
+<span class="sd">                        a non-linked related is not functioning i.e. password</span>
+<span class="sd">                        ClassID not looking up person org triples if the org</span>
+<span class="sd">                        class is not used in the form. This may not be a</span>
+<span class="sd">                        problem ... the below comment out is a start to solving</span>
+<span class="sd">                         if it is a problem</span>
+
+<span class="sd">                        elif _linked_class != self.get_class_name(prop.get(\</span>
+<span class="sd">                                &quot;classUri&quot;)):</span>
+<span class="sd">                        _sparql_elements.append(</span>
+<span class="sd">                            &quot;\t&quot; +_base_subject_finder + &quot;\n &quot; +</span>
+<span class="sd">                            &quot;\t&quot;+ make_triple(&quot;?classID&quot;, iri(prop.get(\</span>
+<span class="sd">                                    &quot;propUri&quot;)), &quot;?s&quot;) + &quot;\n\t?s ?p ?o .&quot;)&#39;&#39;&#39;</span>
+
+<span class="sd">            # merge the sparql elements for each class used into one combined</span>
+<span class="sd">            # sparql union statement</span>
+<span class="sd">            _sparql_unions = &quot;{{\n{}\n}}&quot;.format(&quot;\n} UNION {\n&quot;.join(\</span>
+<span class="sd">                    _sparql_elements))</span>
+<span class="sd">            if _data_list:</span>
+<span class="sd">                _list_binding = &quot;?itemID&quot;</span>
+<span class="sd">            else:</span>
+<span class="sd">                _list_binding = &#39;&#39;</span>
+<span class="sd">            # render the statment in the jinja2 template</span>
+<span class="sd">            _sparql = render_without_request(&quot;sparqlItemTemplate.rq&quot;,</span>
+<span class="sd">                                             prefix=self.get_prefix(),</span>
+<span class="sd">                                             query=_sparql_unions,</span>
+<span class="sd">                                             list_binding=_list_binding)</span>
+<span class="sd">            if DEBUG:</span>
+<span class="sd">                print(_sparql)</span>
+<span class="sd">            # query the triplestore</span>
+<span class="sd">            code_timer().log(&quot;loadOldData&quot;, &quot;pre send query&quot;)</span>
+<span class="sd">            _form_data_query =\</span>
+<span class="sd">                    requests.post(fw_config().get(&#39;TRIPLESTORE_URL&#39;),</span>
+<span class="sd">                                  data={&quot;query&quot;: _sparql, &quot;format&quot;: &quot;json&quot;})</span>
+<span class="sd">            code_timer().log(&quot;loadOldData&quot;, &quot;post send query&quot;)</span>
+<span class="sd">            #print(json.dumps(_form_data_query.json().get(&#39;results&#39;).get(\</span>
+<span class="sd">                    #&#39;bindings&#39;), indent=4))</span>
+<span class="sd">            _query_data = convert_spo_to_dict(\</span>
+<span class="sd">                    _form_data_query.json().get(&#39;results&#39;).get(&#39;bindings&#39;))</span>
+<span class="sd">            code_timer().log(&quot;loadOldData&quot;, &quot;post convert query&quot;)</span>
+<span class="sd">            #print(&quot;form query data _____\n&quot;, json.dumps(_query_data, indent=4))</span>
+<span class="sd">            #_query_data = _form_data_query.json().get(&#39;results&#39;).get(&#39;bindings&#39;)</span>
+<span class="sd">            #_query_data = json.loads(_form_data_query.json().get(&#39;results&#39;).get(</span>
+<span class="sd">            #&#39;bindings&#39;)[0][&#39;itemJson&#39;][&#39;value&#39;])</span>
+<span class="sd">        else:</span>
+<span class="sd">            _query_data = {}</span>
+<span class="sd">        # compare the return results with the form fields and generate a</span>
+<span class="sd">        # formData object</span>
+<span class="sd">        </span>
+<span class="sd">        _form_data_list = []</span>
+<span class="sd">        for _item in make_list(_query_data):</span>
+<span class="sd">            _form_data = {}</span>
+<span class="sd">            for _row in rdf_form.rdfFieldList:</span>
+<span class="sd">                for _prop in _row:</span>
+<span class="sd">                    #print(_prop, &quot;\n\n&quot;)</span>
+<span class="sd">                    _prop_uri = _prop.get(&quot;propUri&quot;)</span>
+<span class="sd">                    _class_uri = _prop.get(&quot;classUri&quot;)</span>
+<span class="sd">                    #print(_class_uri, &quot; &quot;, _prop_uri, &quot;\n\n&quot;)</span>
+<span class="sd">                    _data_value = None</span>
+<span class="sd">                    if &quot;subform&quot; in _prop.get(&quot;fieldType&quot;,{}).get(&quot;type&quot;,&#39;&#39;).lower():</span>
+<span class="sd">                        for i, _data in enumerate(_subform_data.get(&quot;formdata&quot;)):</span>
+<span class="sd">                            for _key, _value in _data.items():</span>
+<span class="sd">                                _form_data[&quot;%s-%s-%s&quot; % (_prop.get(&quot;formFieldName&quot;),i,_key)] = _value   </span>
+<span class="sd">                    else:</span>
+<span class="sd">                        for _subject in _item:</span>
+<span class="sd">                            if _class_uri in _item[_subject].get( \</span>
+<span class="sd">                                    &quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&quot;):</span>
+<span class="sd">                                _data_value = _item[_subject].get(_prop.get(&quot;propUri&quot;))</span>
+<span class="sd">                        if _data_value:</span>
+<span class="sd">                            _processors = clean_processors(</span>
+<span class="sd">                                            make_list(_prop.get(&quot;processors&quot;)), _class_uri)</span>
+<span class="sd">                            #print(&quot;processors - &quot;, _prop_uri, &quot; - &quot;, _processors,</span>
+<span class="sd">                                  #&quot;\npre - &quot;, make_list(_prop.get(&quot;processors&quot;)))</span>
+<span class="sd">                            _processors = remove_null(_processors)</span>
+<span class="sd">                            for _processor in _processors:</span>
+<span class="sd">                                _data_value = \</span>
+<span class="sd">                                        run_processor(_processor,</span>
+<span class="sd">                                                      {&quot;propUri&quot;: _prop_uri,</span>
+<span class="sd">                                                       &quot;classUri&quot;: _class_uri,</span>
+<span class="sd">                                                       &quot;prop&quot;: _prop,</span>
+<span class="sd">                                                       &quot;queryData&quot;: _item,</span>
+<span class="sd">                                                       &quot;dataValue&quot;: _data_value},</span>
+<span class="sd">                                                      &quot;load&quot;)</span>
+<span class="sd">                        if _data_value is not None:</span>
+<span class="sd">                            _form_data[_prop.get(&quot;formFieldName&quot;)] = _data_value</span>
+<span class="sd">            _form_data_list.append(MultiDict(_form_data))</span>
+<span class="sd">        if len(_form_data_list) == 1:</span>
+<span class="sd">            _form_data_dict = _form_data_list[0]</span>
+<span class="sd">        elif len(_form_data_list) &gt; 1:</span>
+<span class="sd">            _form_data_dict = _form_data_list</span>
+<span class="sd">        else:</span>
+<span class="sd">            _form_data_dict = MultiDict()</span>
+<span class="sd">        code_timer().log(&quot;loadOldData&quot;, &quot;post load into MultiDict&quot;)</span>
+<span class="sd">        #print(&quot;data:\n&quot;, _form_data)</span>
+<span class="sd">        #print(&quot;dataDict:\n&quot;, _form_data_dict)</span>
+<span class="sd">        code_timer().print_timer(&quot;loadOldData&quot;, delete=True)</span>
+<span class="sd">        return {&quot;formdata&quot;:_form_data_dict,</span>
+<span class="sd">                &quot;queryData&quot;:_query_data,</span>
+<span class="sd">                &quot;formClassUri&quot;:_lookup_class_uri}&quot;&quot;&quot;</span>
+    
+    <span class="c1"># possible deletion: no longer in use. Commented out till certian</span>
+    <span class="sd">&#39;&#39;&#39;def _find_form_field_name(self, rdf_form, prop_uri):</span>
+<span class="sd">        for _row in rdf_form.rdfFieldList:</span>
+<span class="sd">            for _prop in _row:</span>
+<span class="sd">                if _prop.get(&quot;propUri&quot;) == prop_uri:</span>
+<span class="sd">                    return _prop.get(&quot;formFieldName&quot;)</span>
+<span class="sd">        return None&#39;&#39;&#39;</span>
+        
+    <span class="c1"># possible deletion: no longer in use. Commented out till certian</span>
+    <span class="sd">&quot;&quot;&quot;def get_class_name(self, class_uri):</span>
+<span class="sd">        &#39;&#39;&#39;This method returns the rdf class name for the supplied Class URI&#39;&#39;&#39;</span>
+<span class="sd">        for _rdf_class in self.rdf_class_dict:</span>
+<span class="sd">            _current_class_uri = self.rdf_class_dict.get(_rdf_class, {}).get(\</span>
+<span class="sd">                    &quot;classUri&quot;)</span>
+<span class="sd">            if _current_class_uri == class_uri:</span>
+<span class="sd">                return _rdf_class</span>
+<span class="sd">        return &#39;&#39;&quot;&quot;&quot;</span>
+        
+    <span class="c1"># possible deletion: no longer in use. Commented out till certian</span>
+    <span class="sd">&quot;&quot;&quot;def get_property(self, **kwargs):</span>
+<span class="sd">        &#39;&#39;&#39; Method returns a list of the property json objects where the</span>
+<span class="sd">            property is used</span>
+
+<span class="sd">        keyword Args:</span>
+<span class="sd">            class_name: *Optional the name of Class</span>
+<span class="sd">            class_uri: *Optional the Uri of the Class</span>
+<span class="sd">            prop_name: The Name of the property</span>
+<span class="sd">            prop_uri: The URI of the property</span>
+<span class="sd">            ** the Prop Name or URI is required&#39;&#39;&#39;</span>
+<span class="sd">        _return_list = []</span>
+<span class="sd">        _class_name = kwargs.get(&quot;class_name&quot;)</span>
+<span class="sd">        _class_uri = kwargs.get(&quot;class_uri&quot;)</span>
+<span class="sd">        _prop_name = kwargs.get(&quot;prop_name&quot;)</span>
+<span class="sd">        _prop_uri = kwargs.get(&quot;prop_uri&quot;)</span>
+<span class="sd">        if _class_name or _class_uri:</span>
+<span class="sd">            if _class_uri:</span>
+<span class="sd">                _class_name = self.get_class_name(_class_uri)</span>
+<span class="sd">            if _prop_uri:</span>
+<span class="sd">                _return_list.append(getattr(self, _class_name).get_property(\</span>
+<span class="sd">                        prop_uri=_prop_uri))</span>
+<span class="sd">            else:</span>
+<span class="sd">                _return_list.append(getattr(self, _class_name).get_property(\</span>
+<span class="sd">                        prop_name=_prop_name))</span>
+<span class="sd">        else:</span>
+<span class="sd">            for _rdf_class in self.rdf_class_dict:</span>
+<span class="sd">                if _prop_name:</span>
+<span class="sd">                    _current__class_prop = getattr(self, _rdf_class).get_property(\</span>
+<span class="sd">                            prop_name=_prop_name)</span>
+<span class="sd">                else:</span>
+<span class="sd">                    _current__class_prop = getattr(self, _rdf_class).get_property(\</span>
+<span class="sd">                            prop_uri=_prop_uri)</span>
+<span class="sd">                if _current__class_prop:</span>
+<span class="sd">                    _return_list.append(_current__class_prop)</span>
+<span class="sd">        return _return_list&quot;&quot;&quot;</span>
+    
+    <span class="c1"># possible deletion: no longer in use. Commented out till certian    </span>
+    <span class="sd">&quot;&quot;&quot;def _remove_field_from_json(self, rdf_field_json, field_name):</span>
+<span class="sd">        &#39;&#39;&#39; removes a field form the rdfFieldList form attribute &#39;&#39;&#39;</span>
+<span class="sd">        for _row in rdf_field_json:</span>
+<span class="sd">            for _field in _row:</span>
+<span class="sd">                if _field.get(&#39;formFieldName&#39;) == field_name:</span>
+<span class="sd">                    _row.remove(_field)</span>
+<span class="sd">        return rdf_field_json&quot;&quot;&quot;</span></div>
+
+<span class="c1"># Theses imports are placed at the end of the module to avoid circular imports</span>
+<span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">RdfClass</span>
+<span class="c1">#from rdfframework import RdfDataType</span>
+
+<div class="viewcode-block" id="verify_server_core"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.verify_server_core">[docs]</a><span class="k">def</span> <span class="nf">verify_server_core</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">start_delay</span><span class="o">=</span><span class="mi">90</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; checks to see if the server_core is running </span>
+<span class="sd">        </span>
+<span class="sd">        args:</span>
+<span class="sd">            delay: will cycle till core is up.</span>
+<span class="sd">            timeout: number of seconds to wait</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">last_check</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">start_delay</span> <span class="o">-</span> <span class="mi">10</span>
+    <span class="n">last_delay_notification</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="mi">10</span>
+    <span class="n">server_down</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">return_val</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">timeout</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="c1"># loop until the server is up or the timeout is reached</span>
+    <span class="k">while</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">timestamp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">timeout</span><span class="p">)</span> <span class="ow">and</span> <span class="n">server_down</span><span class="p">:</span>
+        <span class="c1"># if delaying, the start of the check, print waiting to start</span>
+        <span class="k">if</span> <span class="n">start_delay</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">timestamp</span> <span class="o">&lt;</span> <span class="n">start_delay</span> \
+                <span class="ow">and</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">last_delay_notification</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Delaying server status check until </span><span class="si">%s</span><span class="s2">s. Current time: </span><span class="si">%s</span><span class="s2">s&quot;</span> \
+                    <span class="o">%</span> <span class="p">(</span><span class="n">start_delay</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">timestamp</span><span class="p">)))</span>
+            <span class="n">last_delay_notification</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1"># send a request check every 10s until the server is up</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">last_check</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="ow">and</span> <span class="n">server_down</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Checking status of servers at </span><span class="si">%s</span><span class="s2">s&quot;</span> <span class="o">%</span> \
+                    <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">timestamp</span><span class="p">)))</span>
+            <span class="n">last_check</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>  
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">repo</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;REPOSITORY_URL&#39;</span><span class="p">))</span>
+                <span class="n">repo_code</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">status_code</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">repo_code</span> <span class="o">=</span> <span class="mi">400</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">triple</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">))</span>
+                <span class="n">triple_code</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">status_code</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">triple_code</span> <span class="o">=</span> <span class="mi">400</span>
+            <span class="k">if</span> <span class="n">repo_code</span> <span class="o">==</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">triple_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="n">server_down</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">return_val</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;**** Servers up at </span><span class="si">%s</span><span class="s2">s&quot;</span> <span class="o">%</span> \
+                    <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">timestamp</span><span class="p">)))</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">return_val</span>            </div>
+            
+               
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
