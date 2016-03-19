@@ -31,7 +31,7 @@
 
   
     <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
-        <link rel="next" title="Defining RDF Classes in the Framework" href="definingclasses.html"/>
+        <link rel="next" title="Essential RDF concepts" href="essentialrdfconcepts.html"/>
         <link rel="prev" title="Key Concepts" href="keyconcepts.html"/> 
 
   
@@ -87,17 +87,9 @@
                 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Understanding the RDF Application Files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
-<li class="toctree-l3"><a class="reference internal" href="definingprops.html">RDF Properties in the Framework</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#essential-rdf-concepts">Essential RDF concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-triple-pattern">The Triple Pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rdf-classes">RDF classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rdf-properties">RDF properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rdfs-domains">rdfs domains</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rdfs-ranges">rdfs ranges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essentialrdfconcepts.html">Essential RDF concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definingprops.html">RDF Properties in the Framework</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rdfframeworkclass.html">RdfFramework Class</a></li>
@@ -150,125 +142,19 @@
             
   <div class="section" id="understanding-the-rdf-application-files">
 <h1>Understanding the RDF Application Files<a class="headerlink" href="#understanding-the-rdf-application-files" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<p>The RDF application files defining the application using RDF triples. The vocabulary used is a combination of the standard <strong>OWL, RDF, RDFS and XSD</strong> namespaces. These vocabularies are then applied to the namespaces your application is using. Lastly, your classes and properties are enchanced using the <strong>KDS</strong> and <strong>KDR</strong> vocabularies developed by knowledgelinks.io.</p>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="essentialrdfconcepts.html">Essential RDF concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="definingprops.html">RDF Properties in the Framework</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="essential-rdf-concepts">
-<h2>Essential RDF concepts<a class="headerlink" href="#essential-rdf-concepts" title="Permalink to this headline">¶</a></h2>
-<p><em>Turtle RDF notation will be used throughout the documentation. However the the application files do not need to be written in turtle notation. For our purposes it is the easiest to read and understand.</em></p>
-<p>There are a few RDF concepts that are essential to understanding how the application is defined. These are:</p>
-<ul class="simple">
-<li>The Triple Pattern</li>
-<li>RDF classes</li>
-<li>RDF properties</li>
-<li>rdfs domains</li>
-<li>rdfs ranges</li>
-</ul>
-</div>
-<div class="section" id="the-triple-pattern">
-<h2>The Triple Pattern<a class="headerlink" href="#the-triple-pattern" title="Permalink to this headline">¶</a></h2>
-<p>RDF data is written in a triple pattern that has a specific order. The items in the pattern form a sentance composed of a subject, predicate and object. <a href="#id1"><span class="problematic" id="id2">**</span></a>Throughout the documentation and in the framework these items will be referred to over and over again.</p>
-<p><strong>Example</strong></p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="29%" />
-<col width="28%" />
-<col width="43%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><strong>subject</strong></td>
-<td><strong>predicate</strong></td>
-<td><strong>object</strong></td>
-</tr>
-<tr class="row-even"><td>John&#8217;s</td>
-<td>phone number is</td>
-<td>555-555-1234</td>
-</tr>
-<tr class="row-odd"><td>&lt;<a class="reference external" href="http://.../john">http://.../john</a>&gt;</td>
-<td>schema:telephone</td>
-<td>&#8220;555-555-1235&#8221;^^xsd:string</td>
-</tr>
-</tbody>
-</table>
-<p>The <strong>subject</strong> is SQL database terms is the <a href="#id3"><span class="problematic" id="id4">**</span></a>uuid**(universal unique identifier)</p>
-<p>The <strong>predicate</strong> is a rdf vocabulary term that is in the form of URI/IRI that describes the relationship between the <strong>subject</strong> and <strong>object</strong></p>
-<p>The <strong>object</strong> is a either another IRI or a literal (a string, date, number etc)</p>
-</div>
-<div class="section" id="rdf-classes">
-<h2>RDF classes<a class="headerlink" href="#rdf-classes" title="Permalink to this headline">¶</a></h2>
-<p>A class represents a categorization of subjects. i.e. organizations, people, events, etc. Where a <strong>subject</strong> that is identified by a class is one instance of the large grouping.</p>
-<p><strong>schema:Organization</strong> is a rdf class for describing organization.</p>
-<p>Identifying <strong>&lt;http://example.com/org#a&gt;</strong> <strong>rdf:type</strong> <strong>schema:Organization</strong> means that <strong>&lt;http://example.com/orf#a&gt;</strong> is an <strong>organization</strong>.</p>
-</div>
-<div class="section" id="rdf-properties">
-<h2>RDF properties<a class="headerlink" href="#rdf-properties" title="Permalink to this headline">¶</a></h2>
-<p>Rdf properties are used as the predicates of the triple pattern. In general they are used to describe how one rdf class relates to another rdf class.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A property can be used to in multiple classes. i.e. schema:name can be used with schema:Person, schema:Organization, etc.</p>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Throughout the code property and predicate are used interchangeably.</p>
-</div>
-</div>
-<div class="section" id="rdfs-domains">
-<h2>rdfs domains<a class="headerlink" href="#rdfs-domains" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>rdfs:domain</strong> declartion is essential to defining an application wih the framework. The <strong>domain</strong> statement tells what type of rdf:Class should be in the <strong>subject</strong> position of a triple. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:domain schema:Person .
-</pre></div>
-</div>
-<p>The above statement means that when the <strong>schema:email</strong> property is used that the subject of the triple should be a schema:Person.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;http://example.com/john&gt; rdf:type schema:Person ;
-                      schema:email &quot;john@example.com&quot;^^xsd:string .
-</pre></div>
-</div>
-<p><em>&lt;http://example.com/john&gt; is a Person and we are in compliance of the specified domain rule.</em></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;http://example.com/moby-dick&gt; rdf:type schema:Book ;
-                      schema:email &quot;myemail@example.com&quot;^^xsd:string .
-</pre></div>
-</div>
-<p><em>The above triples are a violation of the specified domain rule. The point is not that a book can&#8217;t have an email, but rather that the specified rule says that only a schema:Person should use the property schema:email.</em></p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Their are rdf rules that allow for looking at subclasses and so forth but for the <strong>rdfframework</strong> you must specifically specify each class the property will be used in.</p>
-</div>
-<p>To use the schema:email property for a Person, Book and Organization specifiy them explicitly:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:domain schema:Person,
-                     schema:Book,
-                     schema:Organization .
-</pre></div>
-</div>
-</div>
-<div class="section" id="rdfs-ranges">
-<h2>rdfs ranges<a class="headerlink" href="#rdfs-ranges" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>rdfs:range</strong> tells us what type of rdf:Class should occupy the <strong>object</strong> position of the triple pattern.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:range xsd:string
-</pre></div>
-</div>
-<p>This means that when ever a the <strong>schema:email</strong> property is used it should have a string as the object. Having a URI in the object position would be a violation of the rule.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">For the <strong>rdfframework</strong> be as specific as possible for specification of the range value. If you want a date value to be stored in the object position use <strong>xsd:date</strong>. Do not specify the range as a <strong>literal</strong>.</p>
-</div>
-<p>If you want more than one option for the range specifically specify it.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:range xsd:string,
-                    yourNs:EmailObject .
-</pre></div>
-</div>
-<p>Next we will look at defining our <strong>classes</strong> and <strong>properties</strong> for the framework.</p>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
 <li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
 </ul>
-</div>
 </div>
 
 
@@ -278,7 +164,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="definingclasses.html" class="btn btn-neutral float-right" title="Defining RDF Classes in the Framework" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="essentialrdfconcepts.html" class="btn btn-neutral float-right" title="Essential RDF concepts" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="keyconcepts.html" class="btn btn-neutral" title="Key Concepts" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

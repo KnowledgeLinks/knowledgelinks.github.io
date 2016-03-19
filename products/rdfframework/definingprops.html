@@ -88,20 +88,12 @@
                 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="rdfdatasetup.html#contents">Contents</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">RDF Properties in the Framework</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#steps">Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essentialrdfconcepts.html">Essential RDF concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">RDF Properties in the Framework</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#steps">Steps</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#essential-rdf-concepts">Essential RDF concepts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#the-triple-pattern">The Triple Pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdf-classes">RDF classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdf-properties">RDF properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdfs-domains">rdfs domains</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdfs-ranges">rdfs ranges</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rdfframeworkclass.html">RdfFramework Class</a></li>
@@ -199,7 +191,9 @@
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>Since we only added a <strong>kds:requiredByDomain</strong> tag for the <strong>schema:Person</strong> class, the <strong>schema:Organization</strong>, which also uses the property will not require the property. To make it a required property for the <strong>schema:Organization</strong> class as well add:</p>
-<p class="last">schema:email kds:requiredByDomain schema:Organization.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span>schema:email kds:requiredByDomain schema:Organization.
+</pre></div>
+</div>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
