@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Defining RDF Properties in the Framework &mdash; RdfFramework 0.0.1 documentation</title>
+  <title>RDF Properties in the Framework &mdash; RdfFramework 0.0.1 documentation</title>
   
 
   
@@ -90,7 +90,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="rdfdatasetup.html#contents">Contents</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">Defining RDF Properties in the Framework</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="">RDF Properties in the Framework</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#steps">Steps</a></li>
 </ul>
 </li>
@@ -140,7 +140,7 @@
       
           <li><a href="rdfdatasetup.html">Understanding the RDF Application Files</a> &raquo;</li>
       
-    <li>Defining RDF Properties in the Framework</li>
+    <li>RDF Properties in the Framework</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -154,8 +154,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="defining-rdf-properties-in-the-framework">
-<h1>Defining RDF Properties in the Framework<a class="headerlink" href="#defining-rdf-properties-in-the-framework" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rdf-properties-in-the-framework">
+<h1>RDF Properties in the Framework<a class="headerlink" href="#rdf-properties-in-the-framework" title="Permalink to this headline">¶</a></h1>
 <p>Now we will define the properties to be used in the application and which classes that use them.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -173,70 +173,87 @@
 </li>
 </ol>
 <ol class="arabic" start="3">
-<li><p class="first">Tag the class with <strong>kds:ControlledClass</strong>. This tells the Framework that you will be using the class in the application:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person a kds:ControlledClass .
-</pre></div>
-</div>
-</li>
-<li><p class="first">Now tell specify how the class should be stored. Options are &#8220;object&#8221; or &#8220;blanknode&#8221;. This tells the Framework whether to create a new URI or store it as the blanknode in the object position of a triple:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:storageType &quot;object&quot; .
-</pre></div>
-</div>
-</li>
-<li><p class="first">Next determine if there is a <strong>Primary Key</strong> for the class. This tells the framework that when adding a new instance of the class to the database that the specified properties must be unique or the combination of properties must be unique:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:primaryKey schema:email.
+<li><p class="first">Add a rdfs:domain tag for each class that uses the property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:domain schema:Person,
+                         schema:Organization .
 </pre></div>
 </div>
 </li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>To make the primary key a combination of properties like this:</p>
-<dl class="docutils">
-<dt>schema:Peson kds:primaryKey [</dt>
-<dd>kds:keyCombo schema:givenName;
-kds:keyCombo schema:familyName</dd>
-</dl>
-<p class="last">] .</p>
+<p class="last">The two <strong>rdfs:domain</strong> statements listed above state that the <strong>schema:email</strong> property will be used in both the <strong>schema:Person</strong> and <strong>schema:Organization</strong> rdf:Classes.</p>
+</div>
+<ol class="arabic" start="4">
+<li><p class="first">Next specify the <strong>rdfs:range</strong> for the property. Remember this tells the framework which type of value should be in the <strong>object</strong> position of a triple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:range xsd:string .
+</pre></div>
+</div>
+</li>
+<li><p class="first">Now we need to specify more specific rules for the property. If we want to make it a required property for a <strong>rdf:Class</strong> we can add a <strong>kds:requiredByDomain</strong> tag.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email kds:requiredByDomain schema:Person .
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Since we only added a <strong>kds:requiredByDomain</strong> tag for the <strong>schema:Person</strong> class, the <strong>schema:Organization</strong>, which also uses the property will not require the property. To make it a required property for the <strong>schema:Organization</strong> class as well add:</p>
+<p class="last">schema:email kds:requiredByDomain schema:Organization.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If the property was specified as a <strong>Primary Key</strong> in the <strong>rdf:Class</strong> definition it is not necessary to make it a <strong>required property</strong> in the property definition. <strong>Primary Keys</strong> are required by definition. It will <strong>NOT</strong> cause a problem if a primary key is also specified as a required property.</p>
 </div>
 <ol class="arabic" start="6">
-<li><p class="first">Lastly we need to define the security rules for the class:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:classSecurity [
+<li><p class="first">Define any security rules for the property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email kds:propertySecurity [
+            **kds:appliesTo schema:Person**
             acl:agent kdr:Admin-SG;
-            acl:mode acl:Read, acl:Write
+            acl:mode acl:Read
 ] ;
 </pre></div>
 </div>
 </li>
 </ol>
-<p>This means that anyone in the <strong>kds:Admin-SG</strong> has read and write prevledges to the class.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">To add more permission repeat the above information.</p>
+<p class="last">The <strong>kds:appliesTo</strong> tag specifies which rdf:Class to apply the security setting. In this case adding the above means that the schema:email property when used in the <strong>schema:Person</strong> class can only be seen by the kdr:Admin-SG. However, when it is used in the <strong>schema:Organization</strong> class no such rules apply.</p>
 </div>
 <ol class="arabic" start="7">
-<li><p class="first">Putting it all together would look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email a rdf:Property;
-    rdfs:domain     schema:Person;
-    rdfs:domain schema:Organization;
-    rdfs:range      xsd:string;
-    rdfs:comment &quot;email address.&quot;;
-    kds:requiredByDomain schema:Person;
-    kds:propertyProcessing [
-            a kdr:EmailVerificationProcessor
-    ];
-    kds:propertyValidation [
+<li><p class="first">The next major component is to tell the framework how to validate the property. This way we have consistancy when saving data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email **kds:propertyValidation** [
             a kdr:EmailValidator
-    ];
-    kds:propertySecurity [
-            acl:agent kdr:Self-SG;
-            acl:mode acl:Read, acl:Write
-    ] ;
-    kds:jsonDefault [
-            kds:jsonObjName &quot;email&quot;;
-            kds:jsonValFormat &quot;objectValue&quot;
-    ] ;
-    kds:formDefault [
+    ] .
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">For a full listing of validators see the Validator section</p>
+</div>
+<ol class="arabic" start="8">
+<li><p class="first">Now state how the application should process the data for the property. There are wide variety of actions that can be performed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email kds:propertyProcessing [
+  kds:appliesTo schema:Person ;
+  a kdr:EmailVerificationProcessor
+] .
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We are appling an email verification action only to the schema:Person class. If we wanted to apply it to all rdf:Classes that use the property we would leave that line out.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">The processor section lists all available processors and their specifications.</p>
+</div>
+<ol class="arabic" start="9">
+<li><p class="first">Lastly, we can define a default pattern for how the property will appear in forms:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email kds:formDefault [
             kds:formFieldName &quot;emailaddr&quot;;
             kds:formLabelName &quot;Email Address&quot;;
             kds:formFieldHelp &quot;Enter a valid email address.&quot;;
@@ -248,7 +265,47 @@ kds:keyCombo schema:familyName</dd>
 </div>
 </li>
 </ol>
-<p>Next define your rdf:Properties!</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These can be overridden in the actual form specification. Defining a default here allows for easy insertion of the property into many forms without having to specify the basics about the field each time.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">For a detailed explanation and options see the Forms section</p>
+</div>
+<ol class="arabic" start="10">
+<li><p class="first">Putting it all together would look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email a rdf:Property;
+        rdfs:domain     schema:Person;
+        rdfs:domain schema:Organization;
+        rdfs:range      xsd:string;
+        rdfs:comment &quot;email address.&quot;;
+        kds:requiredByDomain schema:Person;
+        kds:propertyProcessing [
+          kds:appliesTo schema:Person;
+                a kdr:EmailVerificationProcessor
+        ];
+        kds:propertyValidation [
+                a kdr:EmailValidator
+        ];
+        kds:propertySecurity [
+          kds:appliesTo schema:Person;
+                acl:agent kdr:Self-SG;
+                acl:mode acl:Read, acl:Write
+        ] ;
+        kds:formDefault [
+                kds:formFieldName &quot;emailaddr&quot;;
+                kds:formLabelName &quot;Email Address&quot;;
+                kds:formFieldHelp &quot;Enter a valid email address.&quot;;
+                kds:fieldType [
+                        a       kdr:TextField
+                ]
+        ] .
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Next define the application settings!</p>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
