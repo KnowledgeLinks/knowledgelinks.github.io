@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Defining RDF Properties in the Framework &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="Understanding the RDF Application Files" href="rdfdatasetup.html"/>
+        <link rel="next" title="RdfFramework Class" href="rdfframeworkclass.html"/>
+        <link rel="prev" title="Defining RDF Classes in the Framework" href="definingclasses.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="rdfdatasetup.html#contents">Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Defining RDF Properties in the Framework</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#steps">Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#essential-rdf-concepts">Essential RDF concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#the-triple-pattern">The Triple Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdf-classes">RDF classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdf-properties">RDF properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdfs-domains">rdfs domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfdatasetup.html#rdfs-ranges">rdfs ranges</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframeworkclass.html">RdfFramework Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfclass.html">RdfClass Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfproperty.html">RdfProperty Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfdatatype.html">RdfDataType Class</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="rdfdatasetup.html">Understanding the RDF Application Files</a> &raquo;</li>
+      
+    <li>Defining RDF Properties in the Framework</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/definingprops.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="defining-rdf-properties-in-the-framework">
+<h1>Defining RDF Properties in the Framework<a class="headerlink" href="#defining-rdf-properties-in-the-framework" title="Permalink to this headline">¶</a></h1>
+<p>Now we will define the properties to be used in the application and which classes that use them.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Unlike a SQL field definition a property can be used in many rdf:Classes</p>
+</div>
+<div class="section" id="steps">
+<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Next add the basic information about a property you will be using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email a rdf:Property;
+    rdfs:label &quot;Person&quot;;
+    rdfs:comment &quot;A person (alive, dead, undead, or fictional).&quot;.
+</pre></div>
+</div>
+</li>
+</ol>
+<ol class="arabic" start="3">
+<li><p class="first">Tag the class with <strong>kds:ControlledClass</strong>. This tells the Framework that you will be using the class in the application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person a kds:ControlledClass .
+</pre></div>
+</div>
+</li>
+<li><p class="first">Now tell specify how the class should be stored. Options are &#8220;object&#8221; or &#8220;blanknode&#8221;. This tells the Framework whether to create a new URI or store it as the blanknode in the object position of a triple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:storageType &quot;object&quot; .
+</pre></div>
+</div>
+</li>
+<li><p class="first">Next determine if there is a <strong>Primary Key</strong> for the class. This tells the framework that when adding a new instance of the class to the database that the specified properties must be unique or the combination of properties must be unique:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:primaryKey schema:email.
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>To make the primary key a combination of properties like this:</p>
+<dl class="docutils">
+<dt>schema:Peson kds:primaryKey [</dt>
+<dd>kds:keyCombo schema:givenName;
+kds:keyCombo schema:familyName</dd>
+</dl>
+<p class="last">] .</p>
+</div>
+<ol class="arabic" start="6">
+<li><p class="first">Lastly we need to define the security rules for the class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:classSecurity [
+            acl:agent kdr:Admin-SG;
+            acl:mode acl:Read, acl:Write
+] ;
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This means that anyone in the <strong>kds:Admin-SG</strong> has read and write prevledges to the class.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To add more permission repeat the above information.</p>
+</div>
+<ol class="arabic" start="7">
+<li><p class="first">Putting it all together would look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email a rdf:Property;
+    rdfs:domain     schema:Person;
+    rdfs:domain schema:Organization;
+    rdfs:range      xsd:string;
+    rdfs:comment &quot;email address.&quot;;
+    kds:requiredByDomain schema:Person;
+    kds:propertyProcessing [
+            a kdr:EmailVerificationProcessor
+    ];
+    kds:propertyValidation [
+            a kdr:EmailValidator
+    ];
+    kds:propertySecurity [
+            acl:agent kdr:Self-SG;
+            acl:mode acl:Read, acl:Write
+    ] ;
+    kds:jsonDefault [
+            kds:jsonObjName &quot;email&quot;;
+            kds:jsonValFormat &quot;objectValue&quot;
+    ] ;
+    kds:formDefault [
+            kds:formFieldName &quot;emailaddr&quot;;
+            kds:formLabelName &quot;Email Address&quot;;
+            kds:formFieldHelp &quot;Enter a valid email address.&quot;;
+            kds:fieldType [
+                    a       kdr:TextField
+            ]
+    ] .
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Next define your rdf:Properties!</p>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rdfframeworkclass.html" class="btn btn-neutral float-right" title="RdfFramework Class" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="definingclasses.html" class="btn btn-neutral" title="Defining RDF Classes in the Framework" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
