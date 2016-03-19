@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Application wide RDF specification &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="Understanding the RDF Application Files" href="rdfdatasetup.html"/>
+        <link rel="next" title="RdfFramework Class" href="rdfframeworkclass.html"/>
+        <link rel="prev" title="RDF Properties in the Framework" href="definingprops.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="essentialrdfconcepts.html">Essential RDF concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definingprops.html">RDF Properties in the Framework</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Application wide RDF specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#steps">Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframeworkclass.html">RdfFramework Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfclass.html">RdfClass Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfproperty.html">RdfProperty Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfdatatype.html">RdfDataType Class</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="rdfdatasetup.html">Understanding the RDF Application Files</a> &raquo;</li>
+      
+    <li>Application wide RDF specification</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/applicationrdf.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="application-wide-rdf-specification">
+<h1>Application wide RDF specification<a class="headerlink" href="#application-wide-rdf-specification" title="Permalink to this headline">¶</a></h1>
+<p>After you have decided what rdf:Classes that you will be using in the application it is now time to start specifying them.</p>
+<div class="section" id="steps">
+<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Make up a URI for your application add <strong>kds:Application</strong> as the rdf:type and then add the basic information about the application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>myns:My-Awsome-App a kds:Application;
+    rdfs:label &quot;My Awesome Application&quot;;
+    rdfs:comment &quot;An application that does everything.&quot;.
+</pre></div>
+</div>
+</li>
+<li><p class="first">Next specify all the namespaces that are to be used in the application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>myns:My-Awsome-App kds:appNameSpace [
+                 kds:prefix &quot;rdf&quot;;
+                 kds:nameSpaceUri &quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;
+         ];
+         kds:appNameSpace [
+                 kds:prefix &quot;acl&quot;;
+                 kds:nameSpaceUri &quot;http://www.w3.org/ns/auth/acl#&quot;
+         ];
+         kds:appNameSpace [
+                 kds:prefix &quot;xsd&quot;;
+                 kds:nameSpaceUri &quot;http://www.w3.org/2001/XMLSchema#&quot;
+         ];
+         kds:appNameSpace [
+                 kds:prefix &quot;schema&quot;;
+                 kds:nameSpaceUri &quot;https://schema.org/&quot;
+         ];
+         kds:appNameSpace [
+                 kds:prefix &quot;kds&quot;;
+                 kds:nameSpaceUri &quot;http://knowledgelinks.io/ns/data-structures/&quot;
+         ];
+         kds:appNameSpace [
+                 kds:prefix &quot;kdr&quot;;
+                 kds:nameSpaceUri &quot;http://knowledgelinks.io/ns/data-resources/&quot;
+         ] .
+</pre></div>
+</div>
+</li>
+<li><p class="first">Specify the specific data formats. This is essential since python&#8217;s date methods require specific formating parameters. This allows for consitancy when moving between javascript and python:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>myns:My-Awsome-App kds:dataFormats [
+                kds:pythonDateFormat &quot;%m/%d/%Y&quot;;
+                kds:javascriptDateFormat &quot;mm/dd/yyyy&quot;
+        ];
+</pre></div>
+</div>
+</li>
+<li><p class="first">Now define where the app should save its data and how to generate new URIs:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>myns:My-Awsome-App kds:saveLocation &quot;triplestore&quot;;
+        kds:subjectPattern &quot;!--baseUrl,/,ns,/,!--classPrefix,/,!--className,/,!--uuid&quot;.
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The <strong>kds:saveLocation</strong> states the authoriative datastore for the application. This can be overridden in the rdf:class definition by adding the a <strong>kds:saveLocation</strong> tag to that class. Options are <strong>triplestore</strong>, <strong>repository</strong>, and <strong>elasticsearch</strong>.</p>
+<p>The <strong>kds:subjectPattern</strong> specifies how new URIs should be formatted. It is a comma separated string. Items that start with <strong>!&#8211;</strong> are calculated. You can also specify specific properties as well by using <strong>&lt;&lt;prop_uri&gt;&gt;</strong>. For example if you wanted to generate a this pattern:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;http://myappurl.com/organization/my-awesome-org&gt;
+</pre></div>
+</div>
+<p>and where the class is <strong>schema:Organization</strong> and you have a property in the class <strong>schema:alternativeName</strong> the slugifies the name of the organization, the <strong>kds:subjectPattern</strong> would be:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;!--baseUrl,/,!--className,/,&lt;&lt;schema:alternativeName&gt;&gt;&quot;</span>
+</pre></div>
+</div>
+</div>
+<ol class="arabic" start="5">
+<li><p class="first">Next we can define some default settings for our forms:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>myns:My-Awsome-App kds:formDefault [
+                kds:fieldCss &quot;form-control&quot;;
+                kds:rowCss &quot;appFormRowCss&quot;;
+                kds:formCss &quot;appFormFormCss&quot;
+        ];
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All of these can be added to or overridden in the form and then further added to or overridden in the field definitions.</p>
+</div>
+<ol class="arabic" start="6">
+<li><p class="first">Lastly, we define the security settings for the application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>myns:My-Awsome-App kds:applicationSecurity [
+                acl:mode kds:SuperUser;
+                acl:agent kdr:SysAdmin-SG
+        ];
+        kds:applicationSecurity [
+                acl:mode acl:Read, acl:Write, acl:Control;
+                acl:agent kdr:Admin-SG
+        ];
+        kds:applicationSecurity [
+                acl:mode acl:Read, acl:Append;
+                acl:agent kdr:User-SG
+        ];
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">see the Security section for a complete understanding of the security architecture and implementation</p>
+</div>
+<ol class="arabic" start="7">
+<li><p class="first">Putting it all together would look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>myns:My-Awsome-App a kds:Application;
+        kds:applicationSecurity [
+                acl:mode kds:SuperUser;
+                acl:agent kdr:SysAdmin-SG
+        ];
+        kds:applicationSecurity [
+                acl:mode acl:Read, acl:Write, acl:Control;
+                acl:agent kdr:Admin-SG
+        ];
+        kds:applicationSecurity [
+                acl:mode acl:Read, acl:Append;
+                acl:agent kdr:User-SG
+        ];
+        kds:formDefault [
+                kds:fieldCss &quot;form-control&quot;;
+                kds:rowCss &quot;appFormRowCss&quot;;
+                kds:formCss &quot;appFormFormCss&quot;
+        ];
+        kds:dataFormats [
+                kds:pythonDateFormat &quot;%m/%d/%Y&quot;;
+                kds:javascriptDateFormat &quot;mm/dd/yyyy&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;rdf&quot;;
+                kds:nameSpaceUri &quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;acl&quot;;
+                kds:nameSpaceUri &quot;http://www.w3.org/ns/auth/acl#&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;xsd&quot;;
+                kds:nameSpaceUri &quot;http://www.w3.org/2001/XMLSchema#&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;schema&quot;;
+                kds:nameSpaceUri &quot;https://schema.org/&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;kds&quot;;
+                kds:nameSpaceUri &quot;http://knowledgelinks.io/ns/data-structures/&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;kdr&quot;;
+                kds:nameSpaceUri &quot;http://knowledgelinks.io/ns/data-resources/&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;foaf&quot;;
+                kds:nameSpaceUri &quot;http://xmlns.com/foaf/0.1/&quot;
+        ];
+        kds:appNameSpace [
+                kds:prefix &quot;rdfs&quot;;
+                kds:nameSpaceUri &quot;http://www.w3.org/2000/01/rdf-schema#&quot;
+        ];
+        kds:saveLocation &quot;triplestore&quot;;
+        kds:subjectPattern &quot;!--baseUrl,/,ns,/,!--classPrefix,/,!--className,/,!--uuid&quot;.
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Next we will define our Forms!</p>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rdfframeworkclass.html" class="btn btn-neutral float-right" title="RdfFramework Class" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="definingprops.html" class="btn btn-neutral" title="RDF Properties in the Framework" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
