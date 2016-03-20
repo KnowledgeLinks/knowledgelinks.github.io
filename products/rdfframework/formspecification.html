@@ -1,0 +1,447 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Form RDF Specification &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="Understanding the RDF Application Files" href="rdfdatasetup.html"/>
+        <link rel="next" title="RdfFramework Class" href="rdfframeworkclass.html"/>
+        <link rel="prev" title="Application wide RDF specification" href="applicationrdf.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="essentialrdfconcepts.html">Essential RDF concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definingclasses.html">Defining RDF Classes in the Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definingprops.html">RDF Properties in the Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applicationrdf.html">Application wide RDF specification</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Form RDF Specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#steps">Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframeworkclass.html">RdfFramework Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfclass.html">RdfClass Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfproperty.html">RdfProperty Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfdatatype.html">RdfDataType Class</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="rdfdatasetup.html">Understanding the RDF Application Files</a> &raquo;</li>
+      
+    <li>Form RDF Specification</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/formspecification.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="form-rdf-specification">
+<h1>Form RDF Specification<a class="headerlink" href="#form-rdf-specification" title="Permalink to this headline">¶</a></h1>
+<p>Now comes the fun part. Defining your forms!!! Once your forms definitions are built your application can start saving data.</p>
+<div class="section" id="steps">
+<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Make up a URI for your form and add <strong>kds:FormClass</strong> as the rdf:type. Then add basic information:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>obi:BadgeForm a kds:FormClass;
+          rdfs:label &quot;Badge form&quot;;
+          rdfs:comment &quot;Use this form for generating a new Badge.&quot;.
+</pre></div>
+</div>
+</li>
+<li><p class="first">Next we need to specify the instructions for the form. This is all captured in one blanknode of the <strong>kds:formIntructions</strong> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>obi:BadgeForm kds:formInstructions [
+                  kds:loginRequired true ;
+                  kds:form_Method &quot;POST&quot;;
+                  kds:form_enctype &quot;multipart/form-data&quot;;
+                  kds:formTitle &quot;Open Badge&quot;;
+                  kds:formDescription &quot;Badge infomation&quot;;
+                  kds:lookupClassUri obi:BadgeClass;
+                  kds:formUrl &quot;badge&quot;;
+                  kds:submitSuccessRedirect kdr:DisplayForm;
+                  kds:submitFailRedirect &quot;!--currentpage&quot;;
+                  kds:formInstance [
+                          kds:formInstanceType kdr:NewForm;
+                          kds:formTitle &quot;New Open Badge&quot;;
+                          kds:formDescription &quot;Create a new open badge&quot;
+                  ];
+                  kds:formInstance [
+                          kds:formInstanceType kdr:EditForm;
+                          kds:formDescription &quot;Edit badge information.&quot;
+                  ];
+                  kds:formInstance [
+                          kds:formInstanceType kdr:DisplayForm;
+                          kds:formDescription &quot;Badge information.&quot;
+                  ]
+          ].
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Lets analyse the above definition:</p>
+<ul class="last simple">
+<li><strong>kds:form_Method</strong> - defines the allowed methods for the form POST, GET</li>
+<li><strong>kds:form_enctype</strong> - HTML form type</li>
+<li><strong>kds:formTitle</strong> - The name to be displayed in the tile position of the form</li>
+<li><strong>kds:formDescription</strong> - A description of the form that will be displayed in the form description section</li>
+<li><strong>kds:formUrl</strong> - the url to use for the form. <strong>If this is omitted the namespace will be removed from the form URI and that will be the base path. i.e. **obi:BadgeForm</strong> will become <strong>BadgeForm</strong> as the form path.</li>
+<li><strong>kds:lookupClassUri</strong> - the rdf:Class that a passed in <strong>id</strong> value will pertains to. For example: we pass in the url <strong>?id=&lt;http:../Person/1232&gt;</strong> and the id is of the rdf:Class <strong>schema:Person</strong> we would set <strong>schema:Person</strong> as the <strong>kds:lookupClassUri</strong>.</li>
+<li><strong>kds:submitSuccessRedirect</strong> and <strong>kds:submitFailRedirect</strong> - specify where the form should redirect to on success and fail submit attempts.</li>
+<li><strong>kds:formInstance</strong> - There are 3 main instances of any form: a <strong>new</strong>, <strong>edit</strong> and <strong>display</strong> instance. If you want your form to have all three instances they need to be explicitly stated as above. <strong>Within each instance declaration any of the previous declarations can be overriden for that particular instance.</strong> As seen above the form description is change in each instance of the form and the title is changed in the new form intance.</li>
+</ul>
+</div>
+<ol class="arabic" start="3">
+<li><p class="first">Now all we need to do is add the <strong>fields/properties</strong> to the form. This is done with the <strong>kds:hasProperty</strong> tag:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>obi:BadgeForm kds:hasProperty [
+                kds:propUri schema:description;
+                kds:classUri obi:BadgeClass;
+                kds:formFieldOrder 2;
+                kds:formLayoutRow 2;
+        ];
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The above declaration is the simplest of declarations. Here are a few key points.</p>
+<ul class="last simple">
+<li>The <strong>kds:propUri</strong> specifies which rdf:Property we are using.</li>
+<li>The <strong>kds:classUri</strong> tag has been added since the <strong>schema:description</strong> property is used in multiple <strong>rdf:Classes</strong>. <em>This can be omitted if the property is only used in one class.</em></li>
+<li>Lastly we specify the <strong>field order</strong> and <strong>form row</strong>. The value can be either an integer or float/decimal value.</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>The first question you may be thinking is how do we know what the field type, name and any other attributes are!!! When we declared in the <strong>kds:formDefault</strong> specification when we declared the properties. See <a class="reference external" href="./definingprops.html">RDF Properties in the Framework</a></p>
+<p>If you want to override any of those specification re-add the tags here:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>obi:BadgeForm kds:hasProperty [
+    kds:propUri schema:description;
+                kds:classUri obi:BadgeClass;
+                kds:formFieldOrder 2;
+                kds:formLayoutRow 2;
+                kds:formLabelName &quot;Describe your Badge in detail&quot;;
+                kds:formDescription &quot;In this field you must provide a detailed explanation of the Badge.&quot;
+        ];
+</pre></div>
+</div>
+<p>If you want to change the details for specific instances of the form you can do that as well:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span>obi:BadgeForm kds:hasProperty [
+   kds:propUri schema:description;
+               kds:classUri obi:BadgeClass;
+               kds:formFieldOrder 2;
+               kds:formLayoutRow 2;
+               kds:formLabelName &quot;Describe your Badge in detail&quot;;
+               kds:formDescription &quot;In this field you must provide a detailed explanation of the Badge.&quot;;
+               kds:formInstance [
+                       kds:formInstanceType kdr:NewForm;
+                       kds:formLabelName &quot;Label in New Form&quot;;
+               ];
+               kds:formInstance [
+                       kds:formInstanceType kdr:EditForm;
+                       kds:formLabelName &quot;Label in Edit Form&quot;;
+               ];
+               kds:formInstance [
+                       kds:formInstanceType kdr:DisplayForm;
+                       kds:formLabelName &quot;Label in Display Form&quot;;
+               ]
+       ];
+</pre></div>
+</div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">For a full listing of field specifications see the <a class="reference external" href="./formfieldspecs.html">Form field specification</a> section.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>One more key point!</strong> All the security and required property parameters are inhertied from the <strong>rdf:Class</strong> and <strong>rdf:Property</strong> declarations. Required properties do not need to be in the <strong>Form</strong> if they are calculated or have a default value. <strong>The form will not validate and save if you are missing a required property and it can not calculate a value for it missing property!</strong></p>
+</div>
+<ol class="arabic" start="4">
+<li><p class="first">Below is a complete form definition:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>obi:BadgeForm a kds:FormClass;
+        rdfs:label &quot;Badge form&quot;;
+        rdfs:comment &quot;Use this form for generating a new Badge.&quot;;
+        kds:formInstructions [
+                kds:form_Method &quot;POST&quot;;
+                kds:form_enctype &quot;multipart/form-data&quot;;
+                kds:formTitle &quot;Open Badge&quot;;
+                kds:loginRequired true ;
+                kds:formDescription &quot;Badge infomation&quot;;
+                kds:lookupClassUri obi:BadgeClass;
+                kds:formUrl &quot;badge&quot;;
+                kds:submitSuccessRedirect kdr:DisplayForm;
+                kds:submitFailRedirect &quot;!--currentpage&quot;;
+                kds:formInstance [
+                        kds:formInstanceType kdr:NewForm;
+                        kds:formTitle &quot;New Open Badge&quot;;
+                        kds:formDescription &quot;Create a new open badge&quot;
+                ];
+                kds:formInstance [
+                        kds:formInstanceType kdr:EditForm;
+                        kds:formDescription &quot;Edit badge information.&quot;
+                ];
+                kds:formInstance [
+                        kds:formInstanceType kdr:DisplayForm;
+                        kds:formDescription &quot;Badge information.&quot;
+                ]
+        ];
+        kds:hasProperty [
+                kds:propUri obi:issuer;
+                kds:formFieldOrder 0.5;
+                kds:formLayoutRow 1;
+                kds:formInstance [
+                        kds:formInstanceType kdr:NewForm;
+                        kds:applicationAction kdr:LookupAddNewWorkFlow;
+                ];
+                kds:formInstance [
+                        kds:formInstanceType kdr:EditForm;
+                        kds:applicationAction kdr:NotEditable
+                ];
+                kds:formInstance [
+                        kds:formInstanceType kdr:DisplayForm
+                ]
+        ];
+        kds:hasProperty [
+                kds:propUri schema:name;
+                kds:classUri obi:BadgeClass;
+                kds:formFieldOrder 1;
+                kds:formLayoutRow 1;
+                kds:formInstance [
+                        kds:formInstanceType kdr:NewForm;
+                        kds:applicationAction kdr:LookupAddNewWorkFlow;
+                ];
+                kds:formInstance [
+                        kds:formInstanceType kdr:EditForm;
+                        #kds:applicationAction kdr:NotEditable
+                ]
+        ];
+        kds:hasProperty [
+                kds:propUri schema:description;
+                kds:classUri obi:BadgeClass;
+                kds:formFieldOrder 2;
+                kds:formLayoutRow 2;
+        ];
+        kds:hasProperty [
+                kds:propUri obi:startDate;
+                kds:formFieldOrder 3;
+                kds:formLayoutRow 3;
+                kds:addOnCss &quot;dp&quot;;
+        ];
+        kds:hasProperty [
+                kds:propUri obi:endDate;
+                kds:formFieldOrder 4;
+                kds:formLayoutRow 3;
+        ];
+        kds:hasProperty [
+                kds:propUri schema:image;
+                kds:classUri obi:BadgeClass;
+                kds:formFieldOrder 5;
+                kds:formLayoutRow 4;
+        ];
+        kds:hasProperty [
+                kds:propUri obi:tags;
+                kds:formFieldOrder 6;
+                kds:formLayoutRow 5;
+        ];
+        kds:hasProperty [
+                kds:propUri obi:criteria;
+        kds:formFieldOrder 7;
+        kds:formLayoutRow 6;
+].
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Next we will define our APIs!</p>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rdfframeworkclass.html" class="btn btn-neutral float-right" title="RdfFramework Class" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="applicationrdf.html" class="btn btn-neutral" title="Application wide RDF specification" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
