@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.forms.widgets.formwidgets &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.forms.widgets.formwidgets</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.forms.widgets.formwidgets</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mike Stabile, Jeremy Nelson&quot;</span>
+
+<span class="kn">from</span> <span class="nn">wtforms.widgets</span> <span class="kn">import</span> <span class="n">HTMLString</span><span class="p">,</span> <span class="n">html_params</span>
+<span class="kn">from</span> <span class="nn">wtforms.compat</span> <span class="kn">import</span> <span class="n">text_type</span>
+<span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">is_not_null</span>
+<div class="viewcode-block" id="BsGridTableWidget"><a class="viewcode-back" href="../../../../rdfframework.forms.widgets.html#rdfframework.forms.rdffields.BsGridTableWidget">[docs]</a><span class="k">class</span> <span class="nc">BsGridTableWidget</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renders a list of fields as a bootstrap formated table.</span>
+
+<span class="sd">    If `with_row_tag` is True, then an enclosing &lt;row&gt; is placed around the</span>
+<span class="sd">    rows.</span>
+
+<span class="sd">    Hidden fields will not be displayed with a row, instead the field will be</span>
+<span class="sd">    pushed into a subsequent table row to ensure XHTML validity. Hidden fields</span>
+<span class="sd">    at the end of the field list will appear outside the table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">with_section_tag</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_section_tag</span> <span class="o">=</span> <span class="n">with_section_tag</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_section_tag</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;section class=&quot;col-md-6&quot; </span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="n">html_params</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="n">hidden</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">_params</span> <span class="o">=</span> <span class="n">html_params</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">subfield</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">subfield</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;CSRFTokenField&#39;</span><span class="p">:</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;div style=&quot;display:none&quot; </span><span class="si">%s</span><span class="s1">&gt;</span><span class="si">%s</span><span class="s1">&lt;/div&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_params</span><span class="p">,</span><span class="n">text_type</span><span class="p">(</span><span class="n">subfield</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s2">&quot;form-control&quot;</span><span class="p">))))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;col-md-2&quot; </span><span class="si">%s</span><span class="s1">&gt;</span><span class="si">%s</span><span class="s1">&lt;/div&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_params</span><span class="p">,</span><span class="n">text_type</span><span class="p">(</span><span class="n">subfield</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s2">&quot;form-control&quot;</span><span class="p">))))</span>
+                <span class="n">hidden</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_section_tag</span><span class="p">:</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;/section&gt;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hidden</span><span class="p">:</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTMLString</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">html</span><span class="p">))</span></div>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
+<div class="viewcode-block" id="RepeatingSubFormWidget"><a class="viewcode-back" href="../../../../rdfframework.forms.widgets.html#rdfframework.forms.rdffields.RepeatingSubFormWidget">[docs]</a><span class="k">class</span> <span class="nc">RepeatingSubFormWidget</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renders a list of fields as a `row` list.</span>
+
+<span class="sd">    This is used for fields which encapsulate many inner fields as subfields.</span>
+<span class="sd">    The widget will try to iterate the field to get access to the subfields and</span>
+<span class="sd">    call them to render them.</span>
+
+<span class="sd">    If `prefix_label` is set, the subfield&#39;s label is printed before the field,</span>
+<span class="sd">    otherwise afterwards. The latter is useful for iterating radios or</span>
+<span class="sd">    checkboxes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html_tag</span><span class="o">=</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">prefix_label</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">html_tag</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ol&#39;</span><span class="p">,</span> <span class="s1">&#39;ul&#39;</span><span class="p">,</span> <span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="s1">&#39;section&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span> <span class="o">=</span> <span class="n">html_tag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_label</span> <span class="o">=</span> <span class="n">prefix_label</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START RepeatingSubFormWidget.call ---------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">_params</span> <span class="o">=</span> <span class="n">html_params</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;div id=&#39;</span><span class="si">%s</span><span class="s2">_form&#39; class=&#39;repeating-subform&#39;&gt;&quot;</span> <span class="o">%</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> class=&quot;row visible-lg visible-md&quot;&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">))</span>
+        <span class="n">display_mode</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">instance_uri</span> <span class="o">==</span> <span class="s2">&quot;kdr_DisplayForm&quot;</span><span class="p">:</span>
+            <span class="n">display_mode</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+            <span class="n">flag_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">required</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">display_mode</span><span class="p">:</span>
+                <span class="n">flag_str</span> <span class="o">=</span> <span class="s2">&quot; *&quot;</span>
+            <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CSRFTokenField&#39;</span><span class="p">,</span> <span class="s1">&#39;HiddenField&#39;</span><span class="p">]:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">fld</span><span class="o">.</span><span class="n">label</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                &lt;section class=&quot;col-md-2&quot;&gt;</span>
+<span class="s1">                    &lt;div class=&quot;form-group&quot;&gt;</span>
+<span class="s1">                        </span><span class="si">%s%s</span><span class="s1"></span>
+<span class="s1">                    &lt;/div&gt;</span>
+<span class="s1">                &lt;/section&gt;&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">flag_str</span><span class="p">))</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;/</span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">))</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>   
+        <span class="k">for</span> <span class="n">subfield</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> class=&quot;row subform-row&quot;&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">)</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subfield</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">hidden_tag</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;row &quot;</span><span class="p">,</span><span class="n">row</span><span class="p">)</span>
+            <span class="n">row</span> <span class="o">+=</span><span class="mi">1</span>
+            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">subfield</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">error_css</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">error_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;HiddenField&#39;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">display_mode</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">kds_formFieldName</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_image&quot;</span><span class="p">):</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;&lt;img src=&quot;/badges/fedora_image?id=</span><span class="si">%s</span><span class="s1">&quot; style=&quot;height:50px&quot;&gt;&#39;</span> \
+                                <span class="o">%</span> <span class="n">fld</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="s2">&quot;selected_display&quot;</span><span class="p">):</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">fld</span><span class="o">.</span><span class="n">selected_display</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">fld</span><span class="o">.</span><span class="n">data</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="s2">&quot;kds_call_in_display&quot;</span><span class="p">):</span>
+                        <span class="n">fld_render</span> <span class="o">=</span> <span class="n">fld</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                         <span class="n">class_</span><span class="o">=</span><span class="n">fld</span><span class="o">.</span><span class="n">kds_css</span><span class="p">,</span>
+                                         <span class="n">readonly</span><span class="o">=</span><span class="ow">not</span> <span class="n">fld</span><span class="o">.</span><span class="n">editable</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">fld_render</span> <span class="o">=</span> \
+                                <span class="s1">&#39;&lt;div id=&quot;</span><span class="si">%s</span><span class="s1">&quot; class=&quot;form-control-static&quot;&gt;</span><span class="si">%s</span><span class="s1">&lt;/div&gt;&#39;</span> <span class="o">%</span> \
+                                <span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fld_render</span> <span class="o">=</span> <span class="n">fld</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">fld</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                     <span class="n">class_</span><span class="o">=</span><span class="n">fld</span><span class="o">.</span><span class="n">kds_css</span><span class="p">,</span>
+                                     <span class="n">readonly</span><span class="o">=</span><span class="ow">not</span> <span class="n">fld</span><span class="o">.</span><span class="n">editable</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">errors</span><span class="p">:</span>
+                    <span class="n">error_css</span> <span class="o">=</span> <span class="s2">&quot; has-error&quot;</span>
+                    <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;&lt;ul class=&#39;help-block&#39;&gt;&lt;li&gt;</span><span class="si">%s</span><span class="s2">&lt;/li&gt;&lt;/ul&gt;&quot;</span> <span class="o">%</span> \
+                            <span class="s2">&quot;&lt;/li&gt;&lt;li&gt;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                    &lt;section class=&quot;col-md-2&quot;&gt;</span>
+<span class="s1">                        &lt;div class=&quot;form-group </span><span class="si">%s</span><span class="s1">&quot;&gt;</span>
+<span class="s1">                            </span><span class="si">%s</span><span class="s1"></span>
+<span class="s1">                            </span><span class="si">%s</span><span class="s1"></span>
+<span class="s1">                            </span><span class="si">%s</span><span class="s1"></span>
+<span class="s1">                        &lt;/div&gt;</span>
+<span class="s1">                    &lt;/section&gt;&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">error_css</span><span class="p">,</span>
+                                     <span class="n">fld</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="s2">&quot;control-label visible-sm visible-xs&quot;</span><span class="p">),</span>
+                                     <span class="n">fld_render</span><span class="p">,</span>
+                                     <span class="n">error_msg</span><span class="p">))</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;/</span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">)</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">HTMLString</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">html</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">END RepeatingSubFormWidget.call ---------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTMLString</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">html</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="RepeatingSubFormTableJinga2Widget"><a class="viewcode-back" href="../../../../rdfframework.forms.widgets.html#rdfframework.forms.rdffields.RepeatingSubFormTableJinga2Widget">[docs]</a><span class="k">class</span> <span class="nc">RepeatingSubFormTableJinga2Widget</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renders a list of fields as a `row` list.</span>
+
+<span class="sd">    This is used for fields which encapsulate many inner fields as subfields.</span>
+<span class="sd">    The widget will try to iterate the field to get access to the subfields and</span>
+<span class="sd">    call them to render them.</span>
+
+<span class="sd">    If `prefix_label` is set, the subfield&#39;s label is printed before the field,</span>
+<span class="sd">    otherwise afterwards. The latter is useful for iterating radios or</span>
+<span class="sd">    checkboxes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html_tag</span><span class="o">=</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">prefix_label</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">html_tag</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ol&#39;</span><span class="p">,</span> <span class="s1">&#39;ul&#39;</span><span class="p">,</span> <span class="s1">&#39;div&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span> <span class="o">=</span> <span class="n">html_tag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_label</span> <span class="o">=</span> <span class="n">prefix_label</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">_params</span> <span class="o">=</span> <span class="n">html_params</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> class=&quot;row&quot;&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">sub_subfield</span> <span class="ow">in</span> <span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">sub_subfield</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;CSRFTokenField&#39;</span><span class="p">:</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;col-md-2&quot;&gt;</span><span class="si">%s</span><span class="s1">&lt;/div&gt;&#39;</span> <span class="o">%</span> <span class="n">sub_subfield</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;/</span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">))</span>    
+        <span class="k">for</span> <span class="n">subfield</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> class=&quot;row&quot;&gt;</span><span class="si">%s</span><span class="s1">&lt;/</span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">,</span>
+                                           <span class="c1">#_params,</span>
+                                           <span class="n">subfield</span><span class="p">(),</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">html_tag</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">HTMLString</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">html</span><span class="p">))</span></div>
+        
+<div class="viewcode-block" id="ButtonActionWidget"><a class="viewcode-back" href="../../../../rdfframework.forms.widgets.html#rdfframework.forms.rdffields.ButtonActionWidget">[docs]</a><span class="k">class</span> <span class="nc">ButtonActionWidget</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; This widget will place a button on the page that will call a function</span>
+<span class="sd">        as passed in &#39;&#39;&#39;</span>
+        
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="s1">&#39;kds_buttonAction&#39;</span><span class="p">):</span>
+            <span class="n">button_action</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_buttonAction</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">button_action</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="s1">&#39;kds_buttonText&#39;</span><span class="p">):</span>
+            <span class="n">button_text</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_buttonText</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">button_text</span> <span class="o">=</span> 	<span class="p">{</span><span class="s1">&#39;false&#39;</span><span class="p">:</span> <span class="s1">&#39;Click&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span> <span class="s1">&#39;Resend&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="s1">&#39;kds_buttonLink&#39;</span><span class="p">):</span>
+            <span class="n">button_link</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_buttonLink</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">button_link</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="s1">&#39;kds_buttonFalseCss&#39;</span><span class="p">):</span>
+            <span class="n">button_true_css</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_buttonFalseCss</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">button_true_css</span> <span class="o">=</span> <span class="s1">&#39;btn-success&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">field</span><span class="p">,</span><span class="s1">&#39;kds_buttonTrueCss&#39;</span><span class="p">):</span>
+            <span class="n">button_false_css</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_buttonTrueCss</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">button_false_css</span> <span class="o">=</span> <span class="s1">&#39;btn-danger&#39;</span>
+        <span class="n">button_action</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;button_action&#39;</span><span class="p">,</span> <span class="n">button_action</span><span class="p">)</span>
+        <span class="n">button_text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;button_text&#39;</span><span class="p">,</span> <span class="n">button_text</span><span class="p">)</span>
+        <span class="n">button_link</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;button_link&#39;</span><span class="p">,</span> <span class="n">button_link</span><span class="p">)</span>
+        <span class="n">css</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;class_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">css</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">css</span><span class="p">,</span> <span class="n">button_true_css</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">css</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">css</span><span class="p">,</span> <span class="n">button_false_css</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">button_action</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;()&quot;</span><span class="p">:</span>
+            <span class="n">button_action</span> <span class="o">=</span> <span class="n">button_action</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">return_args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;a &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">button_text</span> <span class="o">=</span> <span class="n">button_text</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">button_text</span> <span class="o">=</span> <span class="n">button_text</span><span class="p">[</span><span class="s1">&#39;false&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">button_action</span><span class="p">):</span>
+            <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;href=&#39;javascript:;&#39; &quot;</span><span class="p">)</span>
+            <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;onclick=&quot;</span><span class="si">%s</span><span class="s1">(</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">,this,</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">,</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">)&quot; &#39;</span> <span class="o">%</span> 
+                    <span class="p">(</span><span class="n">button_action</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">button_false_css</span><span class="p">,</span> \
+                     <span class="n">button_true_css</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;href=&#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="n">button_link</span><span class="p">)</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;class=&#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="n">css</span><span class="p">)</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;kds_propUri=&#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;kds_classUri=&#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">)</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;kds_errorLogPropUri=&#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> \
+                           <span class="n">field</span><span class="o">.</span><span class="n">kds_errorLogPropUri</span><span class="p">)</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;data=</span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;id=&#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">return_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&gt;</span><span class="si">%s</span><span class="s2">&lt;/a&gt;&quot;</span> <span class="o">%</span> <span class="n">button_text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">return_args</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

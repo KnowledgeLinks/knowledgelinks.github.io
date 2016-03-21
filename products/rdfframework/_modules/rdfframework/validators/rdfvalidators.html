@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.validators.rdfvalidators &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.validators.rdfvalidators</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.validators.rdfvalidators</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="n">InputRequired</span><span class="p">,</span> <span class="n">Email</span><span class="p">,</span> <span class="n">URL</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">EqualTo</span><span class="p">,</span> \
+        <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">RdfDataType</span><span class="p">,</span> <span class="n">get_framework</span> <span class="k">as</span> <span class="n">rdfw</span>
+<span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">make_triple</span><span class="p">,</span> <span class="n">iri</span><span class="p">,</span> <span class="n">clean_iri</span><span class="p">,</span> <span class="n">fw_config</span><span class="p">,</span>\
+    <span class="n">make_list</span><span class="p">,</span> <span class="n">uri</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mike Stabile, Jeremy Nelson&quot;</span>
+
+<div class="viewcode-block" id="get_wtform_validators"><a class="viewcode-back" href="../../../rdfframework.validators.html#rdfframework.validators.rdfvalidators.get_wtform_validators">[docs]</a><span class="k">def</span> <span class="nf">get_wtform_validators</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; reads the list of validators for the field and returns the wtforms</span>
+<span class="sd">        validator list&#39;&#39;&#39;</span>
+    <span class="n">_field_validators</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_required&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">required</span><span class="p">:</span>
+        <span class="n">_field_validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">InputRequired</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_field_validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Optional</span><span class="p">())</span>
+    <span class="n">_validator_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_validators&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="k">for</span> <span class="n">_validator</span> <span class="ow">in</span> <span class="n">_validator_list</span><span class="p">:</span>
+        <span class="n">_validator_type</span> <span class="o">=</span> <span class="n">_validator</span><span class="p">[</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">_validator_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_PasswordValidator&#39;</span><span class="p">:</span>
+            <span class="n">_field_validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">EqualTo</span><span class="p">(</span>
+                    <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formFieldName&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39;_confirm&#39;</span><span class="p">,</span>
+                    <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Passwords must match&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">_validator_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_EmailValidator&#39;</span><span class="p">:</span>
+            <span class="n">_field_validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Email</span><span class="p">(</span><span class="n">message</span><span class="o">=</span>\
+                    <span class="s1">&#39;Enter a valid email address&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">_validator_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_UrlValidator&#39;</span><span class="p">:</span>
+            <span class="n">_field_validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">URL</span><span class="p">(</span><span class="n">message</span><span class="o">=</span>\
+                    <span class="s1">&#39;Enter a valid URL/web address&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">_validator_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_UniqueValueValidator&#39;</span><span class="p">:</span>
+            <span class="n">_field_validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UniqueValue</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">_validator_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_StringLengthValidator&#39;</span><span class="p">:</span>
+            <span class="n">_string_params</span> <span class="o">=</span> <span class="n">_validator</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_parameters&#39;</span><span class="p">)</span>
+            <span class="n">_param_list</span> <span class="o">=</span> <span class="n">_string_params</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="n">_param_obj</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">_param</span> <span class="ow">in</span> <span class="n">_param_list</span><span class="p">:</span>
+                <span class="n">_new_param</span> <span class="o">=</span> <span class="n">_param</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+                <span class="n">_param_obj</span><span class="p">[</span><span class="n">_new_param</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_new_param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">_field_min</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_param_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">_field_max</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_param_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="mi">1028</span><span class="p">))</span>
+            <span class="n">_field_validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Length</span><span class="p">(</span>
+                <span class="nb">min</span><span class="o">=</span><span class="n">_field_min</span><span class="p">,</span>
+                <span class="nb">max</span><span class="o">=</span><span class="n">_field_max</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="s2">&quot;{} size must be between {} and {} characters&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;formFieldName&quot;</span><span class="p">),</span>
+                    <span class="n">_field_min</span><span class="p">,</span>
+                    <span class="n">_field_max</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">_field_validators</span></div>
+
+
+<div class="viewcode-block" id="UniqueValue"><a class="viewcode-back" href="../../../rdfframework.validators.html#rdfframework.validators.rdfvalidators.UniqueValue">[docs]</a><span class="k">class</span> <span class="nc">UniqueValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; a custom validator for use with wtforms</span>
+<span class="sd">        * checks to see if the value already exists in the triplestore&#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">message</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s1">u&#39;The field must be a unique value&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="c1"># get the test query</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">_sparql</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_unique_value_qry</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">_sparql</span><span class="p">)</span>
+        <span class="c1"># run the test query</span>
+        <span class="n">_unique_test_results</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>\
+                <span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">_sparql</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+        <span class="n">_unique_test</span> <span class="o">=</span> <span class="n">_unique_test_results</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span> \
+                            <span class="s1">&#39;bindings&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="c1"># evaluate the results; True result in the query denotes that the</span>
+        <span class="c1"># value already exists</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_unique_test</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">_unique_test</span> <span class="o">=</span> <span class="n">_unique_test</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s1">&#39;uniqueValueViolation&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_unique_test</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">_unique_test</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_make_unique_value_qry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">_sparql_args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># determine the property and class details of the field</span>
+        <span class="n">_prop_uri</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_propUri</span>
+        <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_classUri</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">rdfs_range</span>
+
+        <span class="c1"># make the base triples for the query</span>
+        <span class="k">if</span> <span class="n">_prop_uri</span><span class="p">:</span>
+            <span class="n">_data_value</span> <span class="o">=</span> <span class="n">RdfDataType</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span>
+                                      <span class="n">class_uri</span><span class="o">=</span><span class="n">_class_uri</span><span class="p">,</span>
+                                      <span class="n">prop_uri</span><span class="o">=</span><span class="n">_prop_uri</span><span class="p">)</span><span class="o">.</span><span class="n">sparql</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?uri&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_class_uri</span><span class="p">))))</span>
+            <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?uri&quot;</span><span class="p">,</span>
+                                            <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">)),</span>
+                                            <span class="n">_data_value</span><span class="p">))</span>
+        <span class="c1"># see if the form is based on a set of triplestore data. if it is</span>
+        <span class="c1"># remove that triple from consideration in the query</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="s2">&quot;data_subject_uri&quot;</span><span class="p">):</span>
+            <span class="n">_subject_uri</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">data_subject_uri</span>
+            <span class="n">_lookup_class_uri</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">data_class_uri</span>
+            <span class="c1"># if the subject class is the same as the field class</span>
+            <span class="k">if</span> <span class="n">_lookup_class_uri</span> <span class="o">==</span> <span class="n">_class_uri</span> <span class="ow">and</span> <span class="n">_subject_uri</span><span class="p">:</span>
+                <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;FILTER(?uri!={}) .&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>\
+                        <span class="n">iri</span><span class="p">(</span><span class="n">_subject_uri</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="n">x</span><span class="o">=</span><span class="n">y</span>
+            <span class="c1"># If not need to determine how the subject is related to the field</span>
+            <span class="c1"># property</span>
+            <span class="k">elif</span> <span class="n">_subject_uri</span><span class="p">:</span>
+                <span class="c1"># class links shows the relationship between the classes in a form</span>
+                <span class="n">_class_links</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">dependancies</span>
+                <span class="n">_linked_lookup_class_uri</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="c1"># cycle through the class links to find the subject linkage</span>
+                <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">_class_links</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">_class_links</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="n">_lookup_class_uri</span> <span class="o">==</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_classUri&quot;</span><span class="p">):</span>
+                            <span class="n">_linked_lookup_class_uri</span> <span class="o">=</span> <span class="n">_rdf_class</span>
+                            <span class="n">_linked_lookup_prop</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+                <span class="c1"># if there is a direct link between the subject class and</span>
+                <span class="c1"># field class add the sparql arguments</span>
+                <span class="k">if</span> <span class="n">_linked_lookup_class_uri</span> <span class="o">==</span> <span class="n">_class_uri</span><span class="p">:</span>
+                    <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>\
+                            <span class="s2">&quot;OPTIONAL{{?uri {} ?linkedUri}} .&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>\
+                                    <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_linked_lookup_prop</span><span class="p">))))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># find the indirect linkage i.e.</span>
+                    <span class="c1">#    field in class A that links to class B with a lookup</span>
+                    <span class="c1">#    subject in class C</span>
+                    <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">_class_links</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">_class_links</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">]:</span>
+                            <span class="k">if</span> <span class="n">_class_uri</span> <span class="o">==</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_classUri&quot;</span><span class="p">):</span>
+                                <span class="n">_linked_field_class_uri</span> <span class="o">=</span> <span class="n">_rdf_class</span>
+                                <span class="n">_linked_field_prop</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">)</span>
+                                <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">_linked_lookup_class_uri</span> <span class="o">==</span> <span class="n">_linked_field_class_uri</span><span class="p">:</span>
+                        <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;OPTIONAL {&quot;</span><span class="p">)</span>
+                        <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;?pass {} ?uri .&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>\
+                                <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_linked_field_prop</span><span class="p">))))</span>
+                        <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;?pass {} ?linkedUri .&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>\
+                                <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_linked_lookup_prop</span><span class="p">))))</span>
+                        <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;} .&quot;</span><span class="p">)</span>
+                <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>\
+                        <span class="s2">&quot;BIND(IF(bound(?linkedUri),?linkedUri,&#39;&#39;) AS ?link)&quot;</span><span class="p">)</span>
+                <span class="n">_sparql_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;FILTER(?link!={}).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>\
+                        <span class="n">iri</span><span class="p">(</span><span class="n">_subject_uri</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;&#39;{}</span><span class="se">\n</span><span class="s1">SELECT (COUNT(?uri)&gt;0 AS ?uniqueValueViolation)</span>
+<span class="s1">{{</span><span class="se">\n</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">}}</span><span class="se">\n</span><span class="s1">GROUP BY ?uri&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_prefix</span><span class="p">(),</span>
+                                    <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_sparql_args</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

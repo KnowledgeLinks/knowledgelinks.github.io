@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.utilities.uriconvertor &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.utilities.uriconvertor</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.utilities.uriconvertor</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39; contains functions for converting objects to namespace prefixes &#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mike Stabile&quot;</span>
+
+<span class="n">NS_OBJ</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<div class="viewcode-block" id="convert_to_ns"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.convert_to_ns">[docs]</a><span class="k">def</span> <span class="nf">convert_to_ns</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ns_obj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; converts a value to the prefixed rdf ns equivalent. If not found</span>
+<span class="sd">        returns the value as is &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">ns_obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">ns_obj</span> <span class="o">=</span> <span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="k">for</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns_uri</span> <span class="ow">in</span> <span class="n">ns_obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>\
+                    <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_ns_uri</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="o">+</span><span class="n">_ns_uri</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">_ns_uri</span><span class="p">,</span> <span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>\
+                    <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="convert_to_ttl"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.convert_to_ttl">[docs]</a><span class="k">def</span> <span class="nf">convert_to_ttl</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ns_obj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; converts a value to the prefixed rdf ns equivalent. If not found</span>
+<span class="sd">        returns the value as is &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">ns_obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">ns_obj</span> <span class="o">=</span> <span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="k">for</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns_uri</span> <span class="ow">in</span> <span class="n">ns_obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2">_&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>\
+                    <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_ns_uri</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="o">+</span><span class="n">_ns_uri</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">_ns_uri</span><span class="p">,</span> <span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>\
+                    <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>    </div>
+    
+<div class="viewcode-block" id="convert_to_uri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.convert_to_uri">[docs]</a><span class="k">def</span> <span class="nf">convert_to_uri</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ns_obj</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strip_iri</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; converts a prefixed rdf ns equivalent value to its uri form. </span>
+<span class="sd">        If not found returns the value as is &#39;&#39;&#39;</span>
+    
+    <span class="k">if</span> <span class="n">ns_obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">ns_obj</span><span class="o">=</span><span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="k">for</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns_uri</span> <span class="ow">in</span> <span class="n">ns_obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2">_&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">strip_iri</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns_uri</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>\
+                        <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns_uri</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_prefix</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">strip_iri</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns_uri</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>\
+                        <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">_prefix</span><span class="p">,</span> <span class="n">_ns_uri</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+    
+<div class="viewcode-block" id="create_namespace_obj"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.create_namespace_obj">[docs]</a><span class="k">def</span> <span class="nf">create_namespace_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; takes initial rdf application definitions and reads the namespaces &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">NS_OBJ</span>
+    <span class="n">_ns_obj</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># find the section of the obj that holds the all the namespaces</span>
+    <span class="n">_key_string</span> <span class="o">=</span> <span class="s2">&quot;http://knowledgelinks.io/ns/data-structures/appNameSpace&quot;</span>
+    <span class="k">for</span> <span class="n">_app_section</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_section_key</span> <span class="ow">in</span> <span class="n">_app_section</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_section_key</span> <span class="o">==</span> <span class="n">_key_string</span><span class="p">:</span>
+                    <span class="n">_ns_obj</span> <span class="o">=</span> <span class="n">_app_section</span><span class="p">[</span><span class="n">_section_key</span><span class="p">]</span>
+                    <span class="k">break</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="n">return_obj</span> <span class="o">=</span> <span class="p">{}</span>  
+    <span class="c1"># cylce through the namespace section and add to the return obj </span>
+    <span class="k">for</span> <span class="n">_ns</span> <span class="ow">in</span> <span class="n">_ns_obj</span><span class="p">:</span>
+        <span class="n">_prefix_key</span> <span class="o">=</span> <span class="s2">&quot;http://knowledgelinks.io/ns/data-structures/prefix&quot;</span>
+        <span class="n">_ns_key</span> <span class="o">=</span> <span class="s1">&#39;http://knowledgelinks.io/ns/data-structures/nameSpaceUri&#39;</span>
+        <span class="n">return_obj</span><span class="p">[</span><span class="n">_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prefix_key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_ns_key</span><span class="p">)</span>
+    <span class="n">NS_OBJ</span> <span class="o">=</span> <span class="n">return_obj</span>
+    <span class="k">return</span> <span class="n">return_obj</span></div>
+
+<div class="viewcode-block" id="convert_obj_to_rdf_namespace"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.convert_obj_to_rdf_namespace">[docs]</a><span class="k">def</span> <span class="nf">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ns_obj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; This function takes rdf json definitions and converts all of the</span>
+<span class="sd">        uri strings to a ns_value format &#39;&#39;&#39;</span> 
+    <span class="k">if</span> <span class="n">ns_obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">ns_obj</span> <span class="o">=</span> <span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>    
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">_return_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">_return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                 <span class="n">_return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convert_to_ns</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_return_list</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">_return_obj</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">nkey</span> <span class="o">=</span> <span class="n">convert_to_ns</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">_return_obj</span><span class="p">[</span><span class="n">nkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_return_obj</span><span class="p">[</span><span class="n">nkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_obj_to_rdf_namespace</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_return_obj</span><span class="p">[</span><span class="n">nkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_to_ns</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_return_obj</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">convert_to_ns</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="pyuri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.pyuri">[docs]</a><span class="k">def</span> <span class="nf">pyuri</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; converts an iri to the app defined rdf namespaces in the framework </span>
+<span class="sd">        in a python accessable format. i.e. schema:name or </span>
+<span class="sd">        http:schema.org/name  --&gt; schema_name &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">NS_OBJ</span>
+    <span class="k">if</span> <span class="n">NS_OBJ</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">NS_OBJ</span><span class="o">=</span><span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">convert_to_ns</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NS_OBJ</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">convert_to_ns</span><span class="p">(</span><span class="n">convert_to_uri</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NS_OBJ</span><span class="p">),</span> <span class="n">NS_OBJ</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ttluri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.ttluri">[docs]</a><span class="k">def</span> <span class="nf">ttluri</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; converts an iri to the app defined rdf namespaces in the framework </span>
+<span class="sd">        in a turtle accessable format. i.e. schema_name or </span>
+<span class="sd">        http:schema.org/name  --&gt; schema:name &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">NS_OBJ</span>
+    <span class="k">if</span> <span class="n">NS_OBJ</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">NS_OBJ</span><span class="o">=</span><span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">convert_to_ttl</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NS_OBJ</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">convert_to_ttl</span><span class="p">(</span><span class="n">convert_to_uri</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NS_OBJ</span><span class="p">),</span> <span class="n">NS_OBJ</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="nouri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.nouri">[docs]</a><span class="k">def</span> <span class="nf">nouri</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">NS_OBJ</span>
+    <span class="k">if</span> <span class="n">NS_OBJ</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">NS_OBJ</span><span class="o">=</span><span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="n">_uri</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+        <span class="n">_uri</span> <span class="o">=</span> <span class="n">convert_to_uri</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NS_OBJ</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_uri</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">_uri</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">r&quot;^(.*[#/])&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_uri</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="uri_prefix"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.uri_prefix">[docs]</a><span class="k">def</span> <span class="nf">uri_prefix</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Takes a uri and returns the prefix for that uri &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START uri_prefix() uriconvertor.py -------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">global</span> <span class="n">NS_OBJ</span>
+    <span class="k">if</span> <span class="n">NS_OBJ</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">NS_OBJ</span><span class="o">=</span><span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="n">_uri</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+        <span class="n">_uri</span> <span class="o">=</span> <span class="n">convert_to_uri</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NS_OBJ</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_uri</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">_ns_uri</span> <span class="o">=</span> <span class="n">_uri</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">r&quot;^(.*[#/])&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_uri</span><span class="p">)),</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;_uri: &quot;</span><span class="p">,</span> <span class="n">_uri</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;_ns_uri: &quot;</span><span class="p">,</span> <span class="n">_ns_uri</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_uri</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">NS_OBJ</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;uri: &quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="s2">&quot; prefix: &quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_ns_uri</span> <span class="o">==</span> <span class="n">uri</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">prefix</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END uri_prefix() uriconvertor.py -------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+       
+<div class="viewcode-block" id="uri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.uri">[docs]</a><span class="k">def</span> <span class="nf">uri</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> 
+    <span class="k">global</span> <span class="n">NS_OBJ</span>
+    <span class="k">if</span> <span class="n">NS_OBJ</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">NS_OBJ</span><span class="o">=</span><span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">convert_to_uri</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+     
+<div class="viewcode-block" id="iris_to_strings"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.uriconvertor.iris_to_strings">[docs]</a><span class="k">def</span> <span class="nf">iris_to_strings</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ns_obj</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ns_obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+        <span class="n">ns_obj</span> <span class="o">=</span> <span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">ns_obj</span>    
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">_return_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">_return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iris_to_strings</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iris_to_strings</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                 <span class="n">_return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convert_to_uri</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_return_list</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">_return_obj</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">nkey</span> <span class="o">=</span> <span class="n">convert_to_ns</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">_return_obj</span><span class="p">[</span><span class="n">nkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris_to_strings</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_return_obj</span><span class="p">[</span><span class="n">nkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris_to_strings</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_return_obj</span><span class="p">[</span><span class="n">nkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_to_uri</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_return_obj</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">convert_to_uri</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ns_obj</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

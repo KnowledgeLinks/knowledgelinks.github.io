@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.sparql.querygenerator &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.sparql.querygenerator</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.sparql.querygenerator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span> <span class="k">as</span> <span class="n">rdfw</span>
+<span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">fw_config</span><span class="p">,</span> <span class="n">make_triple</span><span class="p">,</span> <span class="n">iri</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span>\
+        <span class="n">is_not_null</span><span class="p">,</span> <span class="n">render_without_request</span><span class="p">,</span> <span class="n">make_list</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">uid_to_repo_uri</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+
+<div class="viewcode-block" id="get_data"><a class="viewcode-back" href="../../../rdfframework.sparql.html#rdfframework.sparql.querygenerator.get_data">[docs]</a><span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; queries that datastore for the based on the supplied arguments &#39;&#39;&#39;</span>
+    <span class="n">_sparql</span> <span class="o">=</span> <span class="n">create_data_sparql_query</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">run_sparql_query</span><span class="p">(</span><span class="n">_sparql</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+    
+<div class="viewcode-block" id="run_sparql_query"><a class="viewcode-back" href="../../../rdfframework.sparql.html#rdfframework.sparql.querygenerator.run_sparql_query">[docs]</a><span class="k">def</span> <span class="nf">run_sparql_query</span><span class="p">(</span><span class="n">sparql</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; run the passed in sparql query and returns the results &#39;&#39;&#39;</span>
+    <span class="n">_prefix</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_prefix</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sparql</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">_results</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+                                 <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="n">_prefix</span><span class="p">,</span>
+                                       <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">sparql</span><span class="p">,</span>
+                                       <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">_results</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bindings&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span></div>
+    
+<div class="viewcode-block" id="create_data_sparql_query"><a class="viewcode-back" href="../../../rdfframework.sparql.html#rdfframework.sparql.querygenerator.create_data_sparql_query">[docs]</a><span class="k">def</span> <span class="nf">create_data_sparql_query</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; generates the sparql query for getting an object&#39;s data &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START create_data_sparql_query -----------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;*** kwargs ***: </span><span class="se">\n</span><span class="si">%s</span><span class="s2"> </span><span class="se">\n</span><span class="s2">*** obj ***:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> 
+            <span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">pp</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)))</span>
+    <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">RdfDataType</span>
+    <span class="n">subject_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject_uri&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">data_subject_uri</span><span class="p">)</span>
+    <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class_uri&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">data_class_uri</span><span class="p">)</span>
+    <span class="n">_formated_val</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_lookup_triple</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_subjectUriTransform&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_subjectUriTransform&quot;</span><span class="p">)</span> <span class="o">==</span> \
+                <span class="s2">&quot;kdr_UidToRepositoryUri&quot;</span><span class="p">:</span>
+            <span class="n">id_value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">)</span> 
+            <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">):</span>
+                <span class="n">_subject_uri</span> <span class="o">=</span> <span class="n">uid_to_repo_uri</span><span class="p">(</span><span class="n">id_value</span><span class="p">)</span>
+                <span class="n">subject_uri</span> <span class="o">=</span> <span class="n">_subject_uri</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">data_subject_uri</span> <span class="o">=</span> <span class="n">_subject_uri</span>
+        <span class="k">elif</span> <span class="n">obj</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_subjectUriTransform&quot;</span><span class="p">)</span> <span class="o">==</span> \
+                <span class="s2">&quot;kdr_UidToTriplestoreUri&quot;</span><span class="p">:</span>
+            <span class="n">id_value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">)</span> 
+            <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">):</span>
+                <span class="n">rdf_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rdfw</span><span class="p">(),</span> <span class="n">obj</span><span class="o">.</span><span class="n">data_class_uri</span><span class="p">)</span>
+                <span class="n">subject_uri</span> <span class="o">=</span> <span class="n">rdf_class</span><span class="o">.</span><span class="n">uri_patterner</span><span class="p">(</span><span class="n">id_value</span><span class="p">)</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">data_subject_uri</span> <span class="o">=</span> <span class="n">subject_uri</span>
+                    
+    <span class="k">elif</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">obj</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupPropertyUri&quot;</span><span class="p">):</span>
+        <span class="c1"># find the details for formating the sparql query for the supplied</span>
+        <span class="c1"># id_value or lookup via a property Value</span>
+        <span class="n">id_value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">id_value</span><span class="p">:</span>
+            <span class="n">id_value</span> <span class="o">=</span> <span class="n">subject_uri</span>
+        <span class="n">_kds_propUri</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupPropertyUri&quot;</span><span class="p">)</span>
+        <span class="n">_rdf_class_uri</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupPropertyClass&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_rdf_class_uri</span><span class="p">:</span> 
+            <span class="n">_rdf_class_uri</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupClassUri&quot;</span><span class="p">)</span>
+        <span class="n">_rdf_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rdfw</span><span class="p">(),</span><span class="n">_rdf_class_uri</span><span class="p">)</span>
+        <span class="n">_rdf_prop</span> <span class="o">=</span> <span class="n">_rdf_class</span><span class="o">.</span><span class="n">kds_properties</span><span class="p">[</span><span class="n">_kds_propUri</span><span class="p">]</span>
+        <span class="n">_range</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_rdf_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdfs_range&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_formated_val</span> <span class="o">=</span> <span class="n">RdfDataType</span><span class="p">(</span><span class="n">_range</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rangeClass&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">sparql</span><span class="p">(</span><span class="n">id_value</span><span class="p">)</span>
+        <span class="n">_lookup_triple</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?subject&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                            <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_rdf_class</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">))),</span>
+                <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?subject&quot;</span><span class="p">,</span>
+                            <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_kds_propUri</span><span class="p">)),</span>
+                            <span class="n">_formated_val</span><span class="p">))</span>            
+        <span class="n">subject_uri</span> <span class="o">=</span> <span class="s2">&quot;?subject&quot;</span>
+        
+    <span class="n">subject_lookup</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject_lookup&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">subject_lookup</span><span class="p">:</span>
+        <span class="c1"># subject lookup will pull a subject and all of its related data</span>
+        <span class="n">_kds_propUri</span> <span class="o">=</span> <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">subject_lookup</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">))</span>
+        <span class="n">_data_type</span> <span class="o">=</span> <span class="n">uri</span><span class="p">(</span><span class="n">make_list</span><span class="p">(</span><span class="n">subject_lookup</span><span class="o">.</span><span class="n">rdfs_range</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">_prop_value</span> <span class="o">=</span> <span class="n">RdfDataType</span><span class="p">(</span><span class="n">_data_type</span><span class="p">)</span><span class="o">.</span><span class="n">sparql</span><span class="p">(</span>\
+                <span class="nb">str</span><span class="p">(</span><span class="n">subject_lookup</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">_sparql</span> <span class="o">=</span> <span class="n">render_without_request</span><span class="p">(</span><span class="s2">&quot;sparqlRelatedItemDataTemplate.rq&quot;</span><span class="p">,</span>
+                                         <span class="n">prefix</span><span class="o">=</span><span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_prefix</span><span class="p">(),</span>
+                                         <span class="n">kds_propUri</span><span class="o">=</span><span class="n">_kds_propUri</span><span class="p">,</span>
+                                         <span class="n">prop_value</span><span class="o">=</span><span class="n">_prop_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_sparql</span>          
+    <span class="n">_lookup_class_uri</span> <span class="o">=</span> <span class="n">_class_uri</span>
+    <span class="n">_sparql_args</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_sparql_constructor</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">dependancies</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;+++++++++++++++++++++++ Dependancies:&quot;</span><span class="p">)</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">_sparql_constructor</span><span class="p">)</span>
+    <span class="n">_base_subject_finder</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_linked_class</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_linked_prop</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_sparql_elements</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_subform_data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_data_list</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">is_subobj</span>
+    <span class="n">_parent_field</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">):</span>
+        <span class="c1"># find the primary linkage between the supplied subjectId and</span>
+        <span class="c1"># other form classes</span>
+        
+        <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">_sparql_constructor</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">_sparql_constructor</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">_class_uri</span> <span class="o">==</span> <span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_classUri&quot;</span><span class="p">):</span>
+                        <span class="n">_sparql_args</span> <span class="o">=</span> <span class="n">_prop</span>
+                        <span class="n">_linked_class</span> <span class="o">=</span> <span class="n">_rdf_class</span>
+                        <span class="n">_sparql_constructor</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">_prop</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">_rdf_class</span> <span class="o">!=</span> <span class="n">_lookup_class_uri</span><span class="p">:</span>
+                            <span class="n">_linked_prop</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="c1"># generate the triple pattern for linked class</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;+++++++++++++++++++++++ SPARQL Constructor&quot;</span><span class="p">)</span>
+            <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">_sparql_constructor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_sparql_args</span><span class="p">:</span>
+            <span class="c1"># create a binding for multi-item results</span>
+            <span class="k">if</span> <span class="n">_data_list</span><span class="p">:</span>
+                <span class="n">_list_binding</span> <span class="o">=</span> <span class="s2">&quot;BIND(?classID AS ?itemID) .&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_list_binding</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="c1"># provide connection triples for the id subject and associated</span>
+            <span class="c1"># rdf class</span>
+            <span class="n">format_string</span> <span class="o">=</span> <span class="s2">&quot;{}BIND({} AS ?baseSub) .</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}&quot;</span>
+            <span class="n">_base_subject_finder</span> <span class="o">=</span> <span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">_lookup_triple</span><span class="p">,</span>
+                        <span class="n">iri</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">),</span>
+                        <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?baseSub&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                                    <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_lookup_class_uri</span><span class="p">))),</span>
+                        <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?classID&quot;</span><span class="p">,</span>
+                                    <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_sparql_args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">))),</span>
+                                    <span class="s2">&quot;?baseSub&quot;</span><span class="p">),</span>
+                        <span class="n">_list_binding</span><span class="p">)</span>
+           <span class="c1"># if there is a linkage between subject_uri and another associated</span>
+           <span class="c1"># property in object</span>
+            <span class="k">if</span> <span class="n">_linked_prop</span><span class="p">:</span>
+                <span class="c1"># create a binding for multi-item results</span>
+                <span class="k">if</span> <span class="n">_data_list</span><span class="p">:</span>
+                    <span class="n">_list_binding</span> <span class="o">=</span> <span class="s2">&quot;BIND(?s AS ?itemID) .&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_list_binding</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="n">format_string</span> <span class="o">=</span> \
+                            <span class="s2">&quot;{}BIND({} AS ?baseSub) .</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">?s ?p ?o .&quot;</span>
+                <span class="n">_sparql_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>\
+                                <span class="n">_lookup_triple</span><span class="p">,</span>
+                                <span class="n">iri</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">),</span>
+                                <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?baseSub&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                                            <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_lookup_class_uri</span><span class="p">))),</span>
+                                <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?s&quot;</span><span class="p">,</span>
+                                            <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_sparql_args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">))),</span>
+                                            <span class="s2">&quot;?baseSub&quot;</span><span class="p">),</span>
+                                <span class="n">_list_binding</span><span class="p">))</span>
+        <span class="c1"># iterrate though the classes used in the object and generate the</span>
+        <span class="c1"># spaqrl triples to pull the data for that class</span>
+        <span class="k">for</span> <span class="n">_rdf_class</span> <span class="ow">in</span> <span class="n">_sparql_constructor</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_rdf_class</span> <span class="o">==</span> <span class="n">_class_uri</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_data_list</span><span class="p">:</span>
+                    <span class="n">_list_binding</span> <span class="o">=</span> <span class="s2">&quot;BIND(?s AS ?itemID) .&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_list_binding</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">_lookup_triple</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">_list_binding</span><span class="p">):</span>
+                    <span class="n">format_string</span> <span class="o">=</span> \
+                            <span class="s2">&quot;{}BIND({} AS ?basesub).</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">?s ?p ?o .&quot;</span>
+                    <span class="n">_sparql_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">_lookup_triple</span><span class="p">,</span>
+                            <span class="n">iri</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">),</span>
+                            <span class="n">make_triple</span><span class="p">(</span><span class="s1">&#39;?baseSub&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_lookup_class_uri</span><span class="p">))),</span>
+                            <span class="n">make_triple</span><span class="p">(</span><span class="s1">&#39;?classID&#39;</span><span class="p">,</span><span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_sparql_args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">))),</span><span class="s1">&#39;?s&#39;</span><span class="p">),</span>
+                            <span class="s2">&quot;BIND(?classID AS ?itemID) .&quot;</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">format_string</span> <span class="o">=</span> \
+                                <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">{}BIND({} AS ?s) .</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">?s ?p ?o .&quot;</span>
+                    <span class="n">_sparql_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">_lookup_triple</span><span class="p">,</span>
+                                <span class="n">iri</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">),</span>
+                                <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?s&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_lookup_class_uri</span><span class="p">))),</span>
+                                <span class="n">_list_binding</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">_sparql_constructor</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">_rdf_class</span> <span class="o">==</span> <span class="n">_class_uri</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">_data_list</span><span class="p">:</span>
+                        <span class="n">_list_binding</span> <span class="o">=</span> <span class="s2">&quot;BIND(?s AS ?itemID) .&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">_list_binding</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                    <span class="n">format_string</span> <span class="o">=</span> \
+                                <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">{}BIND({} AS ?baseSub) .</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">?s ?p ?o .&quot;</span>
+                    <span class="n">_sparql_arg</span> <span class="o">=</span> <span class="n">format_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>\
+                            <span class="n">_lookup_triple</span><span class="p">,</span>
+                            <span class="n">iri</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">),</span>
+                            <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?baseSub&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                                        <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_lookup_class_uri</span><span class="p">))),</span>
+                            <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?baseSub&quot;</span><span class="p">,</span>
+                                        <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">))),</span>
+                                        <span class="s2">&quot;?s&quot;</span><span class="p">),</span>
+                            <span class="n">_list_binding</span><span class="p">)</span>
+                    <span class="n">_sparql_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_sparql_arg</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">_rdf_class</span> <span class="o">==</span> <span class="n">_linked_class</span><span class="p">:</span>
+                    <span class="n">_sparql_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">{}</span><span class="se">\n\t</span><span class="s2">?s ?p ?o .&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">_base_subject_finder</span><span class="p">,</span>
+                            <span class="n">make_triple</span><span class="p">(</span><span class="s2">&quot;?classID&quot;</span><span class="p">,</span>
+                                        <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">))),</span>
+                                        <span class="s2">&quot;?s&quot;</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+
+
+                <span class="sd">&#39;&#39;&#39;**** The case where an ID looking up a the triples for</span>
+<span class="sd">                    a non-linked related is not functioning i.e. password</span>
+<span class="sd">                    ClassID not looking up person org triples if the org</span>
+<span class="sd">                    class is not used in the form. This may not be a</span>
+<span class="sd">                    problem ... the below comment out is a start to solving</span>
+<span class="sd">                     if it is a problem</span>
+
+<span class="sd">                    elif _linked_class != self.get_class_name(prop.get(\</span>
+<span class="sd">                            &quot;classUri&quot;)):</span>
+<span class="sd">                    _sparql_elements.append(</span>
+<span class="sd">                        &quot;\t&quot; +_base_subject_finder + &quot;\n &quot; +</span>
+<span class="sd">                        &quot;\t&quot;+ make_triple(&quot;?classID&quot;, iri(prop.get(\</span>
+<span class="sd">                                &quot;propUri&quot;)), &quot;?s&quot;) + &quot;\n\t?s ?p ?o .&quot;)&#39;&#39;&#39;</span>
+
+        <span class="c1"># merge the sparql elements for each class used into one combined</span>
+        <span class="c1"># sparql union statement</span>
+        <span class="n">_sparql_unions</span> <span class="o">=</span> <span class="s2">&quot;{{</span><span class="se">\n</span><span class="s2">{}</span><span class="se">\n</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">} UNION {</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>\
+                <span class="n">_sparql_elements</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">_data_list</span><span class="p">:</span>
+            <span class="n">_list_binding</span> <span class="o">=</span> <span class="s2">&quot;?itemID&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_list_binding</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1"># render the statment in the jinja2 template</span>
+        <span class="n">_sparql</span> <span class="o">=</span> <span class="n">render_without_request</span><span class="p">(</span><span class="s2">&quot;sparqlItemTemplate.rq&quot;</span><span class="p">,</span>
+                                         <span class="n">prefix</span><span class="o">=</span><span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_prefix</span><span class="p">(),</span>
+                                         <span class="n">query</span><span class="o">=</span><span class="n">_sparql_unions</span><span class="p">,</span>
+                                         <span class="n">list_binding</span><span class="o">=</span><span class="n">_list_binding</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;SPARQL query&quot;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">_sparql</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END create_data_sparql_query ---------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_sparql</span></div>
+                                         
+<div class="viewcode-block" id="query_select_options"><a class="viewcode-back" href="../../../rdfframework.sparql.html#rdfframework.sparql.querygenerator.query_select_options">[docs]</a><span class="k">def</span> <span class="nf">query_select_options</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; returns a list of key value pairs for a select field &#39;&#39;&#39;</span>
+    <span class="n">_prefix</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_prefix</span><span class="p">()</span>
+    <span class="n">_select_query</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_fieldType</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_selectQuery&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="n">_select_list</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_options</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">_select_query</span><span class="p">:</span>
+        <span class="c1"># send query to triplestore</span>
+        <span class="n">_select_list</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TRIPLESTORE_URL&#39;</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">_prefix</span> <span class="o">+</span> <span class="n">_select_query</span><span class="p">,</span>
+                  <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">})</span>
+        <span class="n">_raw_options</span> <span class="o">=</span> <span class="n">_select_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bindings&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">_bound_var</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_fieldType</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_selectBoundValue&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>\
+                <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">_display_var</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">kds_fieldType</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_selectDisplay&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>\
+                <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># format query result into key value pairs</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">_raw_options</span><span class="p">:</span>
+            <span class="n">_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span><span class="n">iri</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_bound_var</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_display_var</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="p">})</span>
+    <span class="k">return</span> <span class="n">_options</span></div>
+    
+<div class="viewcode-block" id="save_file_to_repository"><a class="viewcode-back" href="../../../rdfframework.sparql.html#rdfframework.sparql.querygenerator.save_file_to_repository">[docs]</a><span class="k">def</span> <span class="nf">save_file_to_repository</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">repo_item_address</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; saves a file from a form to a repository&#39;&#39;&#39;</span>
+    <span class="n">object_value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">repo_item_address</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;~~~~~~~~ write code here&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">repository_result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;REPOSITORY_URL&quot;</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+			         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-type&quot;</span><span class="p">:</span><span class="s2">&quot;&#39;image/png&#39;&quot;</span><span class="p">})</span>
+        <span class="n">object_value</span> <span class="o">=</span> <span class="n">repository_result</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">return</span> <span class="n">iri</span><span class="p">(</span><span class="n">object_value</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.forms.rdffields &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.forms.rdffields</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.forms.rdffields</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">wtforms.fields</span> <span class="kn">import</span> <span class="n">StringField</span><span class="p">,</span> <span class="n">TextAreaField</span><span class="p">,</span> <span class="n">PasswordField</span><span class="p">,</span> \
+        <span class="n">BooleanField</span><span class="p">,</span> <span class="n">FileField</span><span class="p">,</span> <span class="n">DateField</span><span class="p">,</span> <span class="n">DateTimeField</span><span class="p">,</span> <span class="n">SelectField</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span>\
+        <span class="n">FormField</span><span class="p">,</span> <span class="n">FieldList</span><span class="p">,</span> <span class="n">HiddenField</span>
+<span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="n">InputRequired</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">URL</span>
+<span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span> <span class="k">as</span> <span class="n">rdfw</span>
+<span class="kn">from</span> <span class="nn">rdfframework.processors</span> <span class="kn">import</span> <span class="n">clean_processors</span>
+<span class="kn">from</span> <span class="nn">rdfframework.validators</span> <span class="kn">import</span> <span class="n">get_wtform_validators</span>
+<span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">make_list</span><span class="p">,</span> <span class="n">make_set</span><span class="p">,</span> <span class="n">cbool</span><span class="p">,</span> \
+        <span class="n">calculate_default_value</span> <span class="c1">#, code_timer, \</span>
+<span class="c1">#        fw_config, iri, is_not_null</span>
+<span class="kn">from</span> <span class="nn">rdfframework.forms.widgets</span> <span class="kn">import</span> <span class="n">BsGridTableWidget</span><span class="p">,</span> \
+        <span class="n">RepeatingSubFormWidget</span><span class="p">,</span> <span class="n">ButtonActionWidget</span>
+
+<div class="viewcode-block" id="get_field_json"><a class="viewcode-back" href="../../../rdfframework.forms.html#rdfframework.forms.rdffields.get_field_json">[docs]</a><span class="k">def</span> <span class="nf">get_field_json</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">instructions</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">user_info</span><span class="p">,</span> <span class="n">item_permissions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;This function will read through the RDF defined info and proccess the</span>
+<span class="sd">	json to return the correct values for the instance, security and details&#39;&#39;&#39;</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">item_permissions</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">item_permissions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_rdf_app</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">app</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.html&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="c1"># Determine Security Access</span>
+    <span class="n">_new_field</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_access_level</span> <span class="o">=</span> <span class="n">get_field_security_access</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">user_info</span><span class="p">,</span> <span class="n">item_permissions</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;acl_Read&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_access_level</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;accessLevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_access_level</span>
+
+    <span class="c1"># get form instance info</span>
+    <span class="n">_form_instance_info</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_form_field_instance_type_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formInstance&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formInstance&#39;</span><span class="p">,</span> <span class="p">[])))</span>
+    <span class="c1">#print(&quot;instance type list: &quot;,_form_field_instance_type_list)</span>
+    <span class="c1">#print(&quot;instance: &quot;, instance)</span>
+    <span class="k">for</span> <span class="n">_field_instance</span> <span class="ow">in</span> <span class="n">_form_field_instance_type_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_field_instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formInstanceType&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">instance</span><span class="p">:</span>
+            <span class="n">_form_instance_info</span> <span class="o">=</span> <span class="n">_field_instance</span>
+    <span class="c1">#print(&quot;instance info\n&quot;,_form_instance_info)</span>
+    <span class="c1"># Determine the field paramaters</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_formFieldName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldName&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s2">&quot;kds_formFieldName&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_formFieldName&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_fieldType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_fieldType&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_fieldType&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_fieldType&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_fieldType&#39;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_fieldType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">:</span><span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_fieldType&#39;</span><span class="p">]}</span>
+
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_formLabelName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formLabelName&#39;</span><span class="p">,</span> \
+            <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formLabelName&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_formLabelName&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> \
+            <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;formFieldHelp&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_formFieldOrder&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldOrder&#39;</span><span class="p">,</span> \
+            <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formFieldOrder&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_formFieldOrder&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_formLayoutRow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formLayoutRow&#39;</span><span class="p">,</span> \
+            <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formLayoutRow&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_formLayoutRow&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_propUri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propUri&#39;</span><span class="p">)</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">)</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;rdfs_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rdfs_range&#39;</span><span class="p">)</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_defaultVal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_defaultVal&#39;</span><span class="p">,</span>\
+            <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_defaultVal&#39;</span><span class="p">))</span>
+
+    <span class="c1"># get applicationActionList</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_actionList&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_set</span><span class="p">(</span><span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_applicationAction&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">()))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_actionList&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">make_set</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_applicationAction&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">())))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_actionList&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_actionList&#39;</span><span class="p">])</span>
+    <span class="c1">#print(&quot;action List:_______________&quot;, _new_field[&#39;kds_actionList&#39;])</span>
+    <span class="k">if</span> <span class="s2">&quot;kdr_RemoveFromForm&quot;</span> <span class="ow">in</span>\
+            <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_actionList&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="c1"># get valiator list</span>
+    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_overrideValidation&#39;</span><span class="p">):</span>
+        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_validators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_overrideValidation&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_validators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span>\
+                <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formValidation&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_validators&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">make_list</span><span class="p">(</span>\
+                <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formValidation&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_validators&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">make_list</span><span class="p">(</span>\
+                <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propertyValidation&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="c1"># get processing list</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_processors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formProcessing&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_processors&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formProcessing&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_processors&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propertyProcessing&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_propUri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;schema_image&quot;</span><span class="p">:</span>
+            <span class="n">x</span><span class="o">=</span><span class="mi">1</span>
+    <span class="c1"># get required state</span>
+    <span class="n">_required</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_field_req_var</span> <span class="o">=</span> <span class="n">cbool</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_requiredField&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propUri&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classInfo&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+            <span class="s1">&#39;kds_primaryKey&#39;</span><span class="p">,</span> <span class="p">[])))</span> <span class="ow">or</span> <span class="n">_field_req_var</span><span class="p">:</span>
+        <span class="n">_required</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_requiredByDomain&#39;</span><span class="p">,</span> <span class="p">{})):</span>
+        <span class="n">_required</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">_field_req_var</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="n">_required</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_required&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_required</span>
+
+    <span class="c1"># Determine EditState</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;acl_Write&quot;</span> <span class="ow">in</span> <span class="n">_access_level</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;kdr_NotEditable&quot;</span> \
+            <span class="ow">not</span> <span class="ow">in</span> <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_actionList&#39;</span><span class="p">]):</span>
+        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;editable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;editable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="c1"># Determine css classes</span>
+    <span class="n">css</span> <span class="o">=</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_overrideCss&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_overrideCss&#39;</span><span class="p">,</span> \
+            <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_overrideCss&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">css</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">css</span> <span class="o">=</span> <span class="n">_rdf_app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_fieldCss&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">css</span> <span class="o">=</span> <span class="n">css</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propertyAddOnCss&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">css</span> <span class="o">=</span> <span class="n">css</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">_form_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_addOnCss&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                <span class="s1">&#39;kds_addOnCss&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formDefault&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_addOnCss&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)))</span>
+        <span class="n">css</span> <span class="o">=</span> <span class="n">css</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_css&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">css</span>
+    <span class="c1">#print(&quot;field_json:\n&quot;, json.dumps(_new_field, indent=4))</span>
+
+    <span class="k">return</span> <span class="n">_new_field</span></div>
+    
+<div class="viewcode-block" id="get_wtform_field"><a class="viewcode-back" href="../../../rdfframework.forms.html#rdfframework.forms.rdffields.get_wtform_field">[docs]</a><span class="k">def</span> <span class="nf">get_wtform_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; return a wtform field &#39;&#39;&#39;</span>
+    <span class="n">_form_field</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_field_label</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formLabelName&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="c1">#print(&quot;______label:&quot;, _field_label)</span>
+    <span class="n">_field_name</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formFieldName&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">_field_type_obj</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_fieldType&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_field_type_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">_field_type_obj</span> <span class="o">=</span> <span class="n">_field_type_obj</span><span class="p">[</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_field_validators</span> <span class="o">=</span> <span class="n">get_wtform_validators</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+    <span class="n">_field_type</span> <span class="o">=</span> <span class="n">_field_type_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">_field_row</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_formLayoutRow&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">_default_val</span> <span class="o">=</span> <span class="n">calculate_default_value</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_TextField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                  <span class="n">_field_validators</span><span class="p">,</span>
+                                  <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_OpenBadgeSenderField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span>  <span class="n">ButtonActionField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                  <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                                  <span class="c1">#button_action=&quot;mozillaBackpackSender&quot;,</span>
+                                  <span class="c1">#button_text={&#39;true&#39;:&quot;Resend&quot;,&#39;false&#39;:&#39;Claim now&#39;}</span>
+                                  <span class="p">)</span>
+        <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_call_in_display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_buttonAction&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;mozillaBackpackSender&quot;</span>
+        <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_buttonText&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;true&#39;</span><span class="p">:</span><span class="s2">&quot;Resend&quot;</span><span class="p">,</span><span class="s1">&#39;false&#39;</span><span class="p">:</span><span class="s1">&#39;Claim now&#39;</span><span class="p">}</span>
+        <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_errorLogPropUri&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;kds_errorLog&quot;</span>
+        <span class="c1">#x=y</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_ServerField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c1">#form_field = StringField(_field_label, _field_validators, description= \</span>
+            <span class="c1">#field.get(&#39;kds_formFieldHelp&#39;, &#39;&#39;))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_TextAreaField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">TextAreaField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                    <span class="n">_field_validators</span><span class="p">,</span>
+                                    <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_PasswordField&#39;</span><span class="p">:</span>
+        <span class="c1">#print(&quot;!!!! Mode: &quot;, _field_type_obj.get(&#39;fieldMode&#39;))</span>
+        <span class="n">_field_mode</span> <span class="o">=</span> <span class="n">_field_type_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_fieldMode&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_field_mode</span> <span class="o">==</span> <span class="s2">&quot;kdr_InitialPassword&quot;</span><span class="p">:</span>
+            <span class="n">_form_field</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;kds_fieldName&quot;</span><span class="p">:</span><span class="n">_field_name</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_field&quot;</span><span class="p">:</span><span class="n">PasswordField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                                  <span class="n">_field_validators</span><span class="p">,</span>
+                                                  <span class="n">description</span><span class="o">=</span>\
+                                                  <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span>\
+                                                         <span class="s1">&#39;&#39;</span><span class="p">))},</span>
+                           <span class="p">{</span><span class="s2">&quot;kds_fieldName&quot;</span><span class="p">:</span><span class="n">_field_name</span> <span class="o">+</span> <span class="s2">&quot;_confirm&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_field&quot;</span><span class="p">:</span><span class="n">PasswordField</span><span class="p">(</span><span class="s2">&quot;Re-enter&quot;</span><span class="p">),</span>
+                            <span class="s2">&quot;doNotSave&quot;</span><span class="p">:</span><span class="bp">True</span><span class="p">}]</span>
+
+        <span class="k">elif</span> <span class="n">_field_mode</span> <span class="o">==</span> <span class="s2">&quot;kdr_ChangePassword&quot;</span><span class="p">:</span>
+            
+            <span class="n">_form_field</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;kds_fieldName&quot;</span><span class="p">:</span><span class="n">_field_name</span> <span class="o">+</span> <span class="s2">&quot;_old&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_field&quot;</span><span class="p">:</span><span class="n">PasswordField</span><span class="p">(</span><span class="s2">&quot;Current&quot;</span><span class="p">),</span>
+                            <span class="s2">&quot;doNotSave&quot;</span><span class="p">:</span><span class="bp">True</span><span class="p">},</span>
+                           <span class="p">{</span><span class="s2">&quot;kds_fieldName&quot;</span><span class="p">:</span><span class="n">_field_name</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_field&quot;</span><span class="p">:</span><span class="n">PasswordField</span><span class="p">(</span><span class="s2">&quot;New&quot;</span><span class="p">),</span>
+                            <span class="s2">&quot;kds_formLayoutRow&quot;</span><span class="p">:</span><span class="n">_field_row</span> <span class="o">+</span> <span class="o">.</span><span class="mo">01</span><span class="p">},</span>
+                           <span class="p">{</span><span class="s2">&quot;kds_fieldName&quot;</span><span class="p">:</span><span class="n">_field_name</span> <span class="o">+</span> <span class="s2">&quot;_confirm&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_field&quot;</span><span class="p">:</span><span class="n">PasswordField</span><span class="p">(</span><span class="s2">&quot;Re-enter&quot;</span><span class="p">),</span>
+                            <span class="s2">&quot;doNotSave&quot;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_formLayoutRow&quot;</span><span class="p">:</span><span class="n">_field_row</span> <span class="o">+</span> <span class="o">.</span><span class="mo">02</span><span class="p">}]</span>
+        <span class="k">elif</span> <span class="n">_field_mode</span> <span class="o">==</span> <span class="s2">&quot;kdr_LoginPassword&quot;</span><span class="p">:</span>
+            <span class="n">_form_field</span> <span class="o">=</span> <span class="n">PasswordField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                        <span class="p">[</span><span class="n">InputRequired</span><span class="p">()],</span>
+                                        <span class="n">description</span><span class="o">=</span>\
+                                                <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_BooleanField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                   <span class="n">_field_validators</span><span class="p">,</span>
+                                   <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_FileField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                <span class="n">_field_validators</span><span class="p">,</span>
+                                <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_HiddenField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">FileField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                <span class="n">_field_validators</span><span class="p">,</span>
+                                <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_DateField&#39;</span><span class="p">:</span>
+        <span class="n">_date_format</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                <span class="s1">&#39;kds_dataFormats&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_pythonDateFormat&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="c1">#print(&quot;date validators:\n&quot;, _field_validators)</span>
+        <span class="n">_add_optional</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">_val</span> <span class="ow">in</span> <span class="n">_field_validators</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_val</span><span class="p">,</span> <span class="n">InputRequired</span><span class="p">):</span>
+                <span class="n">_add_optional</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">_add_optional</span><span class="p">:</span>
+            <span class="n">_field_validators</span> <span class="o">=</span> <span class="p">[</span><span class="n">Optional</span><span class="p">()]</span> <span class="o">+</span> <span class="n">_field_validators</span>
+
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                <span class="n">_field_validators</span><span class="p">,</span>
+                                <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                                <span class="n">default</span><span class="o">=</span><span class="n">_default_val</span><span class="p">,</span>
+                                <span class="n">format</span><span class="o">=</span><span class="n">_date_format</span><span class="p">)</span>
+        <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_css&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; dp&quot;</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_DateTimeField&#39;</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">DateTimeField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                    <span class="n">_field_validators</span><span class="p">,</span>
+                                    <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_SelectField&#39;</span><span class="p">:</span>
+        <span class="c1">#print(&quot;--Select Field: &quot;, _field_label, _field_validators, description= \</span>
+                <span class="c1">#field.get(&#39;kds_formFieldHelp&#39;, &#39;&#39;))</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">SelectField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                  <span class="n">_field_validators</span><span class="p">,</span>
+                                  <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="c1">#_form_field = StringField(_field_label, _field_validators, description= \</span>
+                <span class="c1">#field.get(&#39;kds_formFieldHelp&#39;, &#39;&#39;))</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_ImageFileOrURLField&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">instance</span> <span class="o">==</span> <span class="s2">&quot;kdr_DisplayForm&quot;</span><span class="p">:</span>
+            <span class="n">_form_field</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                    <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_formFieldName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_formFieldName&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_image&quot;</span>
+            
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot; image count &quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_form_field</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;kds_fieldName&quot;</span><span class="p">:</span><span class="n">_field_name</span> <span class="o">+</span><span class="s2">&quot;_image&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_field&quot;</span><span class="p">:</span><span class="n">FileField</span><span class="p">(</span><span class="s2">&quot;Image File&quot;</span><span class="p">)},</span>
+                           <span class="p">{</span><span class="s2">&quot;kds_fieldName&quot;</span><span class="p">:</span><span class="n">_field_name</span> <span class="o">+</span> <span class="s2">&quot;_url&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;kds_field&quot;</span><span class="p">:</span><span class="n">StringField</span><span class="p">(</span><span class="s2">&quot;Image Url&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">URL</span><span class="p">])}]</span>
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_SubForm&#39;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.rdfforms</span> <span class="kn">import</span> <span class="n">rdf_framework_form_factory</span>
+        <span class="n">_sub_form_instance</span> <span class="o">=</span> <span class="n">_field_type_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_subFormInstance&#39;</span><span class="p">,</span>\
+                                                 <span class="s1">&#39;kdr_LinkWithParent&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_sub_form_instance</span> <span class="o">==</span> <span class="s1">&#39;kdr_LinkWithParent&#39;</span><span class="p">:</span>
+            <span class="n">_sub_form_instance</span> <span class="o">=</span> <span class="n">instance</span>    
+        <span class="n">_form_path</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_form_path</span><span class="p">(</span>\
+                <span class="n">_field_type_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_subFormUri&#39;</span><span class="p">),</span> <span class="n">instance</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;is_subobj&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">_sub_form</span> <span class="o">=</span> <span class="n">FormField</span><span class="p">(</span>\
+                <span class="n">rdf_framework_form_factory</span><span class="p">(</span><span class="n">_form_path</span><span class="p">,</span> <span class="n">is_subobj</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+                <span class="n">widget</span><span class="o">=</span><span class="n">BsGridTableWidget</span><span class="p">())</span>
+        <span class="k">if</span> <span class="s2">&quot;RepeatingSubForm&quot;</span> <span class="ow">in</span> <span class="n">_field_type_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_subFormMode&quot;</span><span class="p">):</span>
+            <span class="n">_form_field</span> <span class="o">=</span> <span class="n">FieldList</span><span class="p">(</span><span class="n">_sub_form</span><span class="p">,</span> <span class="n">_field_label</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="n">widget</span><span class="o">=</span><span class="n">RepeatingSubFormWidget</span><span class="p">())</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">_form_field</span><span class="p">,</span><span class="s2">&quot;frameworkField&quot;</span><span class="p">,</span><span class="s2">&quot;RepeatingSubForm&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_form_field</span> <span class="o">=</span> <span class="n">_sub_form</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">_form_field</span><span class="p">,</span><span class="s2">&quot;frameworkField&quot;</span><span class="p">,</span><span class="s2">&quot;subForm&quot;</span><span class="p">)</span>        
+    <span class="k">elif</span> <span class="n">_field_type</span> <span class="o">==</span> <span class="s1">&#39;kdr_FieldList&#39;</span><span class="p">:</span>
+        <span class="n">_field_json</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">_field_type_obj</span><span class="p">[</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_field_type_obj</span><span class="p">[</span><span class="s1">&#39;kds_listFieldType&#39;</span><span class="p">]</span>
+        <span class="n">_field_json</span><span class="p">[</span><span class="s1">&#39;kds_fieldType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_field_type_obj</span>
+        <span class="n">list_field</span> <span class="o">=</span> <span class="n">get_wtform_field</span><span class="p">(</span><span class="n">_field_json</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="s1">&#39;fld&#39;</span><span class="p">]</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">FieldList</span><span class="p">(</span><span class="n">list_field</span><span class="p">,</span> <span class="n">_field_label</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_form_field</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="n">_field_label</span><span class="p">,</span>
+                                  <span class="n">_field_validators</span><span class="p">,</span>
+                                  <span class="n">description</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_formFieldHelp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="c1">#print(&quot;--_form_field: &quot;, _form_field)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;fld&quot;</span><span class="p">:</span> <span class="n">_form_field</span><span class="p">,</span> <span class="s2">&quot;fld_json&quot;</span><span class="p">:</span> <span class="n">field</span><span class="p">,</span> <span class="s2">&quot;form_js&quot;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span></div>
+    
+<div class="viewcode-block" id="get_field_security_access"><a class="viewcode-back" href="../../../rdfframework.forms.html#rdfframework.forms.rdffields.get_field_security_access">[docs]</a><span class="k">def</span> <span class="nf">get_field_security_access</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">user_info</span><span class="p">,</span> <span class="n">item_permissions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;This function will return level security access allowed for the field&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">item_permissions</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">item_permissions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1">#Check application wide access</span>
+    <span class="n">_app_security</span> <span class="o">=</span> <span class="n">user_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_applicationSecurity&#39;</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+    <span class="c1">#Check class access</span>
+    <span class="n">_class_access_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_classInfo&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;kds_classSecurity&quot;</span><span class="p">:[]}</span>\
+                <span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_classSecurity&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">_class_access</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_class_access_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_class_access_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;acl_agent&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">user_info</span><span class="p">[</span><span class="s1">&#39;kds_userGroups&#39;</span><span class="p">]:</span>
+                <span class="n">_class_access</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;acl_mode&#39;</span><span class="p">))</span>
+
+    <span class="c1">#check property security</span>
+    <span class="n">_property_access_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_propertySecurity&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">_property_access</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_property_access_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_property_access_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;acl_agent&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">user_info</span><span class="p">[</span><span class="s1">&#39;kds_userGroups&#39;</span><span class="p">]:</span>
+                <span class="n">_class_access</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;acl_mode&#39;</span><span class="p">))</span>
+
+    <span class="c1">#check item permissions</span>
+    <span class="n">_item_access_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;itemSecurity&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">_item_access</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_item_access_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_item_access_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;agent&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">user_info</span><span class="p">[</span><span class="s1">&#39;kds_userGroups&#39;</span><span class="p">]:</span>
+                <span class="n">_item_access</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">))</span>
+
+    <span class="n">_main_access</span> <span class="o">=</span> <span class="n">_item_access</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">_property_access</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;SuperUser&quot;</span> <span class="ow">in</span> <span class="n">_app_security</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="s1">&#39;Read&#39;</span><span class="p">,</span> <span class="s1">&#39;Write&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">_main_access</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_main_access</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">_class_access</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_class_access</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">_app_security</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_app_security</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">()</span></div>
+        
+
+    
+<div class="viewcode-block" id="add_field_attributes"><a class="viewcode-back" href="../../../rdfframework.forms.html#rdfframework.forms.rdffields.add_field_attributes">[docs]</a><span class="k">def</span> <span class="nf">add_field_attributes</span><span class="p">(</span><span class="n">wt_field</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">wt_field</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">wt_field</span><span class="p">,</span> <span class="s2">&quot;old_data&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">wt_field</span><span class="p">,</span> <span class="s2">&quot;processed_data&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">wt_field</span><span class="p">,</span> <span class="s2">&quot;query_data&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wt_field</span></div>
+    
+<div class="viewcode-block" id="ButtonActionField"><a class="viewcode-back" href="../../../rdfframework.forms.html#rdfframework.forms.rdffields.ButtonActionField">[docs]</a><span class="k">class</span> <span class="nc">ButtonActionField</span><span class="p">(</span><span class="n">StringField</span><span class="p">):</span>
+    <span class="n">widget</span> <span class="o">=</span>  <span class="n">ButtonActionWidget</span><span class="p">()</span></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

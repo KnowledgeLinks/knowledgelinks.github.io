@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.processors.rdfprocessors &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.processors.rdfprocessors</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.processors.rdfprocessors</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
+<span class="kn">from</span> <span class="nn">dateutil.parser</span> <span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">parse_date</span>
+<span class="kn">from</span> <span class="nn">passlib.hash</span> <span class="kn">import</span> <span class="n">sha256_crypt</span>
+<span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">is_not_null</span><span class="p">,</span> <span class="n">make_set</span><span class="p">,</span> <span class="n">make_list</span><span class="p">,</span> <span class="n">pyuri</span><span class="p">,</span>\
+        <span class="n">slugify</span><span class="p">,</span> <span class="n">clean_iri</span><span class="p">,</span> <span class="n">iri</span><span class="p">,</span> <span class="n">cbool</span><span class="p">,</span> <span class="n">remove_null</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">ttluri</span><span class="p">,</span> <span class="n">get_attr</span>
+<span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span>
+<span class="kn">from</span> <span class="nn">.imageprocessor</span> <span class="kn">import</span> <span class="n">image_processor</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mike Stabile, Jeremy Nelson&quot;</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
+<div class="viewcode-block" id="run_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.run_processor">[docs]</a><span class="k">def</span> <span class="nf">run_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;runs the passed in processor and returns the saveData&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">processor_type</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="n">processor_type</span> <span class="o">=</span> <span class="n">processor</span>
+    <span class="n">processor_type</span> <span class="o">=</span> <span class="n">processor_type</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>\
+            <span class="s2">&quot;http://knowledgelinks.io/ns/data-resources/&quot;</span><span class="p">,</span> <span class="s2">&quot;kdr_&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_SaltProcessor&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">salt_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_PasswordProcessor&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">password_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_CalculationProcessor&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">calculation_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_CSVstringToMultiPropertyProcessor&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">csv_to_multi_prop_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_AssertionImageBakingProcessor&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">assert_img_baking_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_EmailVerificationProcessor&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">email_verification_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    
+    <span class="k">elif</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_ImageProcessor&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">image_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">processor_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_MultiPropertyToArray&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">prop_to_array_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">prop</span><span class="o">.</span><span class="n">query_data</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;save&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">obj</span>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="assert_img_baking_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.assert_img_baking_processor">[docs]</a><span class="k">def</span> <span class="nf">assert_img_baking_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Application sends badge image to the a badge baking service with the</span>
+<span class="sd">        assertion.&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;save&quot;</span><span class="p">:</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;calcValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">][</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;propUri&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;obi_testing_image_uri&quot;</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="csv_to_multi_prop_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.csv_to_multi_prop_processor">[docs]</a><span class="k">def</span> <span class="nf">csv_to_multi_prop_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Application takes a CSV string and adds each value as a separate triple</span>
+<span class="sd">        to the class instance.&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;save&quot;</span><span class="p">:</span>
+        <span class="n">_value_string</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">_value_string</span><span class="p">):</span>
+            <span class="n">vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">make_set</span><span class="p">(</span><span class="n">make_list</span><span class="p">(</span><span class="n">_value_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">))))</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">][</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;propUri&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">vals</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;calcValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+        <span class="n">prop_val</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;</span><span class="si">%s</span><span class="s2">|</span><span class="si">%s</span><span class="s2">&gt;&gt;&quot;</span> <span class="o">%</span> \
+                               <span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">),</span>
+                               <span class="n">obj</span><span class="p">,</span>
+                               <span class="n">prop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prop_val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">make_list</span><span class="p">(</span><span class="n">prop_val</span><span class="p">))</span>
+            <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">make_list</span><span class="p">(</span><span class="n">prop_val</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="email_verification_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.email_verification_processor">[docs]</a><span class="k">def</span> <span class="nf">email_verification_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Application application initiates a proccess to verify the email</span>
+<span class="sd">        address is a valid working address.&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="password_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.password_processor">[docs]</a><span class="k">def</span> <span class="nf">password_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function handles application password actions</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        modified passed in obj</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START password_processor --------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">salt_url</span> <span class="o">=</span> <span class="s2">&quot;kdr_SaltProcessor&quot;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;save&quot;</span><span class="p">:</span>
+        <span class="c1"># find the salt property</span>
+        
+        <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;classUri&quot;</span><span class="p">)</span>
+        <span class="n">_class_properties</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">get_framework</span><span class="p">(),</span> <span class="n">_class_uri</span><span class="p">)</span><span class="o">.</span><span class="n">kds_properties</span>
+        <span class="n">salt_property</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c1"># find the property Uri that stores the salt value</span>
+        <span class="k">for</span> <span class="n">_class_prop</span> <span class="ow">in</span> <span class="n">_class_properties</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">_processors</span> <span class="o">=</span> <span class="n">clean_processors</span><span class="p">([</span><span class="n">make_list</span><span class="p">(</span>\
+                    <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propertyProcessing&quot;</span><span class="p">,{}))])</span>
+            <span class="k">for</span> <span class="n">_processor</span> <span class="ow">in</span> <span class="n">_processors</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">salt_url</span><span class="p">:</span>
+                    <span class="n">salt_property</span> <span class="o">=</span> <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">)</span>
+                    <span class="n">salt_processor_dict</span> <span class="o">=</span> <span class="n">_processor</span>
+        <span class="c1"># if in save mode create a hashed password</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;save&quot;</span><span class="p">:</span>
+            <span class="c1"># if the there is not a new password in the data return the obj</span>
+            <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">])</span> <span class="ow">or</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+                <span class="c1"># if a salt has not been created call the salt processor</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">salt_property</span><span class="p">):</span>
+                    <span class="n">obj</span> <span class="o">=</span> <span class="n">salt_processor</span><span class="p">(</span><span class="n">salt_processor_dict</span><span class="p">,</span>
+                                         <span class="n">obj</span><span class="p">,</span> 
+                                         <span class="n">mode</span><span class="p">,</span>
+                                         <span class="n">salt_property</span><span class="o">=</span><span class="n">salt_property</span><span class="p">)</span>
+                <span class="c1"># create the hash</span>
+                <span class="n">salt</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">salt_property</span><span class="p">)</span>
+                <span class="n">_hash_value</span> <span class="o">=</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">salt</span><span class="p">)</span>
+                <span class="c1"># assign the hashed password to the processedData</span>
+                <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">][</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;propUri&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_hash_value</span>
+                <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;calcValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END password_processor  mode = save-------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;verify&quot;</span><span class="p">:</span>
+        <span class="c1"># verify the supplied password matches the saved password</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">query_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;password_verified&quot;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">obj</span>    
+        <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_classUri</span>
+        <span class="n">_class_properties</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">get_framework</span><span class="p">(),</span> <span class="n">_class_uri</span><span class="p">)</span><span class="o">.</span><span class="n">kds_properties</span>
+        <span class="n">salt_property</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c1"># find the property Uri that stores the salt value</span>
+        <span class="k">for</span> <span class="n">_class_prop</span> <span class="ow">in</span> <span class="n">_class_properties</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">_processors</span> <span class="o">=</span> <span class="n">clean_processors</span><span class="p">([</span><span class="n">make_list</span><span class="p">(</span>\
+                    <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propertyProcessing&quot;</span><span class="p">,{}))])</span>
+            <span class="k">for</span> <span class="n">_processor</span> <span class="ow">in</span> <span class="n">_processors</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">salt_url</span><span class="p">:</span>
+                    <span class="n">salt_property</span> <span class="o">=</span> <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">)</span>
+                    <span class="n">salt_processor_dict</span> <span class="o">=</span> <span class="n">_processor</span>
+        <span class="c1"># find the salt value in the query_data</span>
+        <span class="n">salt_value</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">props</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">query_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">clean_iri</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">))</span> <span class="o">==</span> <span class="n">_class_uri</span><span class="p">:</span>
+                <span class="n">salt_value</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">salt_property</span><span class="p">)</span>
+                <span class="n">hashed_password</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">salt_value</span><span class="p">,</span> <span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="n">hashed_password</span><span class="p">,</span> <span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;password_verified&quot;</span><span class="p">,</span> \
+            <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="n">salt_value</span><span class="p">,</span> <span class="n">hashed_password</span><span class="p">))</span> 
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END password_processor  mode = verify -------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END password_processor  mode = load -------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="salt_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.salt_processor">[docs]</a><span class="k">def</span> <span class="nf">salt_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Generates a random string for salting&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dataValue&quot;</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;calcValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="c1"># if called from the password processor the kwargs will have a</span>
+    <span class="c1"># salt_property and we can automatically generate a new one</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;salt_property&#39;</span><span class="p">):</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">][</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;salt_property&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                        <span class="n">b64encode</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="n">length</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="c1"># if the salt already exists in the processed data return the obj</span>
+    <span class="c1"># the processor may have been called by the password processor</span>
+    <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;propUri&#39;</span><span class="p">])):</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="c1"># find the password property</span>
+    <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;classUri&quot;</span><span class="p">)</span>
+    <span class="n">_class_properties</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">get_framework</span><span class="p">(),</span> <span class="n">_class_uri</span><span class="p">)</span><span class="o">.</span><span class="n">kds_properties</span>
+    <span class="n">password_property</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">_class_prop</span> <span class="ow">in</span> <span class="n">_class_properties</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propertyProcessing&quot;</span><span class="p">,{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">)</span> \
+                <span class="o">==</span> <span class="s2">&quot;kds_PasswordProcessor&quot;</span><span class="p">:</span>
+            <span class="n">password_property</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;preSaveData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                            <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">))</span>
+    
+    <span class="c1"># check if there is a new password in the preSaveData</span>
+    <span class="c1">#                         or</span>
+    <span class="c1"># if the salt property is required and the old salt is empty</span>
+    <span class="k">if</span> <span class="n">password_property</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">password_property</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;new&#39;</span><span class="p">))</span> <span class="ow">or</span> \
+                                    <span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;required&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+                                            <span class="ow">not</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;old&#39;</span><span class="p">])):</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">][</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;propUri&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                        <span class="n">b64encode</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="n">length</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;old&#39;</span><span class="p">]):</span>
+        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">][</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;propUri&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                        <span class="n">b64encode</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="n">length</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;calcValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="calculation_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.calculation_processor">[docs]</a><span class="k">def</span> <span class="nf">calculation_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="s2">&quot;prop&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Application should proccess the property according to the rules listed</span>
+<span class="sd">        in the kds:calulation property.&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START calculation_processor ------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;save&quot;</span><span class="p">:</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_calculation&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">calculation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">calculation</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;slugify&quot;</span><span class="p">):</span>
+                <span class="n">_prop_uri</span> <span class="o">=</span> <span class="n">calculation</span><span class="p">[</span><span class="n">calculation</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>\
+                                                        <span class="n">calculation</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)]</span>
+                <span class="n">_prop_uri</span> <span class="o">=</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">)</span>
+                <span class="n">_value_to_slug</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">,</span> \
+                                        <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;preSaveData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">,</span> <span class="p">{}</span>\
+                                            <span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;new&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">_value_to_slug</span><span class="p">):</span>
+                    <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;processedData&#39;</span><span class="p">][</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;propUri&#39;</span><span class="p">]]</span> <span class="o">=</span> \
+                            <span class="n">slugify</span><span class="p">(</span><span class="n">_value_to_slug</span><span class="p">)</span>
+                    <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;prop&#39;</span><span class="p">][</span><span class="s1">&#39;calcValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;prop.kds_propUri: &quot;</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+        <span class="n">_calc_type</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_calculationType&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;prop.kds_propUri: &quot;</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">,</span> <span class="s2">&quot; calc_type: &quot;</span><span class="p">,</span>
+                    <span class="n">_calc_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_calc_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_Concat&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">calculator_concat</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_calc_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_ObjectGenerator&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">calculator_object_generator</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_calc_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_DateConvertor&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">calculator_date_convertor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_calc_type</span> <span class="o">==</span> <span class="s2">&quot;kdr_UriTruncation&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">calculator_uir_truncation</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">return_val</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END calculation_processor --------------------------</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="clean_processors"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.clean_processors">[docs]</a><span class="k">def</span> <span class="nf">clean_processors</span><span class="p">(</span><span class="n">processor_list_of_list</span><span class="p">,</span> <span class="n">_class_uri</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; some of the processors are stored as objects and need to retrun</span>
+<span class="sd">        them as a list of string names&#39;&#39;&#39;</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_return_obj</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># cycle through the each list of list of processors</span>
+    <span class="k">for</span> <span class="n">processor_list</span> <span class="ow">in</span> <span class="n">processor_list_of_list</span><span class="p">:</span>
+        <span class="c1"># cylce through each processor in the list</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">processor_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">processor</span> <span class="ow">in</span> <span class="n">processor_list</span><span class="p">:</span>
+                <span class="n">processor_to_add</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="c1"># filter out processors that do not apply to the current </span>
+                    <span class="c1"># rdf_class</span>
+                    <span class="k">if</span> <span class="n">_class_uri</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_appliesTo&quot;</span><span class="p">,</span> <span class="n">_class_uri</span><span class="p">)</span> <span class="o">==</span> \
+                                <span class="n">_class_uri</span><span class="p">:</span>
+                           <span class="n">processor_to_add</span> <span class="o">=</span> <span class="n">processor</span> 
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">processor_to_add</span> <span class="o">=</span> <span class="n">processor</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">processor_to_add</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">:</span> <span class="n">processor</span><span class="p">}</span>
+                <span class="c1"># add the processor to the return_obj if it does not aleady</span>
+                <span class="c1"># exist. This will allow for precedence of the first instance</span>
+                <span class="c1"># of the processor</span>
+                <span class="k">if</span> <span class="n">processor_to_add</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">_return_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">processor_to_add</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                            <span class="s2">&quot;rdf_type&quot;</span><span class="p">))</span> <span class="ow">and</span> <span class="n">processor_to_add</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                            <span class="s2">&quot;rdf_type&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="p">:</span>
+                        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="s2">&quot;kdr_AssertionImageBakingProcessor&quot;</span> <span class="o">==</span> \
+                                    <span class="n">processor_to_add</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">):</span>
+                                <span class="n">x</span><span class="o">=</span><span class="n">y</span>
+                        <span class="n">_return_obj</span><span class="p">[</span><span class="n">processor_to_add</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                <span class="s2">&quot;rdf_type&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">processor</span>
+                        
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_return_obj</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">x</span><span class="o">=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">_return_obj</span></div>
+
+<div class="viewcode-block" id="calculate_value"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.calculate_value">[docs]</a><span class="k">def</span> <span class="nf">calculate_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;&quot;</span><span class="p">):</span>
+        <span class="n">_lookup_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;|&quot;</span> <span class="ow">in</span> <span class="n">_lookup_value</span><span class="p">:</span>
+            <span class="n">value_array</span> <span class="o">=</span> <span class="n">_lookup_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
+            <span class="n">_lookup_value</span> <span class="o">=</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">value_array</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">iri</span><span class="p">(</span><span class="n">pyuri</span><span class="p">(</span><span class="n">value_array</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_lookup_value</span> <span class="o">=</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">_lookup_value</span><span class="p">)</span>
+            <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">iri</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">)</span>
+        <span class="n">_query_data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">query_data</span>
+        <span class="k">for</span> <span class="n">_subject</span><span class="p">,</span> <span class="n">_data</span> <span class="ow">in</span> <span class="n">_query_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">_class_uri</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">)):</span>
+                <span class="c1">#if _class_uri == &quot;&lt;obi_Assertion&gt;&quot;: x=y</span>
+                <span class="k">return</span> <span class="n">cbool</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pyuri</span><span class="p">(</span><span class="n">_lookup_value</span><span class="p">)),</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;!--&quot;</span><span class="p">):</span>
+        <span class="n">return_val</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;!--api_url&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">api_url</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;!--base_url&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">base_url</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;!--base_api_url&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">base_api_url</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;!--subjectUri&quot;</span><span class="p">:</span>
+            <span class="n">_query_data</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">query_data</span>
+            <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">iri</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_subject</span><span class="p">,</span> <span class="n">_data</span> <span class="ow">in</span> <span class="n">_query_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_class_uri</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">)):</span>
+                    <span class="n">return_val</span> <span class="o">=</span> <span class="n">_subject</span>  
+        <span class="k">return</span> <span class="n">return_val</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cbool</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span></div>
+           
+<div class="viewcode-block" id="calculator_concat"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.calculator_concat">[docs]</a><span class="k">def</span> <span class="nf">calculator_concat</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="s2">&quot;prop&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Does a concatition based on the the provided args and kwargs &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START calculator_concat ---------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+    
+    <span class="n">_seperator</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_calculationSeparator&quot;</span><span class="p">,</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+    <span class="n">_calc_string</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_calculation&quot;</span><span class="p">)</span>
+    <span class="n">_concat_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_calc_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">_seperator</span><span class="p">))</span>
+    <span class="n">prop_val</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;</span><span class="si">%s</span><span class="s2">|</span><span class="si">%s</span><span class="s2">&gt;&gt;&quot;</span> <span class="o">%</span> \
+                               <span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">),</span>
+                               <span class="n">obj</span><span class="p">,</span>
+                               <span class="n">prop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prop_val</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span>
+        
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">get_attr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;kds_apiFieldName&quot;</span><span class="p">,</span> \
+                <span class="n">get_attr</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="s2">&quot;kds_formFieldName&quot;</span><span class="p">)),</span><span class="s2">&quot;: &quot;</span><span class="p">,</span> <span class="n">prop_val</span><span class="p">)</span> 
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_concat_list</span><span class="p">):</span>
+        <span class="n">item_val</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;||&quot;</span> <span class="ow">in</span> <span class="n">_item</span><span class="p">:</span>
+            <span class="n">_sub_calc</span> <span class="o">=</span> <span class="n">_item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;||&quot;</span><span class="p">)</span>
+            <span class="n">new_processor</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_sub_calc</span><span class="p">:</span>
+                <span class="n">val_parts</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
+                <span class="n">new_processor</span><span class="p">[</span><span class="n">pyuri</span><span class="p">(</span><span class="n">val_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">val_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_processor</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">item_val</span> <span class="o">=</span> <span class="n">calculation_processor</span><span class="p">(</span><span class="n">new_processor</span><span class="p">,</span> 
+                                                 <span class="n">obj</span><span class="p">,</span> 
+                                                 <span class="n">prop</span><span class="p">,</span> 
+                                                 <span class="n">mode</span><span class="p">,</span>
+                                                 <span class="n">return_type</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">item_val</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="n">_item</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>            
+        <span class="n">_concat_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">item_val</span>
+    
+    <span class="k">if</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">&quot;prop&quot;</span><span class="p">:</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">remove_null</span><span class="p">(</span><span class="n">_concat_list</span><span class="p">))</span>
+        <span class="c1">#if prop.kds_apiFieldName == &quot;image&quot;:</span>
+        <span class="c1">#S    prop.processed_data = &quot;adfadsf&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">remove_null</span><span class="p">(</span><span class="n">_concat_list</span><span class="p">))</span></div>
+     
+   
+<div class="viewcode-block" id="calculator_object_generator"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.calculator_object_generator">[docs]</a><span class="k">def</span> <span class="nf">calculator_object_generator</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="s2">&quot;prop&quot;</span><span class="p">):</span>   
+    <span class="sd">&#39;&#39;&#39; returns and object of calculated values &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+        
+    <span class="n">object_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_calculationObject&quot;</span><span class="p">))</span>
+    <span class="n">return_obj</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_object</span> <span class="ow">in</span> <span class="n">object_list</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="n">_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_objectKey&quot;</span><span class="p">),</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_calculationType&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;kdr_ValueHasher&quot;</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">calculator_value_hasher</span><span class="p">(</span><span class="n">_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_objectValue&quot;</span><span class="p">),</span>
+                                            <span class="n">obj</span><span class="p">,</span>
+                                            <span class="n">prop</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="n">_object</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_objectValue&quot;</span><span class="p">),</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+        <span class="n">return_obj</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot; | &quot;</span><span class="p">,</span> <span class="n">_object</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">&quot;prop&quot;</span><span class="p">:</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="n">return_obj</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">return_obj</span></div>
+
+<div class="viewcode-block" id="calculator_value_hasher"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.calculator_value_hasher">[docs]</a><span class="k">def</span> <span class="nf">calculator_value_hasher</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; hashes a value and returns the hashed value &#39;&#39;&#39;</span>
+    <span class="n">value_to_hash</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value_to_hash</span><span class="p">:</span>
+        <span class="n">salt_list</span> <span class="o">=</span> <span class="n">find_salt_prop</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">salt_ref</span> <span class="ow">in</span> <span class="n">salt_list</span><span class="p">:</span>
+            <span class="n">salt</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;</span><span class="si">%s</span><span class="s2">|</span><span class="si">%s</span><span class="s2">&gt;&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">salt_ref</span><span class="p">[</span><span class="s1">&#39;kds_propUri&#39;</span><span class="p">],</span>
+                                                  <span class="n">salt_ref</span><span class="p">[</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">]),</span>
+                                   <span class="n">obj</span><span class="p">,</span>
+                                   <span class="n">prop</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">salt</span><span class="p">:</span>
+                <span class="n">salt_value</span> <span class="o">=</span> <span class="n">salt</span>
+        <span class="k">return</span> <span class="s1">&#39;sha256$&#39;</span> <span class="o">+</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">value_to_hash</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="n">salt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="find_salt_prop"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.find_salt_prop">[docs]</a><span class="k">def</span> <span class="nf">find_salt_prop</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; finds the property that stores the salt &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_salt_class_search</span><span class="p">(</span><span class="n">class_uri</span><span class="p">):</span>
+        <span class="n">_class_properties</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">get_framework</span><span class="p">(),</span> <span class="n">class_uri</span><span class="p">)</span><span class="o">.</span><span class="n">kds_properties</span>
+        <span class="n">_salt_property</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">_salt_url</span> <span class="o">=</span> <span class="s2">&quot;kdr_SaltProcessor&quot;</span>
+        <span class="k">for</span> <span class="n">_class_prop</span> <span class="ow">in</span> <span class="n">_class_properties</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">_processors</span> <span class="o">=</span> <span class="n">clean_processors</span><span class="p">([</span><span class="n">make_list</span><span class="p">(</span>\
+                    <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propertyProcessing&quot;</span><span class="p">,{}))])</span>
+            <span class="k">for</span> <span class="n">_processor</span> <span class="ow">in</span> <span class="n">_processors</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">_salt_url</span><span class="p">:</span>
+                    <span class="n">_salt_property</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;kds_classUri&quot;</span><span class="p">:</span> <span class="n">class_uri</span><span class="p">,</span> \
+                                <span class="s2">&quot;kds_propUri&quot;</span><span class="p">:</span> <span class="n">_class_prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_propUri&quot;</span><span class="p">)}</span>
+                    <span class="n">salt_processor_dict</span> <span class="o">=</span> <span class="n">_processor</span>    
+        <span class="k">return</span> <span class="n">_salt_property</span>    
+
+    <span class="n">salt_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_class</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">class_set</span><span class="p">:</span>
+        <span class="n">salt_uri</span> <span class="o">=</span> <span class="n">_salt_class_search</span><span class="p">(</span><span class="n">_class</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">salt_uri</span><span class="p">:</span>
+            <span class="n">salt_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">salt_uri</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">salt_list</span></div>
+            
+<div class="viewcode-block" id="calculator_date_convertor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.calculator_date_convertor">[docs]</a><span class="k">def</span> <span class="nf">calculator_date_convertor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="s2">&quot;prop&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START calculator_date_convertor ---------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+    <span class="c1"># get the data value</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;</span><span class="si">%s</span><span class="s2">|</span><span class="si">%s</span><span class="s2">&gt;&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">),</span>
+                            <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">,</span> <span class="s2">&quot; - value: &quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">_date_type</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_calculation&quot;</span><span class="p">)</span>
+    <span class="n">return_val</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">parse_date</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">_date_type</span> <span class="o">==</span> <span class="s2">&quot;Unix timestamp&quot;</span><span class="p">:</span>
+                <span class="n">return_val</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">return_val</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END calculator_date_convertor ----------------------</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">&quot;prop&quot;</span><span class="p">:</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="n">return_val</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">return_val</span></div>
+        
+     
+        
+<div class="viewcode-block" id="calculator_uir_truncation"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.calculator_uir_truncation">[docs]</a><span class="k">def</span> <span class="nf">calculator_uir_truncation</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">return_type</span><span class="o">=</span><span class="s2">&quot;prop&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START calculator_uir_truncation ---------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+    <span class="c1"># get the data value</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_calculationField&quot;</span><span class="p">),</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+    <span class="n">return_val</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_calculation&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">calculation</span> <span class="o">==</span> <span class="s2">&quot;!--afterLastSlash&quot;</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39;^(.*[#/])&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>    
+    <span class="k">if</span> <span class="n">return_type</span> <span class="o">==</span> <span class="s2">&quot;prop&quot;</span><span class="p">:</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="n">return_val</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">return_val</span>
+        
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END calculator_uir_truncation ----------------------</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="prop_to_array_processor"><a class="viewcode-back" href="../../../rdfframework.processors.html#rdfframework.processors.rdfprocessors.prop_to_array_processor">[docs]</a><span class="k">def</span> <span class="nf">prop_to_array_processor</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; This will take a property data and convert it to an array &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START prop_to_array_processor - rdfprocessors.py-----</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">)</span>
+    <span class="n">return_val</span> <span class="o">=</span> <span class="n">obj</span>
+    <span class="c1"># get the data value</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">calculate_value</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;</span><span class="si">%s</span><span class="s2">|</span><span class="si">%s</span><span class="s2">&gt;&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">kds_propUri</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">),</span>
+                            <span class="n">obj</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;save&quot;</span><span class="p">:</span>
+        <span class="n">return_val</span> <span class="o">=</span> <span class="n">obj</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;return_val: &quot;</span><span class="p">,</span> <span class="n">return_val</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">END prop_to_array_processor - rdfprocessors.py-----</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">return_val</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
