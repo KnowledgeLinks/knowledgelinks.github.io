@@ -150,7 +150,8 @@
             
   <div class="section" id="defining-rdf-classes-in-the-framework">
 <h1>Defining RDF Classes in the Framework<a class="headerlink" href="#defining-rdf-classes-in-the-framework" title="Permalink to this headline">¶</a></h1>
-<p>After you have decided what rdf:Classes that you will be using in the application it is now time to start specifying them.</p>
+<p>After deciding what rdf:Classes that you will be using in the application it is now time to
+start specifying your classes in a RDF turtle formated file.</p>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
@@ -168,24 +169,29 @@
 </pre></div>
 </div>
 </li>
-<li><p class="first">Next add the basic information about the first class you will be using:</p>
+<li><p class="first">Next add the basic information about the first class:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person a rdf:Class;
     rdfs:label &quot;Person&quot;;
     rdfs:comment &quot;A person (alive, dead, undead, or fictional).&quot;.
 </pre></div>
 </div>
 </li>
-<li><p class="first">Tag the class with <strong>kds:ControlledClass</strong>. This tells the Framework that you will be using the class in the application:</p>
+<li><p class="first">Tag the class with <strong>kds:ControlledClass</strong>. This tells the Framework what are the classes
+in the application:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person a kds:ControlledClass .
 </pre></div>
 </div>
 </li>
-<li><p class="first">Now tell specify how the class should be stored. Options are &#8220;object&#8221; or &#8220;blanknode&#8221;. This tells the Framework whether to create a new URI or store it as the blanknode in the object position of a triple:</p>
+<li><p class="first">Now specify how the class instance data should be stored. Options are &#8220;object&#8221; or &#8220;blanknode&#8221;.
+This tells the Framework whether to create a new URI or store it as the blanknode in the
+object position of a triple:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:storageType &quot;object&quot; .
 </pre></div>
 </div>
 </li>
-<li><p class="first">Next determine if there is a <strong>Primary Key</strong> for the class. This tells the framework that when adding a new instance of the class to the database that the specified properties must be unique or the combination of properties must be unique:</p>
+<li><p class="first">Next determine if there is a <strong>Primary Key</strong> for the class. The <strong>Primary Key</strong> tells the framework
+that when adding a new instance of the class to the database that the specified properties must be
+unique or some combination of the properties must be unique:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:Person kds:primaryKey schema:email.
 </pre></div>
 </div>
@@ -211,7 +217,7 @@
 </div>
 </li>
 </ol>
-<p>This means that anyone in the <strong>kds:Admin-SG</strong> has read and write privaledges to the class.</p>
+<p>This means that anyone in the <strong>kds:Admin-SG</strong> has read and write privileges to the class.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">To add more permissions repeat the above information.</p>

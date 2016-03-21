@@ -158,12 +158,13 @@
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Next add the basic information about a property you will be using:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>schema:email a rdf:Property;
-    rdfs:label &quot;Person&quot;;
-    rdfs:comment &quot;A person (alive, dead, undead, or fictional).&quot;.
-</pre></div>
-</div>
+<li><p class="first">Start by adding the basic information about a property you will be using:</p>
+<dl class="docutils">
+<dt>schema:email a rdf:Property;</dt>
+<dd><p class="first last">rdfs:label &#8220;E-mail&#8221;;
+rdfs:comment &#8220;Electronic mail sent through a network to an individual&#8221; .</p>
+</dd>
+</dl>
 </li>
 </ol>
 <ol class="arabic" start="3">
@@ -176,7 +177,8 @@
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The two <strong>rdfs:domain</strong> statements listed above state that the <strong>schema:email</strong> property will be used in both the <strong>schema:Person</strong> and <strong>schema:Organization</strong> rdf:Classes.</p>
+<p class="last">The two <strong>rdfs:domain</strong> statements listed above state that the <strong>schema:email</strong>
+property will be used in both the <strong>schema:Person</strong> and <strong>schema:Organization</strong> rdf:Classes.</p>
 </div>
 <ol class="arabic" start="4">
 <li><p class="first">Next specify the <strong>rdfs:range</strong> for the property. Remember this tells the framework which type of value should be in the <strong>object</strong> position of a triple:</p>
@@ -184,7 +186,8 @@
 </pre></div>
 </div>
 </li>
-<li><p class="first">Now we need to specify more specific rules for the property. If we want to make it a required property for a <strong>rdf:Class</strong> we can add a <strong>kds:requiredByDomain</strong> tag.</p>
+<li><p class="first">Now we need to specify more specific rules for the property. If we want to make it a required property
+for a <strong>rdf:Class</strong> we can add a <strong>kds:requiredByDomain</strong> tag.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:email kds:requiredByDomain schema:Person .
 </pre></div>
 </div>
@@ -192,7 +195,8 @@
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Since we only added a <strong>kds:requiredByDomain</strong> tag for the <strong>schema:Person</strong> class, the <strong>schema:Organization</strong>, which also uses the property will not require the property. To make it a required property for the <strong>schema:Organization</strong> class as well add:</p>
+<p>Since we only added a <strong>kds:requiredByDomain</strong> tag for the <strong>schema:Person</strong> class,
+the <strong>schema:Organization</strong>, which also uses the property will not require the property. To make it a required property for the <strong>schema:Organization</strong> class as well add:</p>
 <div class="last highlight-python"><div class="highlight"><pre><span></span>schema:email kds:requiredByDomain schema:Organization.
 </pre></div>
 </div>

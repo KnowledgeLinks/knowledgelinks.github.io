@@ -154,7 +154,7 @@
             
   <div class="section" id="essential-rdf-concepts">
 <h1>Essential RDF concepts<a class="headerlink" href="#essential-rdf-concepts" title="Permalink to this headline">¶</a></h1>
-<p><em>Turtle RDF notation will be used throughout the documentation. However the the application files do not need to be written in turtle notation. For our purposes it is the easiest to read and understand.</em></p>
+<p><em>Turtle RDF notation will be used throughout the documentation. However the the application files do not need to be written in turtle notation.</em></p>
 <p>There are a few RDF concepts that are essential to understanding how the application is defined. These are:</p>
 <ul class="simple">
 <li>The Triple Pattern</li>
@@ -165,7 +165,8 @@
 </ul>
 <div class="section" id="the-triple-pattern">
 <h2>The Triple Pattern<a class="headerlink" href="#the-triple-pattern" title="Permalink to this headline">¶</a></h2>
-<p>RDF data is written in a triple pattern that has a specific order. The items in the pattern form a sentance composed of a subject, predicate and object. <strong>Throughout the documentation and in the framework these items will be referred to over and over again.</strong></p>
+<p>RDF data is written in a triple pattern that has a specific order. The items in the pattern form a sentence composed of a subject, predicate and object.
+<strong>Throughout the documentation and in the framework these items will be referred to repeatly.</strong></p>
 <p><strong>Example</strong></p>
 <table border="1" class="docutils">
 <colgroup>
@@ -188,22 +189,41 @@
 </tr>
 </tbody>
 </table>
-<p>The <strong>subject</strong>, SQL database terms, is a <strong>uuid</strong> (universal unique identifier)</p>
-<p>The <strong>predicate</strong> is a rdf vocabulary term that is in the form of URI/IRI that describes the relationship between the <strong>subject</strong> and <strong>object</strong></p>
-<p>The <strong>object</strong> is a either another IRI or a literal (a string, date, number etc)</p>
+<p>The <strong>subject</strong>, in SQL/Relational database terms, is a <strong>uuid</strong> (universal unique identifier).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <strong>subject/IRI/URI</strong> value itself may contain human readable information but it is not necessary that it does. Sometimes it causes confusion if it does! For example. If you look at <strong>&lt;http://.../Topic/Battle-of-Gettysburg&gt;</strong> it may lead one to think that we are refering to the <strong>Battle of Gettysburg</strong> as a <strong>topic</strong> to be used for categorization. However, the <strong>Battle of Gettysburg</strong> can a <strong>calendar event</strong>, a <strong>battle</strong>, a <strong>historical event</strong>, etc. It would be better to list it solely as <strong>&lt;http://.../Battle-of-Gettysburg&gt;</strong>. This will avoid creating multiple <strong>URIs/IRIs</strong> for one particular concept.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Blanknodes have a <strong>subject</strong> value that is a variable specific to the triplestore. Blanknode subjects will <strong>NOT</strong> function as <strong>uuids</strong>. Blanknodes are used to group properties together for a particular <strong>subject</strong> i.e. if you have the <strong>subject/IRI/URI</strong> <strong>&lt;http://.../john&gt;</strong> as above and you want to add an address for him you can group all the address properties in one blanknode as below:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span>&lt;http://.../john&gt; schema:address [
+        schema:Country  &quot;USA&quot;;
+        schema:addressLocality  &quot;Mountain View&quot;;
+        schema:addressRegion    &quot;CA&quot;;
+        schema:postalCode       Text    &quot;94043&quot;;
+        schema:streetAddress    &quot;1600 Amphitheatre Pkwy&quot;
+   ] .
+</pre></div>
+</div>
+</div>
+<p>The <strong>predicate</strong> is a RDF vocabulary term that is in the form of URI/IRI that describes the relationship between the <strong>subject</strong> and <strong>object</strong></p>
+<p>The <strong>object</strong> is a either another <strong>IRI</strong>, a  <strong>blankenode</strong> or a <strong>literal</strong> (a string, date, number etc)</p>
 </div>
 <div class="section" id="rdf-classes">
 <h2>RDF classes<a class="headerlink" href="#rdf-classes" title="Permalink to this headline">¶</a></h2>
-<p>A class represents a categorization of subjects. i.e. organizations, people, events, etc. Where a <strong>subject</strong> that is identified by a class is one instance of the large grouping.</p>
-<p><strong>schema:Organization</strong> is a rdf class for describing organization.</p>
+<p>A class represents a category of subjects. Examples of classes are organizations, people, and events. When a <strong>subject</strong> that is identified as a class
+it is one instance of the larger category and shares many properties with other <strong>subjects</strong>.</p>
+<p><strong>schema:Organization</strong> is a RDF class for describing organization.</p>
 <p>Identifying <strong>&lt;http://example.com/org#a&gt;</strong> <strong>rdf:type</strong> <strong>schema:Organization</strong> means that <strong>&lt;http://example.com/orf#a&gt;</strong> is an <strong>organization</strong>.</p>
 </div>
 <div class="section" id="rdf-properties">
 <h2>RDF properties<a class="headerlink" href="#rdf-properties" title="Permalink to this headline">¶</a></h2>
-<p>Rdf properties are used as the predicates of the triple pattern. In general they are used to describe how one rdf class relates to another rdf class.</p>
+<p>RDF properties are used as the predicates of the triple pattern. In general they are used to
+describe the relationships between RDF classes.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">A property can be used to in multiple classes. i.e. schema:name can be used with schema:Person, schema:Organization, etc.</p>
+<p class="last">A property can be used in multiple classes. i.e. schema:name can be used with schema:Person, schema:Organization, etc.</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -212,7 +232,8 @@
 </div>
 <div class="section" id="rdfs-domains">
 <h2>rdfs:domains<a class="headerlink" href="#rdfs-domains" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>rdfs:domain</strong> declartion is essential to defining an application wih the framework. The <strong>domain</strong> statement tells what type of rdf:Class should be in the <strong>subject</strong> position of a triple. For example:</p>
+<p>The <strong>rdfs:domain</strong> declaration is essential to defining an application within
+the framework. The <strong>domain</strong> statement tells what type of rdf:Class should be in the <strong>subject</strong> position of a triple. For example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:domain schema:Person .
 </pre></div>
 </div>
@@ -226,12 +247,14 @@
                       schema:email &quot;myemail@example.com&quot;^^xsd:string .
 </pre></div>
 </div>
-<p><em>The above triples are a violation of the specified domain rule. The point is not that a book can&#8217;t have an email, but rather that the specified rule says that only a schema:Person should use the property schema:email.</em></p>
+<p><em>The above triples are a violation of the specified domain rule. The point is not that a book can&#8217;t have an
+email, but rather that the specified statement says that only a schema:Person should use the property schema:email.</em></p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Their are rdf rules that allow for looking at subclasses and so forth but for the <strong>rdfframework</strong> you must specifically specify each class the property will be used in.</p>
+<p class="last">There are RDF rules that allow for looking at subclasses and so forth but for
+the <strong>rdfframework</strong> you must specifically specify each class the property will be used in.</p>
 </div>
-<p>To use the schema:email property for a Person, Book and Organization specifiy them explicitly:</p>
+<p>To use the schema:email property for a Person, Book and Organization specify them explicitly:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:domain schema:Person,
                      schema:Book,
                      schema:Organization .
@@ -244,10 +267,12 @@
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:range xsd:string
 </pre></div>
 </div>
-<p>This means that when ever a the <strong>schema:email</strong> property is used it should have a string as the object. Having a URI in the object position would be a violation of the rule.</p>
+<p>This means that when ever a <strong>schema:email</strong> property is used it should have a string as the object. Having
+an URI in the object position would be a violation of the rule.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">For the <strong>rdfframework</strong> be as specific as possible for specification of the range value. If you want a date value to be stored in the object position use <strong>xsd:date</strong>. Do not specify the range as a <strong>literal</strong>.</p>
+<p class="last">For the <strong>rdfframework</strong> be as specific as possible for specification of the range value. If you want a
+date value to be stored in the object position use <strong>xsd:date</strong>. Do not specify the range as a <strong>literal</strong>.</p>
 </div>
 <p>If you want more than one option for the range specifically specify it.:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>schema:email rdfs:range xsd:string,
