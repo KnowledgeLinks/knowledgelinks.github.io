@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.utilities.frameworkutilities &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.utilities.frameworkutilities</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.utilities.frameworkutilities</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mike Stabile, Jeremy Nelson&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">current_app</span><span class="p">,</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span><span class="p">,</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span>
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">Namespace</span><span class="p">,</span> <span class="n">XSD</span>
+<span class="kn">from</span> <span class="nn">dateutil.parser</span> <span class="kn">import</span> <span class="n">parse</span>
+
+
+<span class="n">DC</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://purl.org/dc/elements/1.1/&quot;</span><span class="p">)</span>
+<span class="n">DCTERMS</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://purl.org/dc/terms/&quot;</span><span class="p">)</span>
+<span class="n">DOAP</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://usefulinc.com/ns/doap#&quot;</span><span class="p">)</span>
+<span class="n">FOAF</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://xmlns.com/foaf/spec/&quot;</span><span class="p">)</span>
+<span class="n">SKOS</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://www.w3.org/2004/02/skos/core#&quot;</span><span class="p">)</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="n">FRAMEWORK_BASE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)))</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">FRAMEWORK_BASE</span><span class="p">):</span>
+    <span class="c1">#! Quick hack to get running on Docker container -- jpn 2016-03-08</span>
+    <span class="n">FRAMEWORK_BASE</span> <span class="o">=</span> <span class="s2">&quot;/opt/intro2libsys/ebadges/rdfframework/rdfframework&quot;</span>
+<span class="n">JSON_LOCATION</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FRAMEWORK_BASE</span><span class="p">,</span> <span class="s2">&quot;json-definitions&quot;</span><span class="p">)</span>
+
+<span class="n">ENV</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FRAMEWORK_BASE</span><span class="p">,</span> <span class="s2">&quot;sparql&quot;</span><span class="p">),</span>
+     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FRAMEWORK_BASE</span><span class="p">,</span> <span class="s2">&quot;turtle&quot;</span><span class="p">)]))</span>
+
+<div class="viewcode-block" id="nz"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.nz">[docs]</a><span class="k">def</span> <span class="nf">nz</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">none_value</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; This function is named after an old VBA function. It returns a default</span>
+<span class="sd">        value if the passed in value is None. If strict is False it will</span>
+<span class="sd">        treat an empty string as None as well.</span>
+<span class="sd">        </span>
+<span class="sd">        example:</span>
+<span class="sd">        x = None</span>
+<span class="sd">        nz(x,&quot;hello&quot;)</span>
+<span class="sd">        --&gt; &quot;hello&quot;</span>
+<span class="sd">        nz(x,&quot;&quot;)</span>
+<span class="sd">        --&gt; &quot;&quot;</span>
+<span class="sd">        y = &quot;&quot;   </span>
+<span class="sd">        nz(y,&quot;hello&quot;)</span>
+<span class="sd">        --&gt; &quot;&quot;</span>
+<span class="sd">        nz(y,&quot;hello&quot;, False)</span>
+<span class="sd">        --&gt; &quot;hello&quot; &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;START nz frameworkutilities.py ----------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">strict</span><span class="p">:</span>
+        <span class="n">return_val</span> <span class="o">=</span> <span class="n">none_value</span>
+    <span class="k">elif</span> <span class="n">strict</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">return_val</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">strict</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="n">return_val</span> <span class="o">=</span> <span class="n">none_value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">return_val</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;value: </span><span class="si">%s</span><span class="s2"> | none_value: </span><span class="si">%s</span><span class="s2"> | return_val: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+            <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">none_value</span><span class="p">,</span> <span class="n">return_val</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="s2">&quot;END nz frameworkutilities.py ----------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">return_val</span>    </div>
+    
+<div class="viewcode-block" id="render_without_request"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.render_without_request">[docs]</a><span class="k">def</span> <span class="nf">render_without_request</span><span class="p">(</span><span class="n">template_name</span><span class="p">,</span> <span class="o">**</span><span class="n">template_vars</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Usage is the same as flask.render_template:</span>
+
+<span class="sd">    render_without_request(&#39;my_template.html&#39;, var1=&#39;foo&#39;, var2=&#39;bar&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">ENV</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">template_vars</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="cbool"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.cbool">[docs]</a><span class="k">def</span> <span class="nf">cbool</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; converts a value to true or false. Python&#39;s default bool() function</span>
+<span class="sd">    does not handle &#39;true&#39; of &#39;false&#39; strings &#39;&#39;&#39;</span>
+    <span class="n">return_val</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;yes&#39;</span><span class="p">]:</span>
+                <span class="n">return_val</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;false&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">]:</span>
+                <span class="n">return_val</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+                    <span class="n">return_val</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="n">return_val</span></div>
+
+
+<div class="viewcode-block" id="iri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.iri">[docs]</a><span class="k">def</span> <span class="nf">iri</span><span class="p">(</span><span class="n">uri_string</span><span class="p">):</span>
+    <span class="s2">&quot;converts a string to an IRI or returns an IRI if already formated&quot;</span>
+    <span class="k">if</span> <span class="n">uri_string</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;?&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">uri_string</span>
+    <span class="k">if</span> <span class="n">uri_string</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;[&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">uri_string</span>
+    <span class="k">if</span> <span class="n">uri_string</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>
+        <span class="n">uri_string</span> <span class="o">=</span> <span class="s2">&quot;&lt;{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uri_string</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">uri_string</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">uri_string</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
+        <span class="n">uri_string</span> <span class="o">=</span> <span class="s2">&quot;{}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uri_string</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">uri_string</span></div>
+
+<div class="viewcode-block" id="is_not_null"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.is_not_null">[docs]</a><span class="k">def</span> <span class="nf">is_not_null</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; test for None and empty string &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="is_valid_object"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.is_valid_object">[docs]</a><span class="k">def</span> <span class="nf">is_valid_object</span><span class="p">(</span><span class="n">uri_string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Test to see if the string is a object store&#39;&#39;&#39;</span>
+    <span class="n">uri_string</span> <span class="o">=</span> <span class="n">uri_string</span>
+    <span class="k">return</span> <span class="bp">True</span></div>
+
+<div class="viewcode-block" id="make_list"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.make_list">[docs]</a><span class="k">def</span> <span class="nf">make_list</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Takes a value and turns it into a list if it is not one</span>
+
+<span class="sd">    !!!!! This is important becouse list(value) if perfomed on an</span>
+<span class="sd">    dictionary will return the keys of the dictionary in a list and not</span>
+<span class="sd">    the dictionay as an element in the list. i.e.</span>
+<span class="sd">        x = {&quot;first&quot;:1, &quot;second&quot;:2}</span>
+<span class="sd">        list(x) = [&quot;first&quot;, &quot;second&quot;]</span>
+<span class="sd">        or use this [x,]  </span>
+<span class="sd">        make_list(x) =[{&quot;first&quot;:1, &quot;second&quot;:2}]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="make_set"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.make_set">[docs]</a><span class="k">def</span> <span class="nf">make_set</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Takes a value and turns it into a set</span>
+
+<span class="sd">    !!!! This is important because set(string) will parse a string to</span>
+<span class="sd">    individual characters vs. adding the string as an element of</span>
+<span class="sd">    the set i.e.</span>
+<span class="sd">        x = &#39;setvalue&#39;</span>
+<span class="sd">        set(x) = {&#39;t&#39;, &#39;a&#39;, &#39;e&#39;, &#39;v&#39;, &#39;u&#39;, &#39;s&#39;, &#39;l&#39;}</span>
+<span class="sd">        make_set(x) = {&#39;setvalue&#39;}</span>
+<span class="sd">        or use set([x,]) by adding string as first item in list.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_return_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">_return_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+        <span class="n">_return_set</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_return_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_return_set</span></div>
+
+<div class="viewcode-block" id="uid_to_repo_uri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.uid_to_repo_uri">[docs]</a><span class="k">def</span> <span class="nf">uid_to_repo_uri</span><span class="p">(</span><span class="n">id_value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">id_value</span><span class="p">:</span>
+        <span class="n">_uri</span> <span class="o">=</span> <span class="s2">&quot;{}/{}/{}/{}/{}/{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fw_config</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;REPOSITORY_URL&#39;</span><span class="p">),</span>
+                                          <span class="n">id_value</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span>
+                                          <span class="n">id_value</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span>
+                                          <span class="n">id_value</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span>
+                                          <span class="n">id_value</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">],</span>
+                                          <span class="n">id_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_uri</span></div>
+    
+<div class="viewcode-block" id="fw_config"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.fw_config">[docs]</a><span class="k">def</span> <span class="nf">fw_config</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; function returns the application configuration information &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">FRAMEWORK_CONFIG</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">FRAMEWORK_CONFIG</span>
+    <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+        <span class="n">FRAMEWORK_CONFIG</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">if</span> <span class="n">FRAMEWORK_CONFIG</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span>  <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">current_app</span><span class="o">.</span><span class="n">config</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">FRAMEWORK_CONFIG</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;framework not initialized&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;framework not initialized&quot;</span>
+    <span class="k">return</span> <span class="n">FRAMEWORK_CONFIG</span></div>
+
+<div class="viewcode-block" id="make_triple"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.make_triple">[docs]</a><span class="k">def</span> <span class="nf">make_triple</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes a subject predicate and object and joins them with a space</span>
+<span class="sd">	in between</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sub -- Subject</span>
+<span class="sd">        pred -- Predicate</span>
+<span class="sd">        obj  -- Object</span>
+<span class="sd">    Returns</span>
+<span class="sd">        str</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;{s} {p} {o} .&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">sub</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">pred</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">obj</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="xsd_to_python"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.xsd_to_python">[docs]</a><span class="k">def</span> <span class="nf">xsd_to_python</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">rdf_type</span><span class="o">=</span><span class="s2">&quot;literal&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; This will take a value and xsd data_type and convert it to a python</span>
+<span class="sd">        variable&#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span> <span class="k">as</span> <span class="n">rdfw</span>
+    <span class="k">if</span> <span class="n">data_type</span><span class="p">:</span>
+        <span class="n">data_type</span> <span class="o">=</span> <span class="n">data_type</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">XSD</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">rdf_type</span> <span class="o">==</span> <span class="s2">&quot;uri&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">iri</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_anyURI&quot;</span><span class="p">:</span>
+        <span class="c1"># URI (Uniform Resource Identifier)</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_base64Binary&quot;</span><span class="p">:</span>
+        <span class="c1"># Binary content coded as &quot;base64&quot;</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_boolean&quot;</span><span class="p">:</span>
+        <span class="c1"># Boolean (true or false)</span>
+        <span class="k">return</span> <span class="n">cbool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_byte&quot;</span><span class="p">:</span>
+        <span class="c1"># Signed value of 8 bits</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_date&quot;</span><span class="p">:</span>
+        <span class="c1">## Gregorian calendar date</span>
+        <span class="n">_temp_value</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="p">:</span>
+            <span class="n">_date_format</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">app</span><span class="p">[</span><span class="s1">&#39;kds_dataFormats&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s1">&#39;kds_pythonDateFormat&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_temp_value</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">_date_format</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;python&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_temp_value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_dateTime&quot;</span><span class="p">:</span>
+        <span class="c1">## Instant of time (Gregorian calendar)</span>
+        <span class="n">_temp_value</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="p">:</span>
+            <span class="n">_date_format</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">app</span><span class="p">[</span><span class="s1">&#39;kds_dataFormats&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                    <span class="s1">&#39;kds_pythonDateTimeFormat&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_temp_value</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">_date_format</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;python&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_temp_value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_decimal&quot;</span><span class="p">:</span>
+        <span class="c1"># Decimal numbers</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_double&quot;</span><span class="p">:</span>
+        <span class="c1"># IEEE 64</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_duration&quot;</span><span class="p">:</span>
+        <span class="c1"># Time durations</span>
+        <span class="k">return</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">milleseconds</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_ENTITIES&quot;</span><span class="p">:</span>
+        <span class="c1"># Whitespace</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_ENTITY&quot;</span><span class="p">:</span>
+        <span class="c1"># Reference to an unparsed entity</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_float&quot;</span><span class="p">:</span>
+        <span class="c1"># IEEE 32</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_gDay&quot;</span><span class="p">:</span>
+        <span class="c1"># Recurring period of time: monthly day</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_gMonth&quot;</span><span class="p">:</span>
+        <span class="c1"># Recurring period of time: yearly month</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_gMonthDay&quot;</span><span class="p">:</span>
+        <span class="c1"># Recurring period of time: yearly day</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_gYear&quot;</span><span class="p">:</span>
+        <span class="c1"># Period of one year</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_gYearMonth&quot;</span><span class="p">:</span>
+        <span class="c1"># Period of one month</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_hexBinary&quot;</span><span class="p">:</span>
+        <span class="c1"># Binary contents coded in hexadecimal</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_ID&quot;</span><span class="p">:</span>
+        <span class="c1"># Definition of unique identifiers</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_IDREF&quot;</span><span class="p">:</span>
+        <span class="c1"># Definition of references to unique identifiers</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_IDREFS&quot;</span><span class="p">:</span>
+        <span class="c1"># Definition of lists of references to unique identifiers</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_int&quot;</span><span class="p">:</span>
+        <span class="c1"># 32</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_integer&quot;</span><span class="p">:</span>
+        <span class="c1"># Signed integers of arbitrary length</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_language&quot;</span><span class="p">:</span>
+        <span class="c1"># RFC 1766 language codes</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_long&quot;</span><span class="p">:</span>
+        <span class="c1"># 64</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_Name&quot;</span><span class="p">:</span>
+        <span class="c1"># XML 1.O name</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_NCName&quot;</span><span class="p">:</span>
+        <span class="c1"># Unqualified names</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_negativeInteger&quot;</span><span class="p">:</span>
+        <span class="c1"># Strictly negative integers of arbitrary length</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">*-</span><span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_NMTOKEN&quot;</span><span class="p">:</span>
+        <span class="c1"># XML 1.0 name token (NMTOKEN)</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_NMTOKENS&quot;</span><span class="p">:</span>
+        <span class="c1"># List of XML 1.0 name tokens (NMTOKEN)</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_nonNegativeInteger&quot;</span><span class="p">:</span>
+        <span class="c1"># Integers of arbitrary length positive or equal to zero</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_nonPositiveInteger&quot;</span><span class="p">:</span>
+        <span class="c1"># Integers of arbitrary length negative or equal to zero</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">*-</span><span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_normalizedString&quot;</span><span class="p">:</span>
+        <span class="c1"># Whitespace</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_NOTATION&quot;</span><span class="p">:</span>
+        <span class="c1"># Emulation of the XML 1.0 feature</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_positiveInteger&quot;</span><span class="p">:</span>
+        <span class="c1"># Strictly positive integers of arbitrary length</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_QName&quot;</span><span class="p">:</span>
+        <span class="c1"># Namespaces in XML</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_short&quot;</span><span class="p">:</span>
+        <span class="c1"># 32</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_string&quot;</span><span class="p">:</span>
+        <span class="c1"># Any string</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_time&quot;</span><span class="p">:</span>
+        <span class="c1"># Point in time recurring each day</span>
+        <span class="k">return</span> <span class="n">parse</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_token&quot;</span><span class="p">:</span>
+        <span class="c1"># Whitespace</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_unsignedByte&quot;</span><span class="p">:</span>
+        <span class="c1"># Unsigned value of 8 bits</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_unsignedInt&quot;</span><span class="p">:</span>
+        <span class="c1"># Unsigned integer of 32 bits</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_unsignedLong&quot;</span><span class="p">:</span>
+        <span class="c1"># Unsigned integer of 64 bits</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;xsd_unsignedShort&quot;</span><span class="p">:</span>
+        <span class="c1"># Unsigned integer of 16 bits</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="convert_spo_to_dict"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.convert_spo_to_dict">[docs]</a><span class="k">def</span> <span class="nf">convert_spo_to_dict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Takes the SPAQRL query results and converts them to a python Dict</span>
+
+<span class="sd">    mode: subject --&gt; groups based on subject</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="n">_return_obj</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_list_obj</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;subject&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="c1"># determine data is list of objects</span>
+            <span class="n">_sv</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="n">_pv</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;itemID&#39;</span><span class="p">):</span>
+                <span class="n">_list_obj</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">_iv</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;itemID&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">_return_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_iv</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_sv</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_pv</span><span class="p">):</span>
+                            <span class="n">_obj_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span>\
+                                    <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">])</span>
+                            <span class="n">_obj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>\
+                                    <span class="n">xsd_to_python</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> \
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;datatype&quot;</span><span class="p">),</span> \
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span>
+                                    <span class="n">option</span><span class="p">))</span>
+                            <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">]</span> <span class="o">=</span> <span class="n">_obj_list</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">]</span> <span class="o">=</span> \
+                                <span class="n">xsd_to_python</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                        <span class="s2">&quot;datatype&quot;</span><span class="p">),</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span> <span class="n">option</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">]</span> <span class="o">=</span> \
+                                <span class="n">xsd_to_python</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                <span class="s2">&quot;datatype&quot;</span><span class="p">),</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span> <span class="n">option</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">_return_obj</span><span class="p">[</span><span class="n">_iv</span><span class="p">][</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">]</span> <span class="o">=</span> \
+                            <span class="n">xsd_to_python</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                            <span class="s2">&quot;datatype&quot;</span><span class="p">),</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span> <span class="n">option</span><span class="p">)</span>
+                    
+            <span class="c1"># if not a list of objects</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_return_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_sv</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">_return_obj</span><span class="p">[</span><span class="n">_sv</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_pv</span><span class="p">):</span>
+                        <span class="n">_obj_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span>\
+                                <span class="n">_return_obj</span><span class="p">[</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">])</span>
+                        <span class="n">_obj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xsd_to_python</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> \
+                                <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;datatype&quot;</span><span class="p">),</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span> <span class="n">option</span><span class="p">))</span>
+                        <span class="n">_return_obj</span><span class="p">[</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">]</span> <span class="o">=</span> <span class="n">_obj_list</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">_return_obj</span><span class="p">[</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">]</span> <span class="o">=</span> \
+                            <span class="n">xsd_to_python</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                    <span class="s2">&quot;datatype&quot;</span><span class="p">),</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span> <span class="n">option</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_return_obj</span><span class="p">[</span><span class="n">_sv</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">_return_obj</span><span class="p">[</span><span class="n">_sv</span><span class="p">][</span><span class="n">_pv</span><span class="p">]</span> <span class="o">=</span> \
+                            <span class="n">xsd_to_python</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                            <span class="s2">&quot;datatype&quot;</span><span class="p">),</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">],</span> <span class="n">option</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_list_obj</span><span class="p">:</span>
+            <span class="n">_return_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">_return_obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">_value</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">&quot;subjectUri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_key</span>
+                <span class="n">_return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_return_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_return_obj</span></div>
+
+<div class="viewcode-block" id="remove_null"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.remove_null">[docs]</a><span class="k">def</span> <span class="nf">remove_null</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; reads through a list or set and strips any null values&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+<div class="viewcode-block" id="DeleteProperty"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.DeleteProperty">[docs]</a><span class="k">class</span> <span class="nc">DeleteProperty</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; dummy class for tagging items to be deleted. This will prevent</span>
+<span class="sd">    passed in data ever being confused with marking a property for</span>
+<span class="sd">    deletion. &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NotInFormClass"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.NotInFormClass">[docs]</a><span class="k">class</span> <span class="nc">NotInFormClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; dummy class for tagging properties that were never in a form.</span>
+<span class="sd">    This will prevent passed in data ever being confused with a property</span>
+<span class="sd">    that was never in the form. &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;notInForm&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="slugify"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.slugify">[docs]</a><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts to lowercase, removes non-word characters (alphanumerics and</span>
+<span class="sd">    underscores) and converts spaces to hyphens. Also strips leading and</span>
+<span class="sd">    trailing whitespace using Django format</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39;[^\w\s-]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39;[-\s]+&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_app_ns_uri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.get_app_ns_uri">[docs]</a><span class="k">def</span> <span class="nf">get_app_ns_uri</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; looks in the framework for the namespace uri&#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">_ns</span> <span class="ow">in</span> <span class="n">get_framework</span><span class="p">()</span><span class="o">.</span><span class="n">rdf_app_dict</span><span class="p">[</span><span class="s1">&#39;application&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                                       <span class="s2">&quot;appNameSpace&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="n">_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prefix&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_ns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nameSpaceUri&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="clean_iri"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.clean_iri">[docs]</a><span class="k">def</span> <span class="nf">clean_iri</span><span class="p">(</span><span class="n">uri_string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;removes the &lt;&gt; signs from a string start and end&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">uri_string</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">uri_string</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span> <span class="ow">and</span> <span class="n">uri_string</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">uri_string</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
+            <span class="n">uri_string</span> <span class="o">=</span> <span class="n">uri_string</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">uri_string</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">uri_string</span></div>
+
+<div class="viewcode-block" id="copy_obj"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.copy_obj">[docs]</a><span class="k">def</span> <span class="nf">copy_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; does a deepcopy of an object, but does not copy a class</span>
+<span class="sd">        i.e. </span>
+<span class="sd">        x = {&quot;key&quot;:[&lt;classInstance1&gt;,&lt;classInstance2&gt;,&lt;classInstance3&gt;]}</span>
+<span class="sd">        y = copy_obj(x)</span>
+<span class="sd">        y --&gt; {&quot;key&quot;:[&lt;classInstance1&gt;,&lt;classInstance2&gt;,&lt;classInstance3&gt;]} </span>
+<span class="sd">        del y[&#39;key&#39;][0]</span>
+<span class="sd">        y --&gt; {&quot;key&quot;:[&lt;classInstance2&gt;,&lt;classInstance3&gt;]} </span>
+<span class="sd">        x --&gt; {&quot;key&quot;:[&lt;classInstance1&gt;,&lt;classInstance2&gt;,&lt;classInstance3&gt;]}</span>
+<span class="sd">        *** this is to overcome a dictionary object that lists with classes</span>
+<span class="sd">            as the list items. &#39;&#39;&#39;</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">return_obj</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">return_obj</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy_obj</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">return_obj</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy_obj</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">return_obj</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">return_obj</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">return_obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy_obj</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">return_obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy_obj</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">return_obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">return_obj</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">return_obj</span></div>
+                
+               
+<div class="viewcode-block" id="get_attr"><a class="viewcode-back" href="../../../rdfframework.utilities.html#rdfframework.utilities.frameworkutilities.get_attr">[docs]</a><span class="k">def</span> <span class="nf">get_attr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; similar to getattr and get but will test for class or dict &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">return_val</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">return_val</span> <span class="o">=</span> <span class="n">default</span>
+    <span class="k">return</span> <span class="n">return_val</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

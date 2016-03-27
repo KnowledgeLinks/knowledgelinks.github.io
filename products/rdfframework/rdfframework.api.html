@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.api package &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="rdfframework package" href="rdfframework.html"/>
+        <link rel="next" title="rdfframework.forms package" href="rdfframework.forms.html"/>
+        <link rel="prev" title="rdfframework package" href="rdfframework.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="rdfframework.html">rdfframework package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="rdfframework.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">rdfframework.api package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.api.rdfapifields">rdfframework.api.rdfapifields module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.api.rdfapis">rdfframework.api.rdfapis module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.api">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.framework">rdfframework.framework module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.getframework">rdfframework.getframework module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfclass">rdfframework.rdfclass module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfdatatype">rdfframework.rdfdatatype module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfproperty">rdfframework.rdfproperty module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="rdfframework.html">rdfframework package</a> &raquo;</li>
+      
+    <li>rdfframework.api package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/rdfframework.api.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rdfframework-api-package">
+<h1>rdfframework.api package<a class="headerlink" href="#rdfframework-api-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rdfframework.api.rdfapifields">
+<span id="rdfframework-api-rdfapifields-module"></span><h2>rdfframework.api.rdfapifields module<a class="headerlink" href="#module-rdfframework.api.rdfapifields" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="rdfframework.api.rdfapifields.get_api_field">
+<code class="descclassname">rdfframework.api.rdfapifields.</code><code class="descname">get_api_field</code><span class="sig-paren">(</span><em>field</em>, <em>instance=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapifields.html#get_api_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapifields.get_api_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>return an API field</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.api.rdfapifields.get_api_field_json">
+<code class="descclassname">rdfframework.api.rdfapifields.</code><code class="descname">get_api_field_json</code><span class="sig-paren">(</span><em>field</em>, <em>instructions</em>, <em>instance</em>, <em>user_info</em>, <em>item_permissions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapifields.html#get_api_field_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapifields.get_api_field_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will read through the RDF defined info and proccess the
+json to return the correct values for the instance, security and details</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.api.rdfapis">
+<span id="rdfframework-api-rdfapis-module"></span><h2>rdfframework.api.rdfapis module<a class="headerlink" href="#module-rdfframework.api.rdfapis" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rdfframework.api.rdfapis.Api">
+<em class="property">class </em><code class="descclassname">rdfframework.api.rdfapis.</code><code class="descname">Api</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#Api"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.Api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class is used for a rdfframework API</p>
+<dl class="method">
+<dt id="rdfframework.api.rdfapis.Api.add_props">
+<code class="descname">add_props</code><span class="sig-paren">(</span><em>prop_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#Api.add_props"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.Api.add_props" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds a new property/field to the form in all the correct
+locations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.api.rdfapis.Api.redirect_url">
+<code class="descname">redirect_url</code><span class="sig-paren">(</span><em>id_value=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#Api.redirect_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.Api.redirect_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>formats the redirect url for the form in its current state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.api.rdfapis.Api.remove_prop">
+<code class="descname">remove_prop</code><span class="sig-paren">(</span><em>prop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#Api.remove_prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.Api.remove_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>removes a prop completely from the form</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.api.rdfapis.Api.reset_fields">
+<code class="descname">reset_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#Api.reset_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.Api.reset_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>fields are moved around during save process and if the validation
+fails this method will return the fields to their original
+locations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.api.rdfapis.Api.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#Api.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.Api.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>sends the form to the framework for saving</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.api.rdfapis.Api.set_obj_data">
+<code class="descname">set_obj_data</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#Api.set_obj_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.Api.set_obj_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets the data for the current form paramters</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>keyword arguments
+subject_uri: the URI for the subject
+class_uri: the rdf class of the subject</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.api.rdfapis.get_api_instructions_json">
+<code class="descclassname">rdfframework.api.rdfapis.</code><code class="descname">get_api_instructions_json</code><span class="sig-paren">(</span><em>instructions</em>, <em>instance</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#get_api_instructions_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.get_api_instructions_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will read through the RDF defined info and proccess the
+json to retrun the correct instructions for the specified form
+instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.api.rdfapis.rdf_framework_api_factory">
+<code class="descclassname">rdfframework.api.rdfapis.</code><code class="descname">rdf_framework_api_factory</code><span class="sig-paren">(</span><em>api_id</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/api/rdfapis.html#rdf_framework_api_factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.api.rdfapis.rdf_framework_api_factory" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Generates a form class based on the form definitions in the</dt>
+<dd>kds-app.ttl file</dd>
+<dt>keyword Args:</dt>
+<dd><dl class="first docutils">
+<dt>class_uri: the classUri used for a form with loaded data</dt>
+<dd><dl class="first last docutils">
+<dt><strong>*</strong> has to be the class of the subject_uri for</dt>
+<dd>the form data lookup</dd>
+</dl>
+</dd>
+</dl>
+<p>subject_uri: the uri of the object that you want to lookup
+is_subform: True or False. States whether the form is a subform</p>
+<blockquote class="last">
+<div>of another form</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.api">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rdfframework.api" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rdfframework.forms.html" class="btn btn-neutral float-right" title="rdfframework.forms package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rdfframework.html" class="btn btn-neutral" title="rdfframework package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

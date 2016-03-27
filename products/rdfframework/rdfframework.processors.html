@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.processors package &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="rdfframework package" href="rdfframework.html"/>
+        <link rel="next" title="rdfframework.security package" href="rdfframework.security.html"/>
+        <link rel="prev" title="rdfframework.forms.widgets package" href="rdfframework.forms.widgets.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="rdfframework.html">rdfframework package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="rdfframework.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.api.html">rdfframework.api package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">rdfframework.processors package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.processors.imageprocessor">rdfframework.processors.imageprocessor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.processors.rdfprocessors">rdfframework.processors.rdfprocessors module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.processors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.framework">rdfframework.framework module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.getframework">rdfframework.getframework module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfclass">rdfframework.rdfclass module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfdatatype">rdfframework.rdfdatatype module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfproperty">rdfframework.rdfproperty module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">rdfframework.processors package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.processors.imageprocessor">rdfframework.processors.imageprocessor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.processors.rdfprocessors">rdfframework.processors.rdfprocessors module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.processors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="rdfframework.html">rdfframework package</a> &raquo;</li>
+      
+    <li>rdfframework.processors package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/rdfframework.processors.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rdfframework-processors-package">
+<h1>rdfframework.processors package<a class="headerlink" href="#rdfframework-processors-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rdfframework.processors.imageprocessor">
+<span id="rdfframework-processors-imageprocessor-module"></span><h2>rdfframework.processors.imageprocessor module<a class="headerlink" href="#module-rdfframework.processors.imageprocessor" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="rdfframework.processors.imageprocessor.image_processor">
+<code class="descclassname">rdfframework.processors.imageprocessor.</code><code class="descname">image_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode='save'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/imageprocessor.html#image_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.imageprocessor.image_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application formats a supplied image to the specified criteria.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.processors.rdfprocessors">
+<span id="rdfframework-processors-rdfprocessors-module"></span><h2>rdfframework.processors.rdfprocessors module<a class="headerlink" href="#module-rdfframework.processors.rdfprocessors" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.assert_img_baking_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">assert_img_baking_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode='save'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#assert_img_baking_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.assert_img_baking_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application sends badge image to the a badge baking service with the
+assertion.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.calculate_value">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">calculate_value</code><span class="sig-paren">(</span><em>value</em>, <em>obj</em>, <em>prop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#calculate_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.calculate_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.calculation_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">calculation_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode='save'</em>, <em>return_type='prop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#calculation_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.calculation_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application should proccess the property according to the rules listed
+in the kds:calulation property.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.calculator_concat">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">calculator_concat</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode='save'</em>, <em>return_type='prop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#calculator_concat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.calculator_concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does a concatition based on the the provided args and kwargs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.calculator_date_convertor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">calculator_date_convertor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode</em>, <em>return_type='prop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#calculator_date_convertor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.calculator_date_convertor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.calculator_object_generator">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">calculator_object_generator</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode</em>, <em>return_type='prop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#calculator_object_generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.calculator_object_generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns and object of calculated values</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.calculator_uir_truncation">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">calculator_uir_truncation</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode</em>, <em>return_type='prop'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#calculator_uir_truncation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.calculator_uir_truncation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.calculator_value_hasher">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">calculator_value_hasher</code><span class="sig-paren">(</span><em>value</em>, <em>obj</em>, <em>prop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#calculator_value_hasher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.calculator_value_hasher" title="Permalink to this definition">¶</a></dt>
+<dd><p>hashes a value and returns the hashed value</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.clean_processors">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">clean_processors</code><span class="sig-paren">(</span><em>processor_list_of_list</em>, <em>_class_uri=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#clean_processors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.clean_processors" title="Permalink to this definition">¶</a></dt>
+<dd><p>some of the processors are stored as objects and need to retrun
+them as a list of string names</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.csv_to_multi_prop_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">csv_to_multi_prop_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop=None</em>, <em>mode='save'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#csv_to_multi_prop_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.csv_to_multi_prop_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application takes a CSV string and adds each value as a separate triple
+to the class instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.email_verification_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">email_verification_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode='save'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#email_verification_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.email_verification_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application application initiates a proccess to verify the email
+address is a valid working address.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.find_salt_prop">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">find_salt_prop</code><span class="sig-paren">(</span><em>obj</em>, <em>prop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#find_salt_prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.find_salt_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>finds the property that stores the salt</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.password_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">password_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode='save'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#password_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.password_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function handles application password actions</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>modified passed in obj</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.prop_to_array_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">prop_to_array_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#prop_to_array_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.prop_to_array_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will take a property data and convert it to an array</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.run_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">run_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop=None</em>, <em>mode='save'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#run_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.run_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the passed in processor and returns the saveData</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.processors.rdfprocessors.salt_processor">
+<code class="descclassname">rdfframework.processors.rdfprocessors.</code><code class="descname">salt_processor</code><span class="sig-paren">(</span><em>processor</em>, <em>obj</em>, <em>prop</em>, <em>mode='save'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/processors/rdfprocessors.html#salt_processor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.processors.rdfprocessors.salt_processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random string for salting</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.processors">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rdfframework.processors" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rdfframework.security.html" class="btn btn-neutral float-right" title="rdfframework.security package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rdfframework.forms.widgets.html" class="btn btn-neutral" title="rdfframework.forms.widgets package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

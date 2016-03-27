@@ -1,0 +1,591 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.utilities package &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="rdfframework package" href="rdfframework.html"/>
+        <link rel="next" title="rdfframework.validators package" href="rdfframework.validators.html"/>
+        <link rel="prev" title="rdfframework.sparql package" href="rdfframework.sparql.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="rdfframework.html">rdfframework package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="rdfframework.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.api.html">rdfframework.api package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">rdfframework.utilities package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.utilities.codetimer">rdfframework.utilities.codetimer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.utilities.debug">rdfframework.utilities.debug module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.utilities.frameworkutilities">rdfframework.utilities.frameworkutilities module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.utilities.uriconvertor">rdfframework.utilities.uriconvertor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.utilities.valuecalculator">rdfframework.utilities.valuecalculator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-rdfframework.utilities">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.framework">rdfframework.framework module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.getframework">rdfframework.getframework module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfclass">rdfframework.rdfclass module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfdatatype">rdfframework.rdfdatatype module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework.rdfproperty">rdfframework.rdfproperty module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rdfframework.html#module-rdfframework">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">rdfframework.utilities package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.utilities.codetimer">rdfframework.utilities.codetimer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.utilities.debug">rdfframework.utilities.debug module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.utilities.frameworkutilities">rdfframework.utilities.frameworkutilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.utilities.uriconvertor">rdfframework.utilities.uriconvertor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.utilities.valuecalculator">rdfframework.utilities.valuecalculator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rdfframework.utilities">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="rdfframework.html">rdfframework package</a> &raquo;</li>
+      
+    <li>rdfframework.utilities package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/rdfframework.utilities.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rdfframework-utilities-package">
+<h1>rdfframework.utilities package<a class="headerlink" href="#rdfframework-utilities-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rdfframework.utilities.codetimer">
+<span id="rdfframework-utilities-codetimer-module"></span><h2>rdfframework.utilities.codetimer module<a class="headerlink" href="#module-rdfframework.utilities.codetimer" title="Permalink to this headline">¶</a></h2>
+<p>Simple timer module for timing code execution</p>
+<dl class="class">
+<dt id="rdfframework.utilities.codetimer.CodeTimer">
+<em class="property">class </em><code class="descclassname">rdfframework.utilities.codetimer.</code><code class="descname">CodeTimer</code><a class="reference internal" href="_modules/rdfframework/utilities/codetimer.html#CodeTimer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.codetimer.CodeTimer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>simple class for placing timers in the code for performance testing</p>
+<dl class="method">
+<dt id="rdfframework.utilities.codetimer.CodeTimer.add_timer">
+<code class="descname">add_timer</code><span class="sig-paren">(</span><em>timer_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/codetimer.html#CodeTimer.add_timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.codetimer.CodeTimer.add_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds a timer to the class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.utilities.codetimer.CodeTimer.delete_timer">
+<code class="descname">delete_timer</code><span class="sig-paren">(</span><em>timer_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/codetimer.html#CodeTimer.delete_timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.codetimer.CodeTimer.delete_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>deletes a timer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.utilities.codetimer.CodeTimer.log">
+<code class="descname">log</code><span class="sig-paren">(</span><em>timer_name</em>, <em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/codetimer.html#CodeTimer.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.codetimer.CodeTimer.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>logs a event in the timer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rdfframework.utilities.codetimer.CodeTimer.print_timer">
+<code class="descname">print_timer</code><span class="sig-paren">(</span><em>timer_name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/codetimer.html#CodeTimer.print_timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.codetimer.CodeTimer.print_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints the timer to the terminal</p>
+<dl class="docutils">
+<dt>keyword args:</dt>
+<dd>delete -&gt; True/False  -deletes the timer after printing</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.codetimer.code_timer">
+<code class="descclassname">rdfframework.utilities.codetimer.</code><code class="descname">code_timer</code><span class="sig-paren">(</span><em>reset=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/codetimer.html#code_timer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.codetimer.code_timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a global variable for tracking the timer accross multiple
+files</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.utilities.debug">
+<span id="rdfframework-utilities-debug-module"></span><h2>rdfframework.utilities.debug module<a class="headerlink" href="#module-rdfframework.utilities.debug" title="Permalink to this headline">¶</a></h2>
+<p>utilities for debuging code</p>
+<dl class="function">
+<dt id="rdfframework.utilities.debug.dumpable_obj">
+<code class="descclassname">rdfframework.utilities.debug.</code><code class="descname">dumpable_obj</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/debug.html#dumpable_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.debug.dumpable_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes an object that fails with json.dumps and converts it to
+a json.dumps dumpable object. This is useful for debuging code when
+you want to dump an object for easy reading</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.utilities.frameworkutilities">
+<span id="rdfframework-utilities-frameworkutilities-module"></span><h2>rdfframework.utilities.frameworkutilities module<a class="headerlink" href="#module-rdfframework.utilities.frameworkutilities" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rdfframework.utilities.frameworkutilities.DeleteProperty">
+<em class="property">class </em><code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">DeleteProperty</code><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#DeleteProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.DeleteProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>dummy class for tagging items to be deleted. This will prevent
+passed in data ever being confused with marking a property for
+deletion.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="rdfframework.utilities.frameworkutilities.NotInFormClass">
+<em class="property">class </em><code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">NotInFormClass</code><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#NotInFormClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.NotInFormClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>dummy class for tagging properties that were never in a form.
+This will prevent passed in data ever being confused with a property
+that was never in the form.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.cbool">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">cbool</code><span class="sig-paren">(</span><em>value</em>, <em>strict=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#cbool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.cbool" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts a value to true or false. Python&#8217;s default bool() function
+does not handle &#8216;true&#8217; of &#8216;false&#8217; strings</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.clean_iri">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">clean_iri</code><span class="sig-paren">(</span><em>uri_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#clean_iri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.clean_iri" title="Permalink to this definition">¶</a></dt>
+<dd><p>removes the &lt;&gt; signs from a string start and end</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.convert_spo_to_dict">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">convert_spo_to_dict</code><span class="sig-paren">(</span><em>data</em>, <em>mode='subject'</em>, <em>option='string'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#convert_spo_to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.convert_spo_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the SPAQRL query results and converts them to a python Dict</p>
+<p>mode: subject &#8211;&gt; groups based on subject</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.copy_obj">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">copy_obj</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#copy_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.copy_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>does a deepcopy of an object, but does not copy a class
+i.e. 
+x = {&#8220;key&#8221;:[&lt;classInstance1&gt;,&lt;classInstance2&gt;,&lt;classInstance3&gt;]}
+y = copy_obj(x)
+y &#8211;&gt; {&#8220;key&#8221;:[&lt;classInstance1&gt;,&lt;classInstance2&gt;,&lt;classInstance3&gt;]} 
+del y[&#8216;key&#8217;][0]
+y &#8211;&gt; {&#8220;key&#8221;:[&lt;classInstance2&gt;,&lt;classInstance3&gt;]} 
+x &#8211;&gt; {&#8220;key&#8221;:[&lt;classInstance1&gt;,&lt;classInstance2&gt;,&lt;classInstance3&gt;]}
+<a href="#id1"><span class="problematic" id="id2">**</span></a>* this is to overcome a dictionary object that lists with classes</p>
+<blockquote>
+<div>as the list items.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.fw_config">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">fw_config</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#fw_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.fw_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>function returns the application configuration information</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.get_app_ns_uri">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">get_app_ns_uri</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#get_app_ns_uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.get_app_ns_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>looks in the framework for the namespace uri</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.get_attr">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">get_attr</code><span class="sig-paren">(</span><em>item</em>, <em>name</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#get_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.get_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to getattr and get but will test for class or dict</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.iri">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">iri</code><span class="sig-paren">(</span><em>uri_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#iri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.iri" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts a string to an IRI or returns an IRI if already formated</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.is_not_null">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">is_not_null</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#is_not_null"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.is_not_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>test for None and empty string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.is_valid_object">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">is_valid_object</code><span class="sig-paren">(</span><em>uri_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#is_valid_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.is_valid_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to see if the string is a object store</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.make_list">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">make_list</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#make_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.make_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a value and turns it into a list if it is not one</p>
+<p>!!!!! This is important becouse list(value) if perfomed on an
+dictionary will return the keys of the dictionary in a list and not
+the dictionay as an element in the list. i.e.</p>
+<blockquote>
+<div>x = {&#8220;first&#8221;:1, &#8220;second&#8221;:2}
+list(x) = [&#8220;first&#8221;, &#8220;second&#8221;]
+or use this [x,]  
+make_list(x) =[{&#8220;first&#8221;:1, &#8220;second&#8221;:2}]</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.make_set">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">make_set</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#make_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.make_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a value and turns it into a set</p>
+<p>!!!! This is important because set(string) will parse a string to
+individual characters vs. adding the string as an element of
+the set i.e.</p>
+<blockquote>
+<div>x = &#8216;setvalue&#8217;
+set(x) = {&#8216;t&#8217;, &#8216;a&#8217;, &#8216;e&#8217;, &#8216;v&#8217;, &#8216;u&#8217;, &#8216;s&#8217;, &#8216;l&#8217;}
+make_set(x) = {&#8216;setvalue&#8217;}
+or use set([x,]) by adding string as first item in list.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.make_triple">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">make_triple</code><span class="sig-paren">(</span><em>sub</em>, <em>pred</em>, <em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#make_triple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.make_triple" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Takes a subject predicate and object and joins them with a space</dt>
+<dd>in between</dd>
+<dt>Args:</dt>
+<dd>sub &#8211; Subject
+pred &#8211; Predicate
+obj  &#8211; Object</dd>
+<dt>Returns</dt>
+<dd>str</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.nz">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">nz</code><span class="sig-paren">(</span><em>value</em>, <em>none_value</em>, <em>strict=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#nz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.nz" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is named after an old VBA function. It returns a default
+value if the passed in value is None. If strict is False it will
+treat an empty string as None as well.</p>
+<p>example:
+x = None
+nz(x,&#8221;hello&#8221;)
+&#8211;&gt; &#8220;hello&#8221;
+nz(x,&#8221;&#8221;)
+&#8211;&gt; &#8220;&#8221;
+y = &#8220;&#8221;   
+nz(y,&#8221;hello&#8221;)
+&#8211;&gt; &#8220;&#8221;
+nz(y,&#8221;hello&#8221;, False)
+&#8211;&gt; &#8220;hello&#8221;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.remove_null">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">remove_null</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#remove_null"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.remove_null" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads through a list or set and strips any null values</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.render_without_request">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">render_without_request</code><span class="sig-paren">(</span><em>template_name</em>, <em>**template_vars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#render_without_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.render_without_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Usage is the same as flask.render_template:</p>
+<p>render_without_request(&#8216;my_template.html&#8217;, var1=&#8217;foo&#8217;, var2=&#8217;bar&#8217;)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.slugify">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">slugify</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#slugify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.slugify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts to lowercase, removes non-word characters (alphanumerics and
+underscores) and converts spaces to hyphens. Also strips leading and
+trailing whitespace using Django format</p>
+<p>Args:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.uid_to_repo_uri">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">uid_to_repo_uri</code><span class="sig-paren">(</span><em>id_value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#uid_to_repo_uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.uid_to_repo_uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.frameworkutilities.xsd_to_python">
+<code class="descclassname">rdfframework.utilities.frameworkutilities.</code><code class="descname">xsd_to_python</code><span class="sig-paren">(</span><em>value</em>, <em>data_type</em>, <em>rdf_type='literal'</em>, <em>output='python'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/frameworkutilities.html#xsd_to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.frameworkutilities.xsd_to_python" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will take a value and xsd data_type and convert it to a python
+variable</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.utilities.uriconvertor">
+<span id="rdfframework-utilities-uriconvertor-module"></span><h2>rdfframework.utilities.uriconvertor module<a class="headerlink" href="#module-rdfframework.utilities.uriconvertor" title="Permalink to this headline">¶</a></h2>
+<p>contains functions for converting objects to namespace prefixes</p>
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.convert_obj_to_rdf_namespace">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">convert_obj_to_rdf_namespace</code><span class="sig-paren">(</span><em>obj</em>, <em>ns_obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#convert_obj_to_rdf_namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.convert_obj_to_rdf_namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes rdf json definitions and converts all of the
+uri strings to a ns_value format</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.convert_to_ns">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">convert_to_ns</code><span class="sig-paren">(</span><em>value</em>, <em>ns_obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#convert_to_ns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.convert_to_ns" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts a value to the prefixed rdf ns equivalent. If not found
+returns the value as is</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.convert_to_ttl">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">convert_to_ttl</code><span class="sig-paren">(</span><em>value</em>, <em>ns_obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#convert_to_ttl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.convert_to_ttl" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts a value to the prefixed rdf ns equivalent. If not found
+returns the value as is</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.convert_to_uri">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">convert_to_uri</code><span class="sig-paren">(</span><em>value</em>, <em>ns_obj=None</em>, <em>strip_iri=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#convert_to_uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.convert_to_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts a prefixed rdf ns equivalent value to its uri form. 
+If not found returns the value as is</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.create_namespace_obj">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">create_namespace_obj</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#create_namespace_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.create_namespace_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes initial rdf application definitions and reads the namespaces</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.iris_to_strings">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">iris_to_strings</code><span class="sig-paren">(</span><em>obj</em>, <em>ns_obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#iris_to_strings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.iris_to_strings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.nouri">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">nouri</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#nouri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.nouri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.pyuri">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">pyuri</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#pyuri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.pyuri" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts an iri to the app defined rdf namespaces in the framework 
+in a python accessable format. i.e. schema:name or 
+http:schema.org/name  &#8211;&gt; schema_name</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.ttluri">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">ttluri</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#ttluri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.ttluri" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts an iri to the app defined rdf namespaces in the framework 
+in a turtle accessable format. i.e. schema_name or 
+<a class="reference external" href="http:schema.org/name">http:schema.org/name</a>  &#8211;&gt; schema:name</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.uri">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">uri</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rdfframework.utilities.uriconvertor.uri_prefix">
+<code class="descclassname">rdfframework.utilities.uriconvertor.</code><code class="descname">uri_prefix</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/uriconvertor.html#uri_prefix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.uriconvertor.uri_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a uri and returns the prefix for that uri</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.utilities.valuecalculator">
+<span id="rdfframework-utilities-valuecalculator-module"></span><h2>rdfframework.utilities.valuecalculator module<a class="headerlink" href="#module-rdfframework.utilities.valuecalculator" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="rdfframework.utilities.valuecalculator.calculate_default_value">
+<code class="descclassname">rdfframework.utilities.valuecalculator.</code><code class="descname">calculate_default_value</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rdfframework/utilities/valuecalculator.html#calculate_default_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rdfframework.utilities.valuecalculator.calculate_default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the default value based on the field default input</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rdfframework.utilities">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rdfframework.utilities" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rdfframework.validators.html" class="btn btn-neutral float-right" title="rdfframework.validators package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rdfframework.sparql.html" class="btn btn-neutral" title="rdfframework.sparql package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rdfframework.api.rdfapis &mdash; RdfFramework 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="RdfFramework 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> RdfFramework
+          
+
+          
+            
+            <img src="../../../_static/kl-logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../keyconcepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rdfframework.validators.html">rdfframework.validators package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">RdfFramework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>rdfframework.api.rdfapis</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rdfframework.api.rdfapis</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Mike Stabile, Jeremy Nelson&quot;</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">.rdfapifields</span> <span class="kn">import</span> <span class="n">get_api_field_json</span><span class="p">,</span> <span class="n">get_api_field</span>
+<span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">cbool</span><span class="p">,</span> <span class="n">make_list</span><span class="p">,</span> <span class="n">make_set</span><span class="p">,</span> <span class="n">code_timer</span><span class="p">,</span> \
+        <span class="n">fw_config</span><span class="p">,</span> <span class="n">iri</span><span class="p">,</span> <span class="n">is_not_null</span><span class="p">,</span> <span class="n">convert_spo_to_dict</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> \
+        <span class="n">convert_obj_to_rdf_namespace</span><span class="p">,</span> <span class="n">copy_obj</span><span class="p">,</span> <span class="n">remove_null</span>
+<span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">get_framework</span> <span class="k">as</span> <span class="n">rdfw</span>
+<span class="kn">from</span> <span class="nn">rdfframework.sparql</span> <span class="kn">import</span> <span class="n">query_select_options</span><span class="p">,</span> <span class="n">get_data</span>
+<span class="kn">from</span> <span class="nn">rdfframework.processors</span> <span class="kn">import</span> <span class="n">run_processor</span>
+
+    
+<div class="viewcode-block" id="Api"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.Api">[docs]</a><span class="k">class</span> <span class="nc">Api</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; This class is used for a rdfframework API &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_type</span> <span class="o">=</span> <span class="s2">&quot;api&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xsd_load</span> <span class="o">=</span> <span class="s2">&quot;python&quot;</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id_value&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_changed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prop_list&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prop_list&quot;</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_apiFieldName</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;base_url&#39;</span><span class="p">):</span>
+            <span class="n">base_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base_url</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_url&quot;</span><span class="p">,</span> <span class="n">base_url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;current_url&#39;</span><span class="p">):</span>
+            <span class="n">current_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_url</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current_url</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_url</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_url&quot;</span><span class="p">,</span> <span class="n">current_url</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;base_api_url&#39;</span> <span class="p">):</span>
+            <span class="n">base_api_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_api_url</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base_api_url</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_api_url</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_api_url&quot;</span><span class="p">,</span> <span class="n">base_api_url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;api_url&#39;</span><span class="p">):</span>
+            <span class="n">api_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_url</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">api_url</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_url</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_url&quot;</span><span class="p">,</span> <span class="n">api_url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_state</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_subject_uri</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_results</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;data_class_uri&#39;</span><span class="p">):</span>
+            <span class="n">class_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_class_uri</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">class_uri</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_subject_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject_uri&quot;</span><span class="p">,</span> <span class="n">class_uri</span><span class="p">)</span> 
+            
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;has_subobj&#39;</span><span class="p">):</span>
+            <span class="n">has_subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_subobj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_subobj</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_subobj</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;has_subobj&#39;</span><span class="p">,</span> <span class="n">has_subobj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;is_subobj&#39;</span><span class="p">):</span>
+            <span class="n">is_subobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_subobj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">is_subobj</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_subobj</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_subobj&#39;</span><span class="p">,</span> <span class="n">is_subobj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;rdf_field_list&#39;</span><span class="p">):</span>
+            <span class="n">rdf_field_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rdf_field_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rdf_field_list&#39;</span><span class="p">,</span> <span class="n">rdf_field_list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;rdf_instructions&#39;</span><span class="p">):</span>
+            <span class="n">rdf_instructions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_instructions</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rdf_instructions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rdf_instructions</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rdf_instructions&#39;</span><span class="p">,</span> <span class="n">rdf_instructions</span><span class="p">)</span>  
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;instance_uri&#39;</span><span class="p">):</span>
+            <span class="n">instance_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_uri</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">instance_uri</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance_uri&#39;</span><span class="p">,</span> <span class="n">instance_uri</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;data_class_uri&#39;</span><span class="p">):</span>
+            <span class="n">data_class_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_class_uri</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_class_uri</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_class_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data_class_uri&#39;</span><span class="p">,</span> <span class="n">data_class_uri</span><span class="p">)</span>           
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;data_prop_uri&#39;</span><span class="p">):</span>
+            <span class="n">data_prop_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_prop_uri</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_prop_uri</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_prop_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data_prop_uri&#39;</span><span class="p">,</span> <span class="n">data_prop_uri</span><span class="p">)</span>                                
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_class_links</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tie_fields_to_field_list</span><span class="p">()</span>   
+        <span class="n">pretty_data</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug_data</span> <span class="o">=</span> <span class="n">pretty_data</span>
+        
+
+<div class="viewcode-block" id="Api.save"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.Api.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; sends the form to the framework for saving &#39;&#39;&#39;</span>
+        <span class="n">save_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_saveAction&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">save_action</span> <span class="o">==</span> <span class="s2">&quot;kdr_AuthenticateUser&quot;</span><span class="p">:</span>
+            <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">user_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">save_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Api.redirect_url"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.Api.redirect_url">[docs]</a>    <span class="k">def</span> <span class="nf">redirect_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_value</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; formats the redirect url for the form in its current state &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">id_value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">id_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_subject_uri</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_state</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+            <span class="n">_url_instructions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_submitSuccessRedirect&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_url_instructions</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">base_url</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_state</span> <span class="o">==</span> <span class="s2">&quot;fail&quot;</span><span class="p">:</span>
+            <span class="n">_url_instructions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;submitFailRedirect&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_url_instructions</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;!--currentpage&quot;</span>
+        <span class="k">if</span> <span class="n">_url_instructions</span> <span class="o">==</span> <span class="s2">&quot;!--currentpage&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_url</span>
+        <span class="k">elif</span> <span class="n">_url_instructions</span> <span class="o">==</span> <span class="s2">&quot;!--homepage&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;/&quot;</span>
+        <span class="k">elif</span> <span class="n">_url_instructions</span> <span class="o">==</span> <span class="s2">&quot;!--source&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;params&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>   
+        <span class="k">elif</span> <span class="n">_url_instructions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">_form_url</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_form_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">form_uri</span><span class="p">,</span> <span class="n">_url_instructions</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_form_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;{}{}?id={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">_form_url</span><span class="p">,</span> <span class="n">id_value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_url_instructions</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span></div>
+            
+<div class="viewcode-block" id="Api.remove_prop"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.Api.remove_prop">[docs]</a>    <span class="k">def</span> <span class="nf">remove_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; removes a prop completely from the form &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form_changed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_prop</span> <span class="o">==</span> <span class="n">prop</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">_prop</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_rdf_class</span><span class="p">,</span> <span class="n">_props</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">_props</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_prop</span> <span class="o">==</span> <span class="n">prop</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">[</span><span class="n">_rdf_class</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">_prop</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span>  <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">kds_apiFieldName</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">x</span>
+        <span class="k">del</span> <span class="n">prop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_class_links</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Api.add_props"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.Api.add_props">[docs]</a>    <span class="k">def</span> <span class="nf">add_props</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop_list</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; adds a new property/field to the form in all the correct</span>
+<span class="sd">            locations &#39;&#39;&#39;</span>
+        <span class="n">prop_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">prop_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_changed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="n">prop_list</span><span class="p">:</span>
+            <span class="n">_current_class</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_classUri</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_prop</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">_prop</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_prop</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">[</span><span class="n">_current_class</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">[</span><span class="n">_current_class</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_prop</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">[</span><span class="n">_current_class</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_prop</span><span class="p">]</span>    
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_class_links</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="Api.reset_fields"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.Api.reset_fields">[docs]</a>    <span class="k">def</span> <span class="nf">reset_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; fields are moved around during save process and if the validation</span>
+<span class="sd">            fails this method will return the fields to their original</span>
+<span class="sd">            locations &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_changed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="c1"># reset the field listing attributes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span> <span class="o">=</span> <span class="n">copy_obj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_rdf_field_list</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span> <span class="o">=</span> <span class="n">copy_obj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_class_grouping</span><span class="p">)</span>
+            <span class="c1"># reset the class links attribute</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_class_links</span><span class="p">()</span>
+            <span class="c1"># call the reset for the subapis</span>
+            <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="n">ApiList</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">api</span> <span class="ow">in</span> <span class="n">fld</span><span class="o">.</span><span class="n">entries</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ApiField</span><span class="p">):</span>
+                            <span class="n">api</span><span class="o">.</span><span class="n">reset_fields</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="n">ApiField</span><span class="p">):</span>
+                            <span class="n">api</span><span class="o">.</span><span class="n">reset_fields</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_changed</span> <span class="o">=</span> <span class="bp">False</span> </div>
+               
+    <span class="k">def</span> <span class="nf">_tie_fields_to_field_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; add the attributes to the wtforms fields and creates the </span>
+<span class="sd">            rdf_field_list and the rdf class groupings &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_new_field_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_set</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">[</span><span class="n">_class</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+            <span class="c1">#field[&#39;field&#39;] = getattr(self,field[&#39;kds_formFieldName&#39;])</span>
+            <span class="n">fld</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_apiFieldName&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">fld</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;processed_data&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;old_data&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;query_data&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="s1">&#39;subject_uri&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">_new_field_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fld</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;kds_NoClass&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fld</span><span class="p">)</span>
+            <span class="n">field</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_apiFieldName&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span> <span class="o">=</span> <span class="n">_new_field_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_rdf_field_list</span> <span class="o">=</span> <span class="n">copy_obj</span><span class="p">(</span><span class="n">_new_field_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_class_grouping</span> <span class="o">=</span> <span class="n">copy_obj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">class_grouping</span><span class="p">)</span>
+            
+    <span class="k">def</span> <span class="nf">_set_class_links</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; reads the classes used in the form fields and determines the</span>
+<span class="sd">            linkages between the classes and sets the the following</span>
+<span class="sd">            attributes:</span>
+
+<span class="sd">            self.dep_classes</span>
+<span class="sd">            self.indep_classes</span>
+<span class="sd">            self.dependancies</span>
+<span class="sd">            self.reverse_dependancies</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">_class_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="c1"># get all of the unique rdf classes in the passed in form</span>
+        <span class="k">for</span> <span class="n">_field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_field</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">_class_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_field</span><span class="p">[</span><span class="s1">&#39;kds_classUri&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_class_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_field</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">)</span>
+        <span class="n">_class_set</span> <span class="o">=</span> <span class="n">remove_null</span><span class="p">(</span><span class="n">_class_set</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_class_set</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;kds_NoClass&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">class_links</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">get_class_links</span><span class="p">(</span><span class="n">_class_set</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_set</span> <span class="o">=</span> <span class="n">_class_set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dep_classes</span> <span class="o">=</span> <span class="n">class_links</span><span class="p">[</span><span class="s1">&#39;dep_classes&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indep_classes</span> <span class="o">=</span> <span class="n">class_links</span><span class="p">[</span><span class="s1">&#39;indep_classes&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dependancies</span> <span class="o">=</span> <span class="n">class_links</span><span class="p">[</span><span class="s1">&#39;dependancies&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse_dependancies</span> <span class="o">=</span> <span class="n">class_links</span><span class="p">[</span><span class="s1">&#39;reverse_dependancies&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Api.set_obj_data"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.Api.set_obj_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_obj_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; sets the data for the current form paramters</span>
+
+<span class="sd">        **keyword arguments</span>
+<span class="sd">        subject_uri: the URI for the subject</span>
+<span class="sd">        class_uri: the rdf class of the subject</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;class_uri&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_class_uri</span><span class="p">)</span>
+        <span class="n">_lookup_class_uri</span> <span class="o">=</span> <span class="n">_class_uri</span>
+        <span class="n">subject_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject_uri&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_subject_uri</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_not_null</span><span class="p">(</span><span class="n">subject_uri</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">query_data</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">_subform_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_parent_field</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c1"># test to see if a sub_obj is part of the form.</span>
+        <span class="sd">&#39;&#39;&#39;if self.has_subobj:</span>
+<span class="sd">            for _field in self.rdf_field_list:</span>
+<span class="sd">                if _field.type == &#39;FieldList&#39;:</span>
+<span class="sd">                    for _entry in _field.entries:</span>
+<span class="sd">                        if _entry.type == &#39;FormField&#39;:</span>
+<span class="sd">                            _sub_rdf_obj = _entry.form</span>
+<span class="sd">                            _parent_field = _field</span>
+<span class="sd">            # if the sub_obj get its data</span>
+<span class="sd">            if _sub_rdf_obj:</span>
+<span class="sd">                _subform_data = _sub_rdf_obj.query_data&#39;&#39;&#39;</span>
+        <span class="c1"># send the form to the query generator and get the query data back</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;query_data&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+            <span class="sd">&#39;&#39;&#39;self.query_data = convert_obj_to_rdf_namespace(\</span>
+<span class="sd">                    convert_spo_to_dict(get_data(self, **kwargs)))&#39;&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">query_data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;query_data&#39;</span><span class="p">)</span>
+        <span class="n">_data_value</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c1"># cycle through the query data and add the data to the fields</span>
+        <span class="k">for</span> <span class="n">_item</span> <span class="ow">in</span> <span class="n">make_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query_data</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdf_field_list</span><span class="p">:</span>
+                <span class="n">_prop_uri</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_propUri</span>
+                <span class="n">_class_uri</span> <span class="o">=</span> <span class="n">iri</span><span class="p">(</span><span class="n">uri</span><span class="p">(</span><span class="n">_prop</span><span class="o">.</span><span class="n">kds_classUri</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">_subject</span> <span class="ow">in</span> <span class="n">_item</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">_class_uri</span> <span class="ow">in</span> <span class="n">_item</span><span class="p">[</span><span class="n">_subject</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdf_type&quot;</span><span class="p">):</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">query_data</span> <span class="o">=</span> <span class="n">_item</span><span class="p">[</span><span class="n">_subject</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_prop_uri</span><span class="p">)</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">subject_uri</span> <span class="o">=</span> <span class="n">_subject</span>
+                        <span class="k">for</span> <span class="n">_processor</span> <span class="ow">in</span> <span class="n">_prop</span><span class="o">.</span><span class="n">kds_processors</span><span class="p">:</span>
+                            <span class="n">run_processor</span><span class="p">(</span><span class="n">_processor</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">_prop</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="c1">#print(_prop_uri, &quot; __ &quot;, _prop.query_data, &quot;--pro--&quot;, _prop.processed_data)</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">old_data</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">processed_data</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">old_data</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">query_data</span>
+                        <span class="c1">#print(_prop_uri, &quot; __ &quot;, _prop.query_data, &quot;--old--&quot;, _prop.old_data)</span>
+                    <span class="k">if</span> <span class="n">_prop</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">_prop</span><span class="o">.</span><span class="n">old_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">_prop</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">_prop</span><span class="o">.</span><span class="n">old_data</span></div></div>
+                <span class="c1">#pp.pprint(_prop.__dict__)</span>
+    
+
+<div class="viewcode-block" id="get_api_instructions_json"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.get_api_instructions_json">[docs]</a><span class="k">def</span> <span class="nf">get_api_instructions_json</span><span class="p">(</span><span class="n">instructions</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; This function will read through the RDF defined info and proccess the</span>
+<span class="sd">        json to retrun the correct instructions for the specified form</span>
+<span class="sd">        instance.&#39;&#39;&#39;</span>
+
+    <span class="n">_rdf_app</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">app</span>
+    <span class="c1">#print(&quot;inst------&quot;, instructions)</span>
+<span class="c1"># get form instance info</span>
+    <span class="n">_api_instance_info</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_api_instance_type_list</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiInstance&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="k">for</span> <span class="n">_api_instance</span> <span class="ow">in</span> <span class="n">_api_instance_type_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_api_instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiInstanceType&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">instance</span><span class="p">:</span>
+            <span class="n">_api_instance_info</span> <span class="o">=</span> <span class="n">_api_instance</span>
+    <span class="n">_new_instr</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1">#print(&quot;------&quot;, _form_instance_info)</span>
+<span class="c1">#Determine the api paramaters</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_apiTitle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiTitle&#39;</span><span class="p">,</span> \
+            <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_apiTitle&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_apiDescription&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiDescription&#39;</span><span class="p">,</span> \
+            <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_apiDescription&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_apiMethod&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiMethod&#39;</span><span class="p">,</span> \
+            <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_apiMethod&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_lookupClassUri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_lookupClassUri&#39;</span><span class="p">,</span> \
+            <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupClassUri&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_lookupPropertyUri&#39;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_lookupPropertyUri&#39;</span><span class="p">,</span>\
+                    <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupPropertyUri&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_submitSuccessRedirect&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_submitSuccessRedirect&#39;</span><span class="p">,</span>
+                                    <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>\
+                                            <span class="s2">&quot;kds_submitSuccessRedirect&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_submitFailRedirect&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_submitFailRedirect&#39;</span><span class="p">,</span>
+                                    <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_submitFailRedirect&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_saveAction&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_saveAction&#39;</span><span class="p">,</span>
+                                    <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_saveAction&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_returnType&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_returnType&#39;</span><span class="p">,</span>
+                                    <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_returnType&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_mimeType&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_mimeType&#39;</span><span class="p">,</span>
+                                    <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_mimeType&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>  
+    <span class="n">_new_instr</span><span class="p">[</span><span class="s1">&#39;kds_subjectUriTransform&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">_api_instance_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_subjectUriTransform&#39;</span><span class="p">,</span>
+                                    <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_subjectUriTransform&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>                                                                                               
+    <span class="k">return</span> <span class="n">_new_instr</span></div>
+
+
+<div class="viewcode-block" id="rdf_framework_api_factory"><a class="viewcode-back" href="../../../rdfframework.api.html#rdfframework.api.rdfapis.rdf_framework_api_factory">[docs]</a><span class="k">def</span> <span class="nf">rdf_framework_api_factory</span><span class="p">(</span><span class="n">api_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Generates a form class based on the form definitions in the</span>
+<span class="sd">        kds-app.ttl file</span>
+
+<span class="sd">    keyword Args:</span>
+<span class="sd">        class_uri: the classUri used for a form with loaded data</span>
+<span class="sd">                   ***** has to be the class of the subject_uri for</span>
+<span class="sd">                         the form data lookup</span>
+<span class="sd">        subject_uri: the uri of the object that you want to lookup</span>
+<span class="sd">        is_subform: True or False. States whether the form is a subform</span>
+<span class="sd">                 of another form</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># find the api name and instance from the url</span>
+    <span class="n">_api_location</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">api_exists</span><span class="p">(</span><span class="n">api_id</span><span class="p">)</span>
+    <span class="c1"># exit factory if form does not exist</span>
+    <span class="k">if</span> <span class="n">_api_location</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="n">_api_uri</span> <span class="o">=</span> <span class="n">_api_location</span><span class="p">[</span><span class="s1">&#39;api_uri&#39;</span><span class="p">]</span>
+    <span class="n">_instance</span> <span class="o">=</span> <span class="n">_api_location</span><span class="p">[</span><span class="s1">&#39;api_uri&#39;</span><span class="p">]</span>
+
+    <span class="n">rdf_api</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">_api_uri</span><span class="p">,</span> <span class="p">(</span><span class="n">Api</span><span class="p">,</span> <span class="p">),</span> <span class="p">{})</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;api_uri&quot;</span><span class="p">,</span> <span class="n">_api_uri</span><span class="p">)</span>
+    <span class="n">_app_api</span> <span class="o">=</span> <span class="n">rdfw</span><span class="p">()</span><span class="o">.</span><span class="n">rdf_api_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_api_uri</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">make_list</span><span class="p">(</span><span class="n">_app_api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_properties&#39;</span><span class="p">))</span>
+    <span class="n">instructions</span> <span class="o">=</span> <span class="n">get_api_instructions_json</span><span class="p">(</span>\
+            <span class="n">_app_api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_apiInstructions&#39;</span><span class="p">),</span> <span class="n">_instance</span><span class="p">)</span>
+    <span class="n">_lookup_class_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;classUri&quot;</span><span class="p">,</span>\
+                                   <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupClassUri&quot;</span><span class="p">))</span>
+    <span class="n">_lookup_prop_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;propUri&quot;</span><span class="p">,</span> \
+                                  <span class="n">instructions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kds_lookupPropUri&quot;</span><span class="p">))</span>
+    <span class="n">_lookup_subject_uri</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject_uri&quot;</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;subject_uri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_lookup_subject_uri</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;propUri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_lookup_prop_uri</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;classUri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_lookup_class_uri</span>
+    <span class="c1"># ************************** Testing Variable *************************</span>
+    <span class="n">user_info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;kds_userGroups&quot;</span><span class="p">:[</span><span class="s2">&quot;kdr_SysAdmin-SG&quot;</span><span class="p">],</span>
+        <span class="s1">&#39;kds_applicationSecurity&#39;</span><span class="p">:[</span><span class="s2">&quot;acl_Read&quot;</span><span class="p">,</span> <span class="s2">&quot;acl_Write&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="c1"># *********************************************************************</span>
+    <span class="n">_has_subobj</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">rdf_field_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">fld</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+        <span class="c1">#print(fld)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">get_api_field_json</span><span class="p">(</span><span class="n">fld</span><span class="p">,</span> <span class="n">instructions</span><span class="p">,</span> <span class="n">_instance</span><span class="p">,</span> <span class="n">user_info</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">field</span><span class="p">:</span>
+            <span class="n">field_item</span> <span class="o">=</span> <span class="n">get_api_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">_instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">api_field</span> <span class="o">=</span> <span class="n">field_item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fld&#39;</span><span class="p">)</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">field_item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fld_json&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">api_field</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">nfld</span> <span class="ow">in</span> <span class="n">api_field</span><span class="p">:</span>
+                    <span class="c1">#print(fld)</span>
+                    <span class="k">if</span> <span class="n">nfld</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kds_field&#39;</span><span class="p">):</span>
+                        <span class="n">_new_field</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+                        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_apiFieldName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfld</span><span class="p">[</span><span class="s1">&#39;kds_fieldName&#39;</span><span class="p">]</span>
+                        <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_apiFieldOrder&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                                <span class="nb">float</span><span class="p">(</span><span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;kds_apiFieldOrder&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">i</span>
+                        <span class="k">if</span> <span class="n">fld</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;doNotSave&quot;</span><span class="p">):</span>
+                            <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;doNotSave&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">_new_field</span><span class="p">[</span><span class="s1">&#39;doNotSave&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="n">augmented_field</span> <span class="o">=</span> <span class="n">add_field_attributes</span><span class="p">(</span>\
+                                <span class="n">nfld</span><span class="p">[</span><span class="s1">&#39;kds_field&#39;</span><span class="p">],</span><span class="n">_new_field</span><span class="p">)</span>
+                        <span class="n">rdf_field_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_new_field</span><span class="p">)</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="n">nfld</span><span class="p">[</span><span class="s1">&#39;kds_fieldName&#39;</span><span class="p">],</span> <span class="n">augmented_field</span><span class="p">)</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="o">.</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#print(field[&#39;apiFieldName&#39;], &quot; - &quot;, api_field)</span>
+                <span class="k">if</span> <span class="n">api_field</span><span class="p">:</span>
+                    <span class="c1">#print(&quot;set --- &quot;, field)</span>
+                    <span class="n">field</span><span class="p">[</span><span class="s1">&#39;doNotSave&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="n">rdf_field_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="s1">&#39;kds_apiFieldName&#39;</span><span class="p">],</span> <span class="n">api_field</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_subobj&quot;</span><span class="p">):</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kds_apiFieldName&#39;</span><span class="p">:</span><span class="s1">&#39;subjectUri&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;kds_fieldType&#39;</span><span class="p">:{</span><span class="s1">&#39;rdf_type&#39;</span><span class="p">:</span><span class="s1">&#39;ReferenceField&#39;</span><span class="p">},</span>
+                 <span class="s1">&#39;kds_apiLabelName&#39;</span><span class="p">:</span><span class="s1">&#39;Hidden dataSubjectUri&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;kds_classUri&#39;</span><span class="p">:</span><span class="n">_lookup_class_uri</span><span class="p">,</span>
+                 <span class="s1">&#39;kds_propUri&#39;</span><span class="p">:</span><span class="s1">&#39;subjectUri&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;kds_processors&#39;</span><span class="p">:[],</span>
+                 <span class="s1">&#39;editable&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                 <span class="s1">&#39;doNotSave&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+        <span class="n">rdf_field_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">augmented_field</span> <span class="o">=</span> <span class="n">add_field_attributes</span><span class="p">(</span><span class="n">StringField</span><span class="p">(</span><span class="s1">&#39;dataSubjectUri&#39;</span><span class="p">),</span>
+                                               <span class="n">field</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s1">&#39;subjectUri&#39;</span><span class="p">,</span> <span class="n">augmented_field</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s1">&#39;is_subobj&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s1">&#39;is_subobj&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s1">&#39;has_subobj&#39;</span><span class="p">,</span> <span class="n">_has_subobj</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s1">&#39;rdf_field_list&#39;</span><span class="p">,</span> <span class="n">rdf_field_list</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;rdf_instructions&quot;</span><span class="p">,</span> <span class="n">instructions</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;instance_uri&quot;</span><span class="p">,</span> <span class="n">_instance</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;data_class_uri&quot;</span><span class="p">,</span> <span class="n">_lookup_class_uri</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;data_subject_uri&quot;</span><span class="p">,</span> <span class="n">_lookup_subject_uri</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;data_prop_uri&quot;</span><span class="p">,</span> <span class="n">_lookup_prop_uri</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;base_url&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_url&quot;</span><span class="p">))</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;current_url&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_url&quot;</span><span class="p">))</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;base_api_url&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_api_url&quot;</span><span class="p">))</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">rdf_api</span><span class="p">,</span> <span class="s2">&quot;api_url&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_url&quot;</span><span class="p">))</span>
+    <span class="c1">#pp.pprint(rdf_api.__dict__)</span>
+    <span class="k">return</span> <span class="n">rdf_api</span></div>
+    <span class="c1">#return rdf_api</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Michael Stabile, Jeremy Nelson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

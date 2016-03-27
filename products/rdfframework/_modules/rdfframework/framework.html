@@ -86,10 +86,14 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../keyconcepts.html">Key Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfframeworkclass.html">RdfFramework Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfclass.html">RdfClass Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfproperty.html">RdfProperty Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfdatatype.html">RdfDataType Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.validators.html">rdfframework.validators package</a></li>
 </ul>
 
             
@@ -156,7 +160,8 @@
 <span class="kn">from</span> <span class="nn">rdfframework.security</span> <span class="kn">import</span> <span class="n">User</span>
 <span class="kn">from</span> <span class="nn">rdfframework.forms</span> <span class="kn">import</span> <span class="n">rdf_framework_form_factory</span>
 <span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
-<div class="viewcode-block" id="RdfFramework"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework">[docs]</a><span class="k">class</span> <span class="nc">RdfFramework</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RdfFramework"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework">[docs]</a><span class="k">class</span> <span class="nc">RdfFramework</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; base class for Knowledge Links&#39; Graph database RDF vocabulary</span>
 <span class="sd">        framework&#39;&#39;&#39;</span>
 
@@ -194,7 +199,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_generate_apis</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
             <span class="k">print</span><span class="p">(</span><span class="s2">&quot;*** Framework Loaded ***&quot;</span><span class="p">)</span>
         
-<div class="viewcode-block" id="RdfFramework.load_default_data"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.load_default_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_default_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.load_default_data"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.load_default_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_default_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; reads default data in the fw_config and attempts to add it </span>
 <span class="sd">            to the server core i.e. inital users and organizations&#39;&#39;&#39;</span>
         <span class="c1"># test to see if the default data was already loaded</span>
@@ -224,7 +229,7 @@
                            <span class="n">data</span><span class="o">=</span><span class="n">save_query</span><span class="p">,</span>
                            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-type&quot;</span><span class="p">:</span> <span class="s2">&quot;text/turtle&quot;</span><span class="p">})</span></div>
             
-<div class="viewcode-block" id="RdfFramework.user_authentication"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.user_authentication">[docs]</a>    <span class="k">def</span> <span class="nf">user_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.user_authentication"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.user_authentication">[docs]</a>    <span class="k">def</span> <span class="nf">user_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; reads the object for authentication information and sets the</span>
 <span class="sd">            flask userclass information &#39;&#39;&#39;</span>
             
@@ -271,47 +276,47 @@
             <span class="n">_password</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
             <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_state</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span></div>
 
-<div class="viewcode-block" id="RdfFramework.form_exists"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.form_exists">[docs]</a>    <span class="k">def</span> <span class="nf">form_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_path</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.form_exists"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.form_exists">[docs]</a>    <span class="k">def</span> <span class="nf">form_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_path</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Tests to see if the form and instance is valid&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">form_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_list</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_list</span><span class="p">[</span><span class="n">form_path</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span></div>
             
-<div class="viewcode-block" id="RdfFramework.api_exists"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.api_exists">[docs]</a>    <span class="k">def</span> <span class="nf">api_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_path</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.api_exists"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.api_exists">[docs]</a>    <span class="k">def</span> <span class="nf">api_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_path</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Tests to see if the form and instance is valid&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">api_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_list</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_list</span><span class="p">[</span><span class="n">api_path</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span></div>
 
-<div class="viewcode-block" id="RdfFramework.get_form_path"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_form_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_form_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_uri</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.get_form_path"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.get_form_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_form_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_uri</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; reads through the list of defined APIs and returns the path &#39;&#39;&#39;</span>
         <span class="k">for</span> <span class="n">form_path</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;form_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">form_uri</span> <span class="ow">and</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;instance_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">instance</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">form_path</span></div>
     
-<div class="viewcode-block" id="RdfFramework.get_api_path"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_api_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_api_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_uri</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.get_api_path"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.get_api_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_api_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_uri</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; reads through the list of defined forms and returns the path &#39;&#39;&#39;</span>
         <span class="k">for</span> <span class="n">api_path</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;api_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">api_uri</span> <span class="ow">and</span> <span class="n">val</span><span class="p">[</span><span class="s1">&#39;instance_uri&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">instance</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">api_path</span></div>
                                 
-<div class="viewcode-block" id="RdfFramework.get_form_name"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_form_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_form_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_uri</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.get_form_name"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.get_form_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_form_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_uri</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns the form name for a form &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">form_uri</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">form_uri</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span></div>
             
-<div class="viewcode-block" id="RdfFramework.get_api_name"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_api_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_api_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_uri</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.get_api_name"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.get_api_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_api_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_uri</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns the API name for an API &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">api_uri</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pyuri</span><span class="p">(</span><span class="n">api_uri</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>   </div>
                  
-<div class="viewcode-block" id="RdfFramework.save_object_with_subobj"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.save_object_with_subobj">[docs]</a>    <span class="k">def</span> <span class="nf">save_object_with_subobj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="n">old_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.save_object_with_subobj"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.save_object_with_subobj">[docs]</a>    <span class="k">def</span> <span class="nf">save_object_with_subobj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="n">old_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; finds the subform field and appends the parent form attributes</span>
 <span class="sd">           to the subform entries and individually sends the augmented</span>
 <span class="sd">           subform to the main save_form property&#39;&#39;&#39;</span>
@@ -365,7 +370,7 @@
         <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_subject_uri</span> <span class="o">=</span> <span class="n">rdf_obj</span><span class="o">.</span><span class="n">data_subject_uri</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">:</span><span class="n">result</span><span class="p">}</span> </div>
             
-<div class="viewcode-block" id="RdfFramework.save_obj"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.save_obj">[docs]</a>    <span class="k">def</span> <span class="nf">save_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="n">old_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.save_obj"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.save_obj">[docs]</a>    <span class="k">def</span> <span class="nf">save_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="n">old_data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Recieves RDF_formfactory form, validates and saves the data</span>
 
 <span class="sd">         *** Steps ***</span>
@@ -467,7 +472,7 @@
         <span class="n">rdf_obj</span><span class="o">.</span><span class="n">save_results</span> <span class="o">=</span> <span class="n">_data_results</span>
         <span class="k">return</span>  <span class="n">rdf_obj</span></div>
 
-<div class="viewcode-block" id="RdfFramework.get_prefix"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_prefix">[docs]</a>    <span class="k">def</span> <span class="nf">get_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_type</span><span class="o">=</span><span class="s2">&quot;sparql&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.get_prefix"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.get_prefix">[docs]</a>    <span class="k">def</span> <span class="nf">get_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_type</span><span class="o">=</span><span class="s2">&quot;sparql&quot;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Generates a string of the rdf namespaces listed used in the</span>
 <span class="sd">            framework</span>
 
@@ -481,7 +486,7 @@
                 <span class="n">_return_str</span> <span class="o">+=</span> <span class="s2">&quot;@prefix {0}: {1} .</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_prefix</span><span class="p">,</span> <span class="n">iri</span><span class="p">(</span><span class="n">_ns</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">_return_str</span></div>
 
-    <span class="k">def</span> <span class="nf">get_class_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_of_classes</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.get_class_links"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.get_class_links">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_of_classes</span><span class="p">):</span>
         <span class="n">_class_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">_dependant_classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">_independant_classes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -511,9 +516,9 @@
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;dep_classes&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">_dependant_classes</span><span class="p">),</span>
                 <span class="s2">&quot;indep_classes&quot;</span> <span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">_independant_classes</span><span class="p">),</span>
                 <span class="s2">&quot;dependancies&quot;</span> <span class="p">:</span> <span class="n">_class_dependancies</span><span class="p">,</span>
-                <span class="s2">&quot;reverse_dependancies&quot;</span> <span class="p">:</span> <span class="n">_reverse_dependancies</span><span class="p">}</span>
+                <span class="s2">&quot;reverse_dependancies&quot;</span> <span class="p">:</span> <span class="n">_reverse_dependancies</span><span class="p">}</span></div>
     
-<div class="viewcode-block" id="RdfFramework.get_obj_data"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.RdfFramework.get_obj_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_obj_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfFramework.get_obj_data"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.RdfFramework.get_obj_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_obj_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; returns the data for the current form paramters</span>
 <span class="sd">        **keyword arguments</span>
 <span class="sd">        subject_uri: the URI for the subject</span>
@@ -1262,7 +1267,7 @@
 <span class="kn">from</span> <span class="nn">rdfframework</span> <span class="kn">import</span> <span class="n">RdfClass</span>
 <span class="c1">#from rdfframework import RdfDataType</span>
 
-<div class="viewcode-block" id="verify_server_core"><a class="viewcode-back" href="../../rdfframeworkclass.html#rdfframework.framework.verify_server_core">[docs]</a><span class="k">def</span> <span class="nf">verify_server_core</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">start_delay</span><span class="o">=</span><span class="mi">90</span><span class="p">):</span>
+<div class="viewcode-block" id="verify_server_core"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.framework.verify_server_core">[docs]</a><span class="k">def</span> <span class="nf">verify_server_core</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">start_delay</span><span class="o">=</span><span class="mi">90</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; checks to see if the server_core is running </span>
 <span class="sd">        </span>
 <span class="sd">        args:</span>

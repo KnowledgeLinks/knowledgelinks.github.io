@@ -86,10 +86,14 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../keyconcepts.html">Key Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../rdfdatasetup.html">Understanding the RDF Application Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfframeworkclass.html">RdfFramework Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfclass.html">RdfClass Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfproperty.html">RdfProperty Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../rdfdatatype.html">RdfDataType Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.html">rdfframework package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.forms.html">rdfframework.forms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.forms.widgets.html">rdfframework.forms.widgets package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.processors.html">rdfframework.processors package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.security.html">rdfframework.security package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.sparql.html">rdfframework.sparql package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.utilities.html">rdfframework.utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rdfframework.validators.html">rdfframework.validators package</a></li>
 </ul>
 
             
@@ -142,7 +146,7 @@
 <span class="kn">from</span> <span class="nn">rdfframework.utilities</span> <span class="kn">import</span> <span class="n">iri</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">make_list</span><span class="p">,</span> <span class="n">xsd_to_python</span>
 <span class="kn">from</span> <span class="nn">.getframework</span> <span class="kn">import</span> <span class="n">get_framework</span> <span class="k">as</span> <span class="n">rdfw</span>
 
-<div class="viewcode-block" id="RdfDataType"><a class="viewcode-back" href="../../rdfdatatype.html#rdfframework.rdfdatatype.RdfDataType">[docs]</a><span class="k">class</span> <span class="nc">RdfDataType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfDataType"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.rdfdatatype.RdfDataType">[docs]</a><span class="k">class</span> <span class="nc">RdfDataType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="s2">&quot;This class will generate a rdf data type&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdf_data_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -171,7 +175,7 @@
             <span class="c1">#! Why is uri a new property if an object?</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;objInject&quot;</span>
 
-<div class="viewcode-block" id="RdfDataType.sparql"><a class="viewcode-back" href="../../rdfdatatype.html#rdfframework.rdfdatatype.RdfDataType.sparql">[docs]</a>    <span class="k">def</span> <span class="nf">sparql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_value</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfDataType.sparql"><a class="viewcode-back" href="../../rdfframework.html#rdfframework.rdfdatatype.RdfDataType.sparql">[docs]</a>    <span class="k">def</span> <span class="nf">sparql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_value</span><span class="p">):</span>
         <span class="s2">&quot;formats a value for a sparql triple&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;object&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">iri</span><span class="p">(</span><span class="n">data_value</span><span class="p">)</span>
