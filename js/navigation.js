@@ -21,9 +21,11 @@ $('#kl-nav').after().load("/navigation.html", function(){
      	this.get('', function() { 
      		var url = $.url();
      		if (url.attr('path') == "/") {
-     			$("#kl-page").empty();
-            	$('#kl-page').load("/home.html");
-            	window.location.hash = '#main';
+     			var el = $("#kl-page")
+     			el.empty();
+            	el.load("/home.html");
+            	var offset = el.offset()
+            	window.scroll(offset.let, offset.top);
             } else {
             	window.location = url.attr('source');
             };
