@@ -32,7 +32,7 @@ $(document).ready(function () {
 
         	});
         });
-        this.get('#:folder/#:page', function() {
+        this.get('#:folder/:page', function() {
         	var el = $("#kl-page")
             el.empty();
             el.load("/" + this.params.folder + "/" + this.params.page + ".html", function(){
