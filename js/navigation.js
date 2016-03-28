@@ -11,7 +11,11 @@
 		}
 	});
 });*/
-
+$(document).ready(function () {
+        $("li.dropdown ul.dropdown-menu li").click(function (event) {
+            event.toElement.parentElement.click();
+        })
+    })
  // Client-side routes    
     Sammy(function() {
         this.get('#:page', function() {
