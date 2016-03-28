@@ -1,5 +1,5 @@
 // load the navigation bar
-$('#kl-nav').load("/navigation.html", function(){
+$('#kl-nav').after().load("/navigation.html", function(){
 	/* Set the active link in the navigation by reading the url path and
    	   and comparing it to the links in navigation */
    	var url = $.url();
