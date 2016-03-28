@@ -19,6 +19,9 @@ $('#kl-nav').after().load("/navigation.html", function(){
             $('#kl-page').load("/" + this.params.page + ".html")
         });
      	this.get('', function() { 
-     		$("#kl-page").empty();
-            $('#kl-page').load("/home.html") });   
+     		var url = $.url();
+     		if (url.attr('path').length() == 0) {
+     			$("#kl-page").empty();
+            	$('#kl-page').load("/home.html") });
+            };
     }).run();
