@@ -20,7 +20,7 @@
             el.load("/" + this.params.page + ".html", function(){
 	            var offset = el.offset()
 	            window.scroll(offset.left, offset.top);
-	            $("#navbar").find(".dropdown-toggle").attr("aria-expanded",false)
+	            $("#navbar").find(".dropdown-toggle").dropdown("toggle")
         	});
         });
      	this.get('', function() { 
