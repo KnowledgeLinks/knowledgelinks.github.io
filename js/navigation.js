@@ -22,6 +22,7 @@ $('#kl-nav').after().load("/navigation.html", function(){
      		var url = $.url();
      		if (url.attr('path').length() == 0) {
      			$("#kl-page").empty();
-            	$('#kl-page').load("/home.html") });
+            	$('#kl-page').load("/home.html");
             };
+        });
     }).run();
