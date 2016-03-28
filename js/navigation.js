@@ -11,3 +11,11 @@ $('#kl-nav').after().load("/navigation.html", function(){
 		}
 	});
 });
+
+ // Client-side routes    
+    Sammy(function() {
+        this.get('#:page', function() {
+            $("#kl-page").contents.remove();
+            $('#kl-page').load("/" + this.params.page + ".html")
+        });   
+    }).run();
