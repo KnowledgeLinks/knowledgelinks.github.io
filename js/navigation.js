@@ -21,7 +21,7 @@
 	            var offset = el.offset()
 	            window.scroll(offset.left, offset.top);
 	            $("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
-	            $("#navbar").find(".dropdown-menu").hide();
+	           // $("#navbar").find(".dropdown-menu").hide();
         	});
         });
      	this.get('', function() { 
@@ -31,7 +31,7 @@
      			el.empty();
             	el.load("/home.html");
             	$("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
-            	 $("#navbar").find(".dropdown-menu").hide();
+            	 //$("#navbar").find(".dropdown-menu").hide();
             } else {
             	window.location = url.attr('source');
             };
