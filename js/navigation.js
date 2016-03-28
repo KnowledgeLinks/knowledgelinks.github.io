@@ -23,6 +23,8 @@ $('#kl-nav').after().load("/navigation.html", function(){
      		if (url.attr('path') == "/") {
      			$("#kl-page").empty();
             	$('#kl-page').load("/home.html");
+            } else {
+            	window.location(url.attr('source'));
             };
         });
     }).run();
