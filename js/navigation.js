@@ -26,6 +26,7 @@ $(document).ready(function () {
             	var x = $(".navbar-header").find("button");
             	var y = x.height();
             	var z = x.width();
+            	var k = x.is(':visible');
             	if ($('div.nav-collapse.in').length > 0) {
             		 offset.top = offset.top + 50
             	};
