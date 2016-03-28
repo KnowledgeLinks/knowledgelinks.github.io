@@ -24,7 +24,7 @@ $('#kl-nav').after().load("/navigation.html", function(){
      			$("#kl-page").empty();
             	$('#kl-page').load("/home.html");
             } else {
-            	window.location(url.attr('source'));
+            	window.location = url.attr('source');
             };
         });
     }).run();
