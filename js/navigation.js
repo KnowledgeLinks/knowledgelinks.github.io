@@ -20,7 +20,8 @@
             el.load("/" + this.params.page + ".html", function(){
 	            var offset = el.offset()
 	            window.scroll(offset.left, offset.top);
-	            $("#navbar").find(".dropdown-toggle").dropdown("toggle")
+	            $("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
+	            $("#navbar").find(".dropdown-menu").hide();
         	});
         });
      	this.get('', function() { 
@@ -29,7 +30,8 @@
      			var el = $("#kl-page")
      			el.empty();
             	el.load("/home.html");
-            	$("#navbar").find(".dropdown-toggle").dropdown("toggle")
+            	$("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
+            	 $("#navbar").find(".dropdown-menu").hide();
             } else {
             	window.location = url.attr('source');
             };
