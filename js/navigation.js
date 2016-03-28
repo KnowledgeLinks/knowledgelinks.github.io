@@ -11,15 +11,25 @@
 		}
 	});
 });*/
-
+$(document).ready(function () {
+        $("li.dropdown ul.dropdown-menu li").click(function (event) {
+            event.toElement.parentElement.click();
+        })
+    })
  // Client-side routes    
     Sammy(function() {
         this.get('#:page', function() {
         	var el = $("#kl-page")
             el.empty();
             el.load("/" + this.params.page + ".html", function(){
-	            var offset = el.offset()
+            	var offset = el.offset();
+            	if ($(".navbar-header").find("button").is(':visible')) {
+            		 offset.top = offset.top - 50
+            	};
 	            window.scroll(offset.left, offset.top);
+	            // close all open dropdowns
+	            $('.in,.open').removeClass('in open');
+
         	});
         });
      	this.get('', function() { 
@@ -27,7 +37,14 @@
      		if (url.attr('path') == "/") {
      			var el = $("#kl-page")
      			el.empty();
-            	el.load("/home.html");
+            	el.load("/home.html", function() {
+					if ($(".navbar-header").find("button").is(':visible')) {
+						 var offset = el.offset();
+	            		 offset.top = offset.top - 50;
+	            		 window.scroll(offset.left, offset.top);
+	            	};
+		            $('.in,.open').removeClass('in open');
+		        });
             } else {
             	window.location = url.attr('source');
             };
