@@ -22,7 +22,10 @@ $(document).ready(function () {
         	var el = $("#kl-page")
             el.empty();
             el.load("/" + this.params.page + ".html", function(){
-            	var offset = el.offset()
+            	var offset = el.offset();
+            	var x = $(".navbar-header").find("button");
+            	var y = x.height();
+            	var z = x.width();
             	if ($('div.nav-collapse.in').length > 0) {
             		 offset.top = offset.top + 50
             	};
