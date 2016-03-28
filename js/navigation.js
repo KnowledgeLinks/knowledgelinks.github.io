@@ -24,7 +24,7 @@ $(document).ready(function () {
             el.load("/" + this.params.page + ".html", function(){
             	var offset = el.offset();
             	if ($(".navbar-header").find("button").is(':visible')) {
-            		 offset.top = offset.top + 50
+            		 offset.top = offset.top - 50
             	};
 	            window.scroll(offset.left, offset.top);
 	            // close all open dropdowns
@@ -40,7 +40,7 @@ $(document).ready(function () {
             	el.load("/home.html", function() {
 					if ($(".navbar-header").find("button").is(':visible')) {
 						 var offset = el.offset();
-	            		 offset.top = offset.top + 50;
+	            		 offset.top = offset.top - 50;
 	            		 window.scroll(offset.left, offset.top);
 	            	};
 		            $('.in,.open').removeClass('in open');
