@@ -20,7 +20,7 @@ $('#kl-nav').after().load("/navigation.html", function(){
         });
      	this.get('', function() { 
      		var url = $.url();
-     		if (url.attr('path').length() == 0) {
+     		if (url.attr('path').length() == 1) {
      			$("#kl-page").empty();
             	$('#kl-page').load("/home.html");
             };
