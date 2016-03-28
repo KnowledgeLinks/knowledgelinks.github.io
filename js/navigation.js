@@ -32,6 +32,20 @@ $(document).ready(function () {
 
         	});
         });
+        this.get('#:folder/', function() {
+        	var el = $("#kl-page")
+            el.empty();
+            el.load("/" + this.params.folder + "/index.html", function(){
+            	var offset = el.offset();
+            	if ($(".navbar-header").find("button").is(':visible')) {
+            		 offset.top = offset.top - 50
+            	};
+	            window.scroll(offset.left, offset.top);
+	            // close all open dropdowns
+	            $('.in,.open').removeClass('in open');
+
+        	});
+        });
         this.get('#:folder/:page', function() {
         	var el = $("#kl-page")
             el.empty();
