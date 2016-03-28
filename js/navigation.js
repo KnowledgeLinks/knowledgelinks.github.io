@@ -24,6 +24,7 @@ $(document).ready(function () {
             el.load("/" + this.params.page + ".html", function(){
 	            var offset = el.offset()
 	            window.scroll(offset.left, offset.top);
+	            $('.in,.open').removeClass('in open');
 	           /* $("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
 	            $("#navbar").find("a").click(function() {
 	            	$(this).closest(".doprdown-toggle").dropdown("toggle");
@@ -40,6 +41,7 @@ $(document).ready(function () {
             	$("#navbar").find("a").click(function() {
 	            	$(this).closest(".doprdown-toggle").dropdown("toggle");
 	            });*/
+	            $('.in,.open').removeClass('in open');
             } else {
             	window.location = url.attr('source');
             };
