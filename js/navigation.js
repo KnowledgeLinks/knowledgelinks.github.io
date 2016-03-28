@@ -20,10 +20,10 @@
             el.load("/" + this.params.page + ".html", function(){
 	            var offset = el.offset()
 	            window.scroll(offset.left, offset.top);
-	            $("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
+	           /* $("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
 	            $("#navbar").find("a").click(function() {
 	            	$(this).closest(".doprdown-toggle").dropdown("toggle");
-	            });
+	            });*/
         	});
         });
      	this.get('', function() { 
@@ -32,10 +32,10 @@
      			var el = $("#kl-page")
      			el.empty();
             	el.load("/home.html");
-            	$("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
+            	/*$("#navbar").find(".dropdown-toggle").attr("aria-expanded",false);
             	$("#navbar").find("a").click(function() {
 	            	$(this).closest(".doprdown-toggle").dropdown("toggle");
-	            });
+	            });*/
             } else {
             	window.location = url.attr('source');
             };
