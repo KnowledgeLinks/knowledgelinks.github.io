@@ -23,11 +23,7 @@ $(document).ready(function () {
             el.empty();
             el.load("/" + this.params.page + ".html", function(){
             	var offset = el.offset();
-            	var x = $(".navbar-header").find("button");
-            	var y = x.height();
-            	var z = x.width();
-            	var k = x.is(':visible');
-            	if ($('div.nav-collapse.in').length > 0) {
+            	if ($(".navbar-header").find("button").is(':visible')) {
             		 offset.top = offset.top + 50
             	};
 	            window.scroll(offset.left, offset.top);
@@ -42,7 +38,11 @@ $(document).ready(function () {
      			var el = $("#kl-page")
      			el.empty();
             	el.load("/home.html");
-
+				if ($(".navbar-header").find("button").is(':visible')) {
+					 var offset = el.offset();
+            		 offset.top = offset.top + 50;
+            		 window.scroll(offset.left, offset.top);
+            	};
 	            $('.in,.open').removeClass('in open');
             } else {
             	window.location = url.attr('source');
