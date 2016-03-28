@@ -37,13 +37,14 @@ $(document).ready(function () {
      		if (url.attr('path') == "/") {
      			var el = $("#kl-page")
      			el.empty();
-            	el.load("/home.html");
-				if ($(".navbar-header").find("button").is(':visible')) {
-					 var offset = el.offset();
-            		 offset.top = offset.top + 50;
-            		 window.scroll(offset.left, offset.top);
-            	};
-	            $('.in,.open').removeClass('in open');
+            	el.load("/home.html", function() {
+					if ($(".navbar-header").find("button").is(':visible')) {
+						 var offset = el.offset();
+	            		 offset.top = offset.top + 50;
+	            		 window.scroll(offset.left, offset.top);
+	            	};
+		            $('.in,.open').removeClass('in open');
+		        });
             } else {
             	window.location = url.attr('source');
             };
