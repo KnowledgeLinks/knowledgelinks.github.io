@@ -18,7 +18,29 @@ $(document).ready(function () {
     })
  // Client-side routes    
     Sammy(function() {
-        this.get('#:folder', function() {
+        this.get('#/:folder', function() {
+        	var el = $("#kl-page")
+            el.empty();
+            el.load("/" + this.params.folder + "/index.html", function(){
+            	var offset = el.offset();
+            	if ($(".navbar-header").find("button").is(':visible')) {
+            		 offset.top = offset.top - 50
+            	};
+            	var url = $.url();
+            	$("#navbar").find('a').each( function () {
+            		if (url.attr('path') == $(this).attr('href')) {
+						$(this).closest( "li" ).addClass("active")
+					} else {
+						$(this).closest( "li" ).removeClass("active")
+					}
+				});	
+	            window.scroll(offset.left, offset.top);
+	            // close all open dropdowns
+	            $('.in,.open').removeClass('in open');
+
+        	});
+        });
+        this.get('#/:folder/', function() {
         	var el = $("#kl-page")
             el.empty();
             el.load("/" + this.params.folder + "/index.html", function(){
@@ -32,21 +54,7 @@ $(document).ready(function () {
 
         	});
         });
-        this.get('#:folder/', function() {
-        	var el = $("#kl-page")
-            el.empty();
-            el.load("/" + this.params.folder + "/index.html", function(){
-            	var offset = el.offset();
-            	if ($(".navbar-header").find("button").is(':visible')) {
-            		 offset.top = offset.top - 50
-            	};
-	            window.scroll(offset.left, offset.top);
-	            // close all open dropdowns
-	            $('.in,.open').removeClass('in open');
-
-        	});
-        });
-        this.get('#:folder/:page', function() {
+        this.get('#/:folder/:page', function() {
         	var el = $("#kl-page")
             el.empty();
             el.load("/" + this.params.folder + "/" + this.params.page + ".html", function(){
