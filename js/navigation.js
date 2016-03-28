@@ -29,7 +29,7 @@
      			var el = $("#kl-page")
      			el.empty();
             	el.load("/home.html");
-            	$("#navbar").find(".dropdown-toggle").attr("aria-expanded",false)
+            	$("#navbar").find(".dropdown-toggle").dropdown("toggle")
             } else {
             	window.location = url.attr('source');
             };
