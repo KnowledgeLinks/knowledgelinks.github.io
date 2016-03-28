@@ -15,8 +15,11 @@ $('#kl-nav').after().load("/navigation.html", function(){
  // Client-side routes    
     Sammy(function() {
         this.get('#:page', function() {
-            $("#kl-page").empty();
-            $('#kl-page').load("/" + this.params.page + ".html")
+        	var el = $("#kl-page")
+            el.empty();
+            el.load("/" + this.params.page + ".html")
+            var offset = el.offset()
+            window.scroll(offset.left, offset.top);
         });
      	this.get('', function() { 
      		var url = $.url();
@@ -24,8 +27,6 @@ $('#kl-nav').after().load("/navigation.html", function(){
      			var el = $("#kl-page")
      			el.empty();
             	el.load("/home.html");
-            	var offset = el.offset()
-            	window.scroll(offset.let, offset.top);
             } else {
             	window.location = url.attr('source');
             };
