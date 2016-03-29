@@ -34,7 +34,9 @@ $(document).ready(function () {
      			var el = $("#kl-page")
      			el.empty();
             	el.load("/home.html", function() {
-	            	scrollPage()
+            		if ($(".navbar-header").find("button").is(':visible')) { 
+	            		scrollPage();
+	            	};
 	            });
             } else {
             	window.location = url.attr('source');
