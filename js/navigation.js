@@ -29,9 +29,10 @@ $(document).ready(function () {
             });
         });
         this.get('#:pageRef', function() {
-        	var el = $("#"+this.params.pageRef)
-        	if (el.length > 0) {
-        		offset = el.offset();
+        	var pageEl = $("#"+this.params.pageRef)
+        	var el = $("#kl-page")
+        	if (pageEl.length > 0) {
+        		offset = pageEl.offset();
         		window.scroll(offset.left, offset.top-50);
         	} else {
 	            el.empty();
