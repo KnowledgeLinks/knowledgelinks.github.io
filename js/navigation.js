@@ -40,7 +40,7 @@ function highlightActiveNav() {
 	var url = $.url();
 	$("#navbar").find('a').each( function () {
 		if (url.attr('relative') == "/" + $(this).attr('href')||
-				url.attr('source') == $(this).attr('href') {
+				url.attr('source') == $(this).attr('href')) {
 			$(this).closest( "li" ).addClass("active")
 		} else {
 			if ($(this).closest( "li" ).hasClass("dropdown")&&
