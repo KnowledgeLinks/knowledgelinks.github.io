@@ -37,6 +37,9 @@ function highlightActiveNav() {
 	/* Set the active link in the navigation by reading the url path and
    	   and comparing it to the links in navigation */
 	$("#navbar").find('a').each( function () {
+		var r = url.attr('relative');
+		var h = $(this).attr('href');
+		var s = url.attr('source');
 		if (url.attr('relative') == $(this).attr('href')||
 			url.attr('source') == $(this).attr('href')) {
 			$(this).closest( "li" ).addClass("active")
