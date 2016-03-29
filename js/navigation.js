@@ -1,4 +1,4 @@
-var url = $.url();
+
 
 $(document).ready(function () {
         $("li.dropdown ul.dropdown-menu li").click(function (event) {
@@ -23,6 +23,7 @@ $(document).ready(function () {
             el.load("/" + this.params.folder + "/" + this.params.page + ".html", scrollPage());
         });
      	this.get('', function() { 
+     		var url = $.url();
      		if (url.attr('path') == "/") {
      			var el = $("#kl-page")
      			el.empty();
@@ -36,12 +37,15 @@ $(document).ready(function () {
 function highlightActiveNav() {
 	/* Set the active link in the navigation by reading the url path and
    	   and comparing it to the links in navigation */
+	var url = $.url();
 	$("#navbar").find('a').each( function () {
 		var r = url.attr('relative');
 		var h = $(this).attr('href');
 		var s = url.attr('source');
+		
 		if (url.attr('relative') == "/" + $(this).attr('href')||
-			url.attr('source') == $(this).attr('href')) {
+			url.attr('source') == $(this).attr('href')||
+			("/" + $(this).attr('href')).indexOf(url.attr('relative')) > -1 ) {
 			$(this).closest( "li" ).addClass("active")
 		} else {
 			$(this).closest( "li" ).removeClass("active")
