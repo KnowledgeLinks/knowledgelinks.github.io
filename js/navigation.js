@@ -28,6 +28,18 @@ $(document).ready(function () {
             	scrollPage()
             });
         });
+        this.get('#:pageRef', function() {
+        	var el = $("#"+this.params.pageRef)
+        	if (el.length > 0) {
+        		offset = el.offset();
+        		window.scroll(offset.left, offset.top-50);
+        	} else {
+	            el.empty();
+	            el.load("/" + this.params.pageRef + ".html", function() {
+	            	scrollPage()
+	            });
+	        }
+        });
      	this.get('', function() { 
      		var url = $.url();
      		if (url.attr('path') == "/") {
