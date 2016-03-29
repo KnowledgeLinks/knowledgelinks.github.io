@@ -10,24 +10,32 @@ $(document).ready(function () {
         this.get('#/:folder', function() {
         	var el = $("#kl-page")
             el.empty();
-            el.load("/" + this.params.folder + "/index.html", scrollPage());
+            el.load("/" + this.params.folder + "/index.html", function() {
+            	scrollPage()
+            });
         });
         this.get('#/:folder/', function() {
         	var el = $("#kl-page")
             el.empty();
-            el.load("/" + this.params.folder + "/index.html", scrollPage());
+            el.load("/" + this.params.folder + "/index.html", function() {
+            	scrollPage()
+            });
         });
         this.get('#/:folder/:page', function() {
         	var el = $("#kl-page")
             el.empty();
-            el.load("/" + this.params.folder + "/" + this.params.page + ".html", scrollPage());
+            el.load("/" + this.params.folder + "/" + this.params.page + ".html", function() {
+            	scrollPage()
+            });
         });
      	this.get('', function() { 
      		var url = $.url();
      		if (url.attr('path') == "/") {
      			var el = $("#kl-page")
      			el.empty();
-            	el.load("/home.html", scrollPage());
+            	el.load("/home.html", function() {
+	            	scrollPage()
+	            });
             } else {
             	window.location = url.attr('source');
             };
