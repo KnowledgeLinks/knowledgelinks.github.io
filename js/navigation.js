@@ -36,6 +36,8 @@ $(document).ready(function () {
             	el.load("/home.html", function() {
             		if ($(".navbar-header").find("button").is(':visible')) { 
 	            		scrollPage();
+	            	} else {
+	            		highlightActiveNav();
 	            	};
 	            });
             } else {
