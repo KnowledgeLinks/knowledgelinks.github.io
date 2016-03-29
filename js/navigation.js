@@ -39,17 +39,16 @@ function highlightActiveNav() {
    	   and comparing it to the links in navigation */
 	var url = $.url();
 	$("#navbar").find('a').each( function () {
-		var r = url.attr('relative');
-		var h = "/" + $(this).attr('href');
-		var s = url.attr('source');
-		var x = (url.attr('relative')).indexOf("/" + $(this).attr('href'))
-		var y = ("/" + $(this).attr('href')).indexOf(url.attr('relative'))
 		if (url.attr('relative') == "/" + $(this).attr('href')||
-			url.attr('source') == $(this).attr('href')||
-			x > -1 ) {
+				url.attr('source') == $(this).attr('href') {
 			$(this).closest( "li" ).addClass("active")
 		} else {
-			$(this).closest( "li" ).removeClass("active")
+			if ($(this).closest( "li" ).hasClass("dropdown")&&
+					url.attr('relative').indexOf("/" + $(this).attr('href'))) {
+				$(this).closest( "li" ).addClass("active");
+			} else {
+				$(this).closest( "li" ).removeClass("active");
+			};
 		}
 	});
 };
