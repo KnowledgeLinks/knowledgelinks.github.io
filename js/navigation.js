@@ -44,7 +44,7 @@ function highlightActiveNav() {
 			$(this).closest( "li" ).addClass("active")
 		} else {
 			if ($(this).closest( "li" ).hasClass("dropdown")&&
-					url.attr('relative').indexOf("/" + $(this).attr('href'))) {
+					url.attr('relative').indexOf("/" + $(this).attr('href'))>-1) {
 				$(this).closest( "li" ).addClass("active");
 			} else {
 				$(this).closest( "li" ).removeClass("active");
