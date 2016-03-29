@@ -40,12 +40,13 @@ function highlightActiveNav() {
 	var url = $.url();
 	$("#navbar").find('a').each( function () {
 		var r = url.attr('relative');
-		var h = $(this).attr('href');
+		var h = "/" + $(this).attr('href');
 		var s = url.attr('source');
-		
+		var x = (url.attr('relative')).indexOf("/" + $(this).attr('href'))
+		var y = ("/" + $(this).attr('href')).indexOf(url.attr('relative'))
 		if (url.attr('relative') == "/" + $(this).attr('href')||
 			url.attr('source') == $(this).attr('href')||
-			("/" + $(this).attr('href')).indexOf(url.attr('relative')) > -1 ) {
+			x > -1 ) {
 			$(this).closest( "li" ).addClass("active")
 		} else {
 			$(this).closest( "li" ).removeClass("active")
