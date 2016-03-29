@@ -38,7 +38,7 @@ function highlightActiveNav() {
    	   and comparing it to the links in navigation */
 	$("#navbar").find('a').each( function () {
 		if (url.attr('relative') == $(this).attr('href')||
-			(url.attr('source') == $(this).attr('href')) {
+			url.attr('source') == $(this).attr('href')) {
 			$(this).closest( "li" ).addClass("active")
 		} else {
 			$(this).closest( "li" ).removeClass("active")
