@@ -65,9 +65,9 @@ function scrollPage(){
 	/* scrolls the page to the first content and closes all bootstrap dropdowns */
 	var el = $("#kl-page");
 	var offset = el.offset();
-	if ($(".navbar-header").find("button").is(':visible')) {
+	//if ($(".navbar-header").find("button").is(':visible')) {
 		 offset.top = offset.top - 50
-	};
+	//};
 	window.scroll(offset.left, offset.top);
 	highlightActiveNav()
     // close all open dropdowns
