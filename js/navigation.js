@@ -61,6 +61,7 @@ $(document).ready(function () {
 	            	};
 	            });
             } else {
+            	$('body').attr("onunload","")
             	window.location = url.attr('source');
             };
         });
@@ -99,6 +100,3 @@ function scrollPage(){
 
 }
 
-window.onload = function() {
-	alert("test")
-};
