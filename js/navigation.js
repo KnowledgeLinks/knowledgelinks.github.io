@@ -98,3 +98,9 @@ function scrollPage(){
     $('.in,.open').removeClass('in open');
 
 }
+
+script.onreadystatechange(function(){ 
+   if(script.readyState == 'loaded' || script.readyState == 'complete') {
+      alert("test");
+   } 
+});
