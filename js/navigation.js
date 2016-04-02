@@ -61,7 +61,7 @@ $(document).ready(function () {
 	            	};
 	            });
             } else {
-            	window.location.href = url.attr('source');
+            	window.location.replace(url.attr('source'));
             };
         });
     }).run();
