@@ -52,7 +52,8 @@ $(document).ready(function () {
      			el.empty();
             	el.load("/home.html", function() {
             		if ($(".navbar-header").find("button").is(':visible')) { 
-	            		scrollPage();
+            			$(".blurred-container").addClass("non-homepage-blur");
+	            		//scrollPage();
 	            	} else {
 	            		highlightActiveNav();
 	            	};
