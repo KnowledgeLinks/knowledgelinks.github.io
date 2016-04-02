@@ -53,7 +53,8 @@ $(document).ready(function () {
             	el.load("/home.html", function() {
             		if ($(".navbar-header").find("button").is(':visible')) { 
             			$(".blurred-container").addClass("non-homepage-blur");
-	            		//scrollPage();
+	            		$(".navbar-transparent").addClass("navbar-transparent-small");
+	            		scrollPage();
 	            	} else {
 	            		highlightActiveNav();
 	            	};
