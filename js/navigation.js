@@ -61,8 +61,7 @@ $(document).ready(function () {
 	            	};
 	            });
             } else {
-            	$('body').attr("onunload","")
-            	window.location = url.attr('source');
+            	window.location.href = url.attr('source');
             };
         });
     }).run();
