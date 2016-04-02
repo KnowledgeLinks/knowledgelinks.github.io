@@ -55,6 +55,7 @@ $(document).ready(function () {
             			$(".blurred-container").addClass("non-homepage-blur");
 	            		$(".navbar-transparent").addClass("navbar-transparent-small");
 	            		scrollPage();
+	            		$('.in,.open').removeClass('in open');
 	            	} else {
 	            		highlightActiveNav();
 	            	};
