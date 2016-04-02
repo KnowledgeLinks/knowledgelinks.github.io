@@ -99,7 +99,7 @@ function scrollPage(){
 
 }
 
-script.onreadystatechange(function(){ 
+$(document).onreadystatechange(function(){ 
    if(script.readyState == 'loaded' || script.readyState == 'complete') {
       alert("test");
    } 
