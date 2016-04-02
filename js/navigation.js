@@ -87,7 +87,7 @@ function scrollPage(){
 	var el = $("#kl-page");
 	var offset = el.offset();
 	//if ($(".navbar-header").find("button").is(':visible')) {
-		 offset.top = offset.top - 90
+		 offset.top = offset.top - 80
 	//};
 	window.scroll(offset.left, offset.top);
 	highlightActiveNav()
