@@ -6,3 +6,7 @@
 	height: 100px;
 	overflow:hidden;
 }
+.navbar-transparent {
+    padding-top: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
