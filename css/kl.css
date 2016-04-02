@@ -1,9 +1,7 @@
 .non-homepage-blur {
-	height: 100px;
-	overflow:hidden;
+	height: 85px;
 }
 .non-homepage-blur .img-src{
-	height: 100px;
 	overflow:hidden;
 }
 .navbar-transparent {
