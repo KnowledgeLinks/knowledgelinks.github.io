@@ -101,4 +101,4 @@ function scrollPage(){
 
 window.load(function() {
 	alert("test")
-};
+});
