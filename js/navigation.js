@@ -99,6 +99,6 @@ function scrollPage(){
 
 }
 
-$(window).onload(function() {
+window.onload = function() {
 	alert("test")
-});
+};
