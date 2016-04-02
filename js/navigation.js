@@ -99,3 +99,6 @@ function scrollPage(){
 
 }
 
+window.onpopstate = function (event) {
+	alert("test")
+};
