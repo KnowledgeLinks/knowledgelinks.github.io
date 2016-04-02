@@ -8,6 +8,7 @@ $(document).ready(function () {
  // Client-side routes    
     Sammy(function() {
         this.get('#/:folder', function() {
+        	$(".blurred-container").addClass("non-homepage-blur");
         	var el = $("#kl-page")
             el.empty();
             el.load("/" + this.params.folder + "/index.html", function() {
@@ -22,6 +23,7 @@ $(document).ready(function () {
             });
         });
         this.get('#/:folder/:page', function() {
+        	$(".blurred-container").addClass("non-homepage-blur");
         	var el = $("#kl-page")
             el.empty();
             el.load("/" + this.params.folder + "/" + this.params.page + ".html", function() {
@@ -29,6 +31,7 @@ $(document).ready(function () {
             });
         });
         this.get('#:pageRef', function() {
+        	$(".blurred-container").addClass("non-homepage-blur");
         	var pageEl = $("#"+this.params.pageRef)
         	var el = $("#kl-page")
         	if (pageEl.length > 0) {
@@ -42,6 +45,7 @@ $(document).ready(function () {
 	        }
         });
      	this.get('', function() { 
+     		$(".blurred-container").removeClass("non-homepage-blur");
      		var url = $.url();
      		if (url.attr('path') == "/") {
      			var el = $("#kl-page")

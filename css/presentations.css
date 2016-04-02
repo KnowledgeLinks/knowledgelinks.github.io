@@ -10,3 +10,7 @@
 .info-group {
 	display:inline-block;
 }
+
+.non-homepage-blur {
+	height: 90px
+}
