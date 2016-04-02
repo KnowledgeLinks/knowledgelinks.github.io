@@ -1,4 +1,8 @@
 .non-homepage-blur {
-	height: 90px
+	height: 100px;
+	overflow:hidden;
 }
-
+.non-homepage-blur .img-src{
+	height: 100px;
+	overflow:hidden;
+}
