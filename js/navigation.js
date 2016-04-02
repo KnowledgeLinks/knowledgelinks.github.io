@@ -99,8 +99,6 @@ function scrollPage(){
 
 }
 
-$(document).onreadystatechange(function(){ 
-   if(script.readyState == 'loaded' || script.readyState == 'complete') {
-      alert("test");
-   } 
-});
+window.load(function() {
+	alert("test")
+};
