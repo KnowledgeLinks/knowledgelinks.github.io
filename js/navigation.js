@@ -98,7 +98,3 @@ function scrollPage(){
     $('.in,.open').removeClass('in open');
 
 }
-
-window.onpopstate = function (event) {
-	alert("test")
-};
