@@ -61,8 +61,9 @@ $(document).ready(function () {
 	            	};
 	            });
             } else {
-            	this.unload();
             	window.location.replace(url.attr('source'));
+            	this.unload();
+            	
             };
         });
     }).run();
