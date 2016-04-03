@@ -7,7 +7,6 @@ $(document).ready(function () {
     })
  // Client-side routes    
     Sammy(function() {
-    	alert("sammy")
         this.get('#/:folder', function() {
         	$(".blurred-container").addClass("non-homepage-blur");
         	var el = $("#kl-page")
