@@ -45,7 +45,7 @@ $(document).ready(function () {
 	            });
 	        }
         });
-     	this.get('', function() { 
+     	this.get('/', function() { 
      		$(".blurred-container").removeClass("non-homepage-blur");
      		var url = $.url();
      		if (url.attr('path') == "/") {
