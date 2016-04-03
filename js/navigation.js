@@ -61,6 +61,7 @@ $(document).ready(function () {
 	            	};
 	            });
             } else {
+            	this.unload();
             	window.location.replace(url.attr('source'));
             };
         });
@@ -97,4 +98,15 @@ function scrollPage(){
     // close all open dropdowns
     $('.in,.open').removeClass('in open');
 
+}
+
+function myUrl() {
+    var url= window.location.href;
+    if (window.location.hash) {
+        url= url.replace(window.location.hash, "");
+    }
+    if (window.location.search) {
+        url= url.replace(window.location.search, "");
+    }
+    return url;
 }
