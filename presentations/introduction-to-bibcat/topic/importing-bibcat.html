@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+    <head>
+        <title></title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" 
+              href="../static/css/uikit.min.css" />
+        <!-- UIkit JS -->
+        <script src="../static/js/uikit.min.js"></script>
+        <script src="../static/js/uikit-icons.min.js"></script>
+    </head>
+    <body>
+    
+    <nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li><a href="http://knowledgelinks.io">KL</a></li>
+            <li class=""><a href="../index.html">Introduction to BIBCAT</a></li>
+            <li >
+                <a href="quickstart.html">Quickstart</a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="install.html">
+                                Installing BIBCAT
+                            </a>
+                        </li>
+                        <li>
+                            <a href="importing-bibcat.html">
+                                Importing BIBCAT and Overview of Functions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marc2bibframe2.html">
+                                Using marc2bibframe2 XSLT
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li >
+                <a href="rdf-mapping.html">
+                        RDF Mapping Language (RML)
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="filtering-bibframe.html">
+                                Filtering BIBFRAME 2.0
+                            </a>
+                        </li>
+                        <li>
+                           <a href="mods-to-bibframe-map.html">
+                                MODS XML to BIBFRAME 2.0 Map
+                            </a>
+                        </li>
+                        <li>
+                           <a href="dublin-core-to-bibframe-map.html">
+                                Dublin Core to BIBFRAME Map
+                            </a>
+                        </li>
+                        <li></li>
+                        <li>
+                           <a href="bibframe-to-dpla-map4-map.html">
+                                BIBFRAME 2.0 to DP.LA MAPv4
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="bibframe-to-schema-org-map.html">
+                                BIBFRAME to Schema.org Linked Data
+                            </a>
+                        </li>
+                        <li>
+                            <a href="custom-rml-rule.html">
+                                Custom RML Rules
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-linking.html">
+                    BIBCAT Linking
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="loc-authorities-linker.html">
+                                Library of Congress Authorities Linker
+                            </a>
+                        </li>
+                        <li>
+                            <a href="geonames-linker.html">
+                                Geonames.org Linker
+                            </a>
+                        </li>
+                        
+                    </ul> 
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-future.html">
+                    Future of BIBCAT
+                </a>
+                </li>
+       </ul>
+
+    </div>
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            
+            <li><a href="install.html" 
+               uk-icon="icon:  chevron-left"></a>
+            </li>
+            
+            <li><a href="../index.html"
+               uk-icon="icon: home"></a>
+            </li>
+            
+            <li><a href="marc2bibframe2.html" 
+               uk-icon="icon:  chevron-right"></a>
+            </li>
+            
+            <li><a href="#">About</a></li>
+        </ul>
+    </div>
+</nav>
+    
+    
+<div class="uk-container">
+    <div uk-grid>
+        <article class="uk-article">
+           <h1 class="uk-article-title">Importing BIBCAT and Overview of Functions</h1>
+           <p class="uk-article-meta">Written by 
+               <a href="http://orcid.org/0000-0002-7543-3893">Jeremy Nelson</a> on
+               2017-10-30
+           </p>
+           <h2>Importing BIBCAT</h2>
+<p>To import <a href="https://github.com/KnowledgeLinks/bibcat">BIBCAT</a>, first activate your Virtual Environment and then launch 
+the Python <a href="">IDLE</a> program with this command <code>(bibcat-env) $ python -m idlelib</code>.</p>
+<pre><code>
+Python 3.6.0 (v3.6.0:41df79263a11, Dec 23 2016, 08:06:12) [MSC v.1900 64 bit (AMD64)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> import bibcat
+INFO:rdflib:RDFLib Version: 4.2.2
+>>> bibcat.__version__
+'1.18.1'
+</code></pre>
+
+<h2>Setup for Exercises</h2>
+<p>Before we explore <code>bibcat</code>, we'll create a minimal RDF environment to use 
+through-out this tutorial.</p>
+<ol>
+<li>
+<p>Import <code>rdflib</code> module 
+    <pre><code>&gt;&gt;&gt; import rdflib</code></pre></p>
+</li>
+<li>
+<p>Create a BIBFRAME 2.0 Namespace <code>BF</code></p>
+<p><pre><code>&gt;&gt;&gt; BF = rdflib.Namespace("http://id.loc.gov/ontologies/bibframe/")</code></pre></p>
+</li>
+<li>
+<p>Create a test RDF graph
+    <pre><code>&gt;&gt;&gt; test_graph = bibcat.rdflib.Graph()</code></pre></p>
+</li>
+<li>
+<p>BIND BIBFRAME namespace in graph
+    <pre><code>&gt;&gt;&gt; test_graph.namespace_manager.bind("bf", BF)</code></pre></p>
+</li>
+</ol>
+<h2>Overview of BIBCAT Functions</h2>
+<p>The base <code>bibcat</code> module has a number of helpful RDF functions when building Semantic
+Web and Linked Data applications </p>
+<h3>_is_valid_uri, clean_uris, create_rdf_list</h3>
+<p>The <code>bibcat._is_valid_uri</code> function is used internally by other functions in the base
+bibcat module. This function uses <code>rdflib</code> internal functions for validating 
+URIs. </p>
+<pre><code>
+>>> bibcat._is_valid_uri("http://bibcat.org/")
+True
+>>> bibcat._is_valid_uri("http://bibcat.org/ ")
+False
+>>>
+</code></pre>
+
+<p>The <code>bibcat.clean_uris</code> function is used in post-processing the RDF produced by
+the Library of Congress's <a href="/topic/marc2bibframe2">marc2bibframe2</a> XSLT 
+process which sometimes includes URIs that are invalid and cause errors
+when trying to process further with either <code>bibcat.rml.processor</code> 
+or <code>bibcat.linkers</code> classes.</p>
+<p>The <code>bibcat.create_rdf_list</code> function creates a RDF List that preserves the
+order of the elements in RDF. Many of the complex subjects that result
+from the MARC XML-to-BIBFRAME 2.0 <a href="/topic/marc2bibframe2">marc2bibframe2</a> XSLT 
+transform. </p>
+<h3>delete_bnode, delete_iri, replace_iri</h3>
+<p>The <code>delete_bnode</code>, <code>delete_iri</code>, and <code>replace_iri</code> helper functions are used
+by multiple <code>bibcat</code> submodules. These helper functions allow for easier manipulation
+of RDF Graphs to link-out and replace local instances of a RDF entity with a linked
+URI that exists locally or through an external linking entity like the Library of Congress
+or Geonames. </p>
+<h3>slugify and wikify</h3>
+<p>The <code>bibcat.slugify</code> and <code>bibcat.wikify</code> allow you to create human-readable but valid
+URIs for use in your Linked Data applications.</p>
+<p>The <code>bibcat.slugify</code> function takes a string, lowercases all characters, replaces 
+spaces with dashes, and removes any punctuation.</p>
+<pre><code>
+>>> bibcat.slugify("A short message.")
+'a-short-message'
+>>> bibcat.slugify("A Very Long Title by Dr. First name Second name")
+'a-very-long-title-by-dr-first-name-second-name'
+</code></pre>
+
+<p>The <code>bibcat.wikify</code> is similar function but converts a string that follows 
+[Wikipedia][https://en.wikipedia.org/wiki/Main_Page] patter of keeping capitalization
+and replacing punctuation and spaces with underscores.</p>
+<pre><code>
+>>> bibcat.wikify("A short message.")
+'A_short_message'
+>>> bibcat.wikify("A Very Long Title by Dr. First name Second name")
+'A_Very_Long_Title_by_Dr_First_name_Second_name'</code></pre>
+
+<p>Now that we have had a quick overview of some of the base <code>bibcat</code> functions,
+we'll <a href="/topic/marc2bibframe2">next</a> use the Library of Congress <code>marc2bibframe2</code> to 
+transform MARC XML records to BIBFRAME 2.0 RDF XML.</p>
+        </article>
+    </div>
+</div>
+
+    
+<div class="uk-container uk-margin-large-top">
+   <ul class="uk-iconnav">
+      
+      <a href="install.html" 
+         uk-icon="icon:  chevron-left"></a>
+      
+      <a href="../index.html"
+         uk-icon="icon: home"></a>
+       
+      <a href="marc2bibframe2.html" 
+         uk-icon="icon:  chevron-right"></a>
+      
+   </ul>
+</div>
+
+    <div class="uk-container uk-margin-large-top">
+        <p class="uk-text-muted">
+            Original contented Copyrighted &copy; 2017 by Jeremy Nelson and 
+            <a href="http://knowledgelinks.io">KnowledgeLinks</a> under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                <img alt="Creative Commons License" style="border-width:0" 
+                src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>,
+            Source code repository licensed under the Apache 2 and available on 
+            <a href="https://github.com/KnowledgeLinks/introduction-to-bibcat">Github</a>.
+        </p>
+    </div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-70910607-1"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+
+     gtag('config', 'UA-70910607-1');
+    </script>
+    <script async defer src="https://hypothes.is/embed.js"></script>
+
+    </body>
+</html>

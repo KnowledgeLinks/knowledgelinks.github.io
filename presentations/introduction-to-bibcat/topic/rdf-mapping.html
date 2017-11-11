@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+    <head>
+        <title></title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" 
+              href="../static/css/uikit.min.css" />
+        <!-- UIkit JS -->
+        <script src="../static/js/uikit.min.js"></script>
+        <script src="../static/js/uikit-icons.min.js"></script>
+    </head>
+    <body>
+    
+    <nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li><a href="http://knowledgelinks.io">KL</a></li>
+            <li class=""><a href="../index.html">Introduction to BIBCAT</a></li>
+            <li >
+                <a href="quickstart.html">Quickstart</a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="install.html">
+                                Installing BIBCAT
+                            </a>
+                        </li>
+                        <li>
+                            <a href="importing-bibcat.html">
+                                Importing BIBCAT and Overview of Functions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marc2bibframe2.html">
+                                Using marc2bibframe2 XSLT
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="uk-active">
+                <a href="rdf-mapping.html">
+                        RDF Mapping Language (RML)
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="filtering-bibframe.html">
+                                Filtering BIBFRAME 2.0
+                            </a>
+                        </li>
+                        <li>
+                           <a href="mods-to-bibframe-map.html">
+                                MODS XML to BIBFRAME 2.0 Map
+                            </a>
+                        </li>
+                        <li>
+                           <a href="dublin-core-to-bibframe-map.html">
+                                Dublin Core to BIBFRAME Map
+                            </a>
+                        </li>
+                        <li></li>
+                        <li>
+                           <a href="bibframe-to-dpla-map4-map.html">
+                                BIBFRAME 2.0 to DP.LA MAPv4
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="bibframe-to-schema-org-map.html">
+                                BIBFRAME to Schema.org Linked Data
+                            </a>
+                        </li>
+                        <li>
+                            <a href="custom-rml-rule.html">
+                                Custom RML Rules
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-linking.html">
+                    BIBCAT Linking
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="loc-authorities-linker.html">
+                                Library of Congress Authorities Linker
+                            </a>
+                        </li>
+                        <li>
+                            <a href="geonames-linker.html">
+                                Geonames.org Linker
+                            </a>
+                        </li>
+                        
+                    </ul> 
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-future.html">
+                    Future of BIBCAT
+                </a>
+                </li>
+       </ul>
+
+    </div>
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            
+            <li><a href="marc2bibframe2.html" 
+               uk-icon="icon:  chevron-left"></a>
+            </li>
+            
+            <li><a href="../index.html"
+               uk-icon="icon: home"></a>
+            </li>
+            
+            <li><a href="filtering-bibframe.html" 
+               uk-icon="icon:  chevron-right"></a>
+            </li>
+            
+            <li><a href="#">About</a></li>
+        </ul>
+    </div>
+</nav>
+    
+    
+<div class="uk-container">
+    <div uk-grid>
+        <article class="uk-article">
+           <h1 class="uk-article-title">RDF Mapping Language (RML)</h1>
+           <p class="uk-article-meta">Written by 
+               <a href="http://orcid.org/0000-0002-7543-3893">Jeremy Nelson</a> on
+               2017-10-30
+           </p>
+           <p><a href="http://rml.io">RDF Mapping Language</a> or RML is a specification for creating rules or
+mappings between different input data sources like XML, JSON, CSV, Relational 
+Databases, and even other RDF triplestores through SPARQL to RDF triples. </p>
+<p>RML itself is constructed using RDF so knowing how to write RDF (Turtle is usually easier
+to write and comprehend for RML maps) allows you to create mappings between the input
+data and your target RDF. </p>
+<p>
+<img src="/static/img/RMLmappingMethod.png">
+</p>
+
+<p><em>Source:</em> <a href="http://rml.io/">http://rml.io/</a></p>
+<p>Each rule is a <code>TriplesMap</code> class that contains</p>
+<ul>
+<li>A <code>logicalSource</code> predicate containing what type of input data source.</li>
+<li>A <code>subjectMap</code> predicate that allows you to assign a subject IRI
+   or blank node and to make a RDF Class assignment</li>
+<li>One or more <code>predicateObjectMap</code> that allow to assign a predicate
+   to the subject using a number of different methods for matching
+   data from the input as a RDF object.</li>
+</ul>
+<p>The <code>bibcat.rml.processor</code> submodule has a base RML Processor 
+ <a href="https://github.com/KnowledgeLinks/bibcat/blob/0e0cc35fd0d906ebaaf306e7050ea74b60ea09c6/bibcat/rml/processor.py#L36">Processor</a> </p>
+<pre><code>
+>>> import bibcat.rml.processor as processor
+INFO:rdflib:RDFLib Version: 4.2.2
+>>> processor.Processor
+&lt;class 'bibcat.rml.processor.Processor'&gt;
+</code></pre>
+
+<p>This class is extended for specific kinds of data
+sub-classes like <a href="https://github.com/KnowledgeLinks/bibcat/blob/0e0cc35fd0d906ebaaf306e7050ea74b60ea09c6/bibcat/rml/processor.py#L393">CSVRowProcessor</a> for common-separated values data inputs 
+such as spreadsheets</p>
+<pre><code>
+>>> processor.CSVRowProcessor
+&lt;class 'bibcat.rml.processor.CSVRowProcessor'&gt;
+</code></pre>
+
+<p>A <a href="https://github.com/KnowledgeLinks/bibcat/blob/0e0cc35fd0d906ebaaf306e7050ea74b60ea09c6/bibcat/rml/processor.py#L481">JSONProcessor</a> for JSON data sources,</p>
+<pre><code>
+>>> processor.JSONProcessor
+&lt;class 'bibcat.rml.processor.JSONProcessor'&gt;
+</code></pre>
+
+<p>A <a href="https://github.com/KnowledgeLinks/bibcat/blob/0e0cc35fd0d906ebaaf306e7050ea74b60ea09c6/bibcat/rml/processor.py#L772">SPARQLProcessor</a> for mapping RDF triples to RDF triples, </p>
+<pre><code>
+>>> processor.SPARQLProcessor
+&lt;class 'bibcat.rml.processor.SPARQLProcessor'&gt;
+</code></pre>
+
+<p>And a 
+<a href="https://github.com/KnowledgeLinks/bibcat/blob/0e0cc35fd0d906ebaaf306e7050ea74b60ea09c6/bibcat/rml/processor.py#L591">XMLProcessor</a>.</p>
+<pre><code>
+>>> processor.XMLProcessor
+&lt;class 'bibcat.rml.processor.XMLProcessor'&gt;
+</code></pre>
+
+<p>In the first example will take the BIBFRAME RDF produced by the <code>marc2bibframe2</code>,
+create an instance of the <code>SPARQLProcessor</code> class to demonstrate the use of
+the RML Processor.</p>
+        </article>
+    </div>
+</div>
+
+    
+<div class="uk-container uk-margin-large-top">
+   <ul class="uk-iconnav">
+      
+      <a href="marc2bibframe2.html" 
+         uk-icon="icon:  chevron-left"></a>
+      
+      <a href="../index.html"
+         uk-icon="icon: home"></a>
+       
+      <a href="filtering-bibframe.html" 
+         uk-icon="icon:  chevron-right"></a>
+      
+   </ul>
+</div>
+
+    <div class="uk-container uk-margin-large-top">
+        <p class="uk-text-muted">
+            Original contented Copyrighted &copy; 2017 by Jeremy Nelson and 
+            <a href="http://knowledgelinks.io">KnowledgeLinks</a> under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                <img alt="Creative Commons License" style="border-width:0" 
+                src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>,
+            Source code repository licensed under the Apache 2 and available on 
+            <a href="https://github.com/KnowledgeLinks/introduction-to-bibcat">Github</a>.
+        </p>
+    </div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-70910607-1"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+
+     gtag('config', 'UA-70910607-1');
+    </script>
+    <script async defer src="https://hypothes.is/embed.js"></script>
+
+    </body>
+</html>

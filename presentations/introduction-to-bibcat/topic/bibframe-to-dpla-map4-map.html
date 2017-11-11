@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+    <head>
+        <title></title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" 
+              href="../static/css/uikit.min.css" />
+        <!-- UIkit JS -->
+        <script src="../static/js/uikit.min.js"></script>
+        <script src="../static/js/uikit-icons.min.js"></script>
+    </head>
+    <body>
+    
+    <nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li><a href="http://knowledgelinks.io">KL</a></li>
+            <li class=""><a href="../index.html">Introduction to BIBCAT</a></li>
+            <li >
+                <a href="quickstart.html">Quickstart</a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="install.html">
+                                Installing BIBCAT
+                            </a>
+                        </li>
+                        <li>
+                            <a href="importing-bibcat.html">
+                                Importing BIBCAT and Overview of Functions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marc2bibframe2.html">
+                                Using marc2bibframe2 XSLT
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="uk-active">
+                <a href="rdf-mapping.html">
+                        RDF Mapping Language (RML)
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="filtering-bibframe.html">
+                                Filtering BIBFRAME 2.0
+                            </a>
+                        </li>
+                        <li>
+                           <a href="mods-to-bibframe-map.html">
+                                MODS XML to BIBFRAME 2.0 Map
+                            </a>
+                        </li>
+                        <li>
+                           <a href="dublin-core-to-bibframe-map.html">
+                                Dublin Core to BIBFRAME Map
+                            </a>
+                        </li>
+                        <li></li>
+                        <li>
+                           <a href="bibframe-to-dpla-map4-map.html">
+                                BIBFRAME 2.0 to DP.LA MAPv4
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="bibframe-to-schema-org-map.html">
+                                BIBFRAME to Schema.org Linked Data
+                            </a>
+                        </li>
+                        <li>
+                            <a href="custom-rml-rule.html">
+                                Custom RML Rules
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-linking.html">
+                    BIBCAT Linking
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="loc-authorities-linker.html">
+                                Library of Congress Authorities Linker
+                            </a>
+                        </li>
+                        <li>
+                            <a href="geonames-linker.html">
+                                Geonames.org Linker
+                            </a>
+                        </li>
+                        
+                    </ul> 
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-future.html">
+                    Future of BIBCAT
+                </a>
+                </li>
+       </ul>
+
+    </div>
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            
+            <li><a href="dublin-core-to-bibframe-map.html" 
+               uk-icon="icon:  chevron-left"></a>
+            </li>
+            
+            <li><a href="../index.html"
+               uk-icon="icon: home"></a>
+            </li>
+            
+            <li><a href="bibframe-to-schema-org-map.html" 
+               uk-icon="icon:  chevron-right"></a>
+            </li>
+            
+            <li><a href="#">About</a></li>
+        </ul>
+    </div>
+</nav>
+    
+    
+<div class="uk-container">
+    <div uk-grid>
+        <article class="uk-article">
+           <h1 class="uk-article-title">BIBFRAME 2.0 to DP.LA MAPv4</h1>
+           <p class="uk-article-meta">Written by 
+               <a href="http://orcid.org/0000-0002-7543-3893">Jeremy Nelson</a> on
+               2017-10-30
+           </p>
+           <p>For the <a href="https://plains2peaks.org/">Plains2Peaks.org</a> <a href="https://dp.la">DP.LA</a> regional service
+hub for Colorado and Wyoming, a RML rules map <code>bf-to-map4.ttl</code> takes BIBFRAME 2.0
+RDF and processes to a new JSON-LD for ingestion into <a href="https://dp.la">DP.LA</a> using a 
+<a href="http://resource.io">ResourceSync</a> feed and dump.</p>
+<p>First, we will create an another instance of <code>SPARQLProcessor</code> and use a
+different RML map <code>bf-to-map4.ttl</code>. For the source RDF triples, we will use
+the previous topic's BIBFRAME RDF,</p>
+<pre><code>
+>>> bf2map_processor = processor.SPARQLProcessor(
+    rml_rules=['bf-to-map4.ttl'],
+    triplestore=dc_processor.output)
+</code></pre>
+
+<p>Now, we will use the <strong>item_iri</strong> and <strong>instance_iri</strong> to run the
+mapping from BIBFRAME to MAPv4</p>
+<pre><code>
+>>> bf2map_processor.run(
+        instance_iri='https://www.denverlibrary.org/57154f74-c5cb-11e7-9f30-ac87a3129ce6',
+        item_iri='http://cdm16079.contentdm.oclc.org:80/cdm/ref/collection/p15330coll22/id/68544')
+</code></pre>
+
+<p>To see the resulting MAPv4 RDF Graph, we will serialize as turtle:
+ <pre><code> &gt;&gt;&gt; print(bf2map_processor.output.serialize(format='turtle').decode())
+</code></pre></p>
+<pre><code>
+@prefix bf: &lt;http://id.loc.gov/ontologies/bibframe/&gt; .
+@prefix dc: &lt;http://purl.org/dc/elements/1.1/&gt; .
+@prefix dpla: &lt;http://dp.la/about/map/&gt; .
+@prefix edm: &lt;http://www.europeana.eu/schemas/edm/&gt; .
+@prefix kds: &lt;http://knowledgelinks.io/ns/data-structures/&gt; .
+@prefix locn: &lt;http://www.w3.org/ns/locn#&gt; .
+@prefix ore: &lt;http://www.openarchives.org/ore/terms/&gt; .
+@prefix oslo: &lt;http://purl.org/oslo/ns/localgov#&gt; .
+@prefix ql: &lt;http://semweb.mmlab.be/ns/ql#&gt; .
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix vcard: &lt;http://www.w3.org/2006/vcard/ns#&gt; .
+@prefix xml: &lt;http://www.w3.org/XML/1998/namespace&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+&lt;https://www.denverlibrary.org/57154f74-c5cb-11e7-9f30-ac87a3129ce6#Work&gt; a ore:Aggregation ;
+    edm:aggregatedCHO &lt;https://www.denverlibrary.org/57154f74-c5cb-11e7-9f30-ac87a3129ce6&gt; ;
+    edm:dataProvider &lt;https://www.denverlibrary.org/&gt; ;
+    edm:isShownAt &lt;http://cdm16079.contentdm.oclc.org:80/cdm/ref/collection/p15330coll22/id/68544&gt; .
+
+&lt;http://cdm16079.contentdm.oclc.org:80/cdm/ref/collection/p15330coll22/id/68544&gt; a edm:WebResource .
+
+&lt;https://www.denverlibrary.org/57154f74-c5cb-11e7-9f30-ac87a3129ce6&gt; a dpla:SourceResource ;
+    dc:date "12/23/2010" ;
+    dcterms:creator "N31e3e5a7f2cd40ed96fce3bfd50aa901" ;
+    dcterms:description "Major John M. Burke, head and shoulders studio portrait, wearing hat, suit jacket and vest; Wild West promoter and Indian Agent."^^xsd:string ;
+    dcterms:extent "1 copy photonegative ; 15 x 11 cm. (5 3/4 x 4 1/4 in.); 1 photonegative : glass ; 26 x 21 cm. (10 x 8 in.); 1 photoprint ; 24 x 18 cm. (9 1/4 x 7 in.)"^^xsd:string ;
+    dcterms:identifier "34837596"^^xsd:string,
+        "B-529"^^xsd:string ;
+    dcterms:title "Major John Burke, bust"^^xsd:string .
+
+
+</code></pre>
+
+<p>Switching to a different output vocabulary is the focus on the next exercise.</p>
+        </article>
+    </div>
+</div>
+
+    
+<div class="uk-container uk-margin-large-top">
+   <ul class="uk-iconnav">
+      
+      <a href="dublin-core-to-bibframe-map.html" 
+         uk-icon="icon:  chevron-left"></a>
+      
+      <a href="../index.html"
+         uk-icon="icon: home"></a>
+       
+      <a href="bibframe-to-schema-org-map.html" 
+         uk-icon="icon:  chevron-right"></a>
+      
+   </ul>
+</div>
+
+    <div class="uk-container uk-margin-large-top">
+        <p class="uk-text-muted">
+            Original contented Copyrighted &copy; 2017 by Jeremy Nelson and 
+            <a href="http://knowledgelinks.io">KnowledgeLinks</a> under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                <img alt="Creative Commons License" style="border-width:0" 
+                src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>,
+            Source code repository licensed under the Apache 2 and available on 
+            <a href="https://github.com/KnowledgeLinks/introduction-to-bibcat">Github</a>.
+        </p>
+    </div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-70910607-1"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+
+     gtag('config', 'UA-70910607-1');
+    </script>
+    <script async defer src="https://hypothes.is/embed.js"></script>
+
+    </body>
+</html>

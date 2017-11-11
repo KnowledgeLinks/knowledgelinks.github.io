@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+    <head>
+        <title></title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" 
+              href="../static/css/uikit.min.css" />
+        <!-- UIkit JS -->
+        <script src="../static/js/uikit.min.js"></script>
+        <script src="../static/js/uikit-icons.min.js"></script>
+    </head>
+    <body>
+    
+    <nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li><a href="http://knowledgelinks.io">KL</a></li>
+            <li class=""><a href="../index.html">Introduction to BIBCAT</a></li>
+            <li >
+                <a href="quickstart.html">Quickstart</a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="install.html">
+                                Installing BIBCAT
+                            </a>
+                        </li>
+                        <li>
+                            <a href="importing-bibcat.html">
+                                Importing BIBCAT and Overview of Functions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marc2bibframe2.html">
+                                Using marc2bibframe2 XSLT
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li >
+                <a href="rdf-mapping.html">
+                        RDF Mapping Language (RML)
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="filtering-bibframe.html">
+                                Filtering BIBFRAME 2.0
+                            </a>
+                        </li>
+                        <li>
+                           <a href="mods-to-bibframe-map.html">
+                                MODS XML to BIBFRAME 2.0 Map
+                            </a>
+                        </li>
+                        <li>
+                           <a href="dublin-core-to-bibframe-map.html">
+                                Dublin Core to BIBFRAME Map
+                            </a>
+                        </li>
+                        <li></li>
+                        <li>
+                           <a href="bibframe-to-dpla-map4-map.html">
+                                BIBFRAME 2.0 to DP.LA MAPv4
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="bibframe-to-schema-org-map.html">
+                                BIBFRAME to Schema.org Linked Data
+                            </a>
+                        </li>
+                        <li>
+                            <a href="custom-rml-rule.html">
+                                Custom RML Rules
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li class="uk-active">
+                <a href="bibcat-linking.html">
+                    BIBCAT Linking
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="loc-authorities-linker.html">
+                                Library of Congress Authorities Linker
+                            </a>
+                        </li>
+                        <li>
+                            <a href="geonames-linker.html">
+                                Geonames.org Linker
+                            </a>
+                        </li>
+                        
+                    </ul> 
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-future.html">
+                    Future of BIBCAT
+                </a>
+                </li>
+       </ul>
+
+    </div>
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            
+            <li><a href="bibcat-linking.html" 
+               uk-icon="icon:  chevron-left"></a>
+            </li>
+            
+            <li><a href="../index.html"
+               uk-icon="icon: home"></a>
+            </li>
+            
+            <li><a href="geonames-linker.html" 
+               uk-icon="icon:  chevron-right"></a>
+            </li>
+            
+            <li><a href="#">About</a></li>
+        </ul>
+    </div>
+</nav>
+    
+    
+<div class="uk-container">
+    <div uk-grid>
+        <article class="uk-article">
+           <h1 class="uk-article-title">Library of Congress Authorities Linker</h1>
+           <p class="uk-article-meta">Written by 
+               <a href="http://orcid.org/0000-0002-7543-3893">Jeremy Nelson</a> on
+               2017-11-10
+           </p>
+           <p>The <code>bibcat.linker.loc</code> submodule is provides an API wrapper around
+the Library of Congress <a href="http://id.loc.gov/search/">search service</a> that
+we try to link out to external Library of Congress 
+authoritative name and subject IRIs for local IRIs and blank nodes.</p>
+<pre><code>>>> import bibcat.linkers.loc as loc
+>>> loc
+&lt;module 'bibcat.linkers.loc' from '/Users/jeremynelson/2017/bibcat/bibcat/linkers/loc.py'&gt;
+</code></pre>
+
+<p>We will test the <code>loc.link_term</code> function that takes a term and searches all
+of the Library of Congress available data sets. Much like the functions in the 
+base <code>bibcat</code> module, the <code>loc.link_term</code> is a more primitive function that
+is meant to used in application workflows.</p>
+<p>Using the original Library of Congress RDF Graph, we'll create a <code>for</code> loop
+and iterate through all of the <code>bf:Agent</code> entities and run the <code>loc.link_term</code>
+to see what the top result is for each term.</p>
+<pre><code>
+>>> for agent in pp4_loc.subjects(predicate=rdflib.RDF.type,
+                  object=BF.Agent):
+    label = pp4_loc.value(subject=agent,
+                  predicate=rdflib.RDFS.label)
+    if label is not None:
+        print("Original label: {}".format(label))
+        result = loc.link_term(str(label))
+        for row in result:
+            print("\tIRI: {}\n\ttitle {}\n".format(row.get('iri'),
+                                row.get('title')))
+
+Original label: DLC
+    IRI: http://id.loc.gov/authorities/names/n2015048683
+    title DLC eng rda DLC
+
+Original label: ZMM
+    IRI: http://id.loc.gov/authorities/names/no2004035637
+    title ZMM-GT Coordinating Secretariat
+
+Original label: C. Scribner's sons
+    IRI: http://id.loc.gov/authorities/names/n81050810
+    title Charles Scribner's Sons
+
+Original label: ZMM
+    IRI: http://id.loc.gov/authorities/names/no2004035637
+    title ZMM-GT Coordinating Secretariat
+
+Original label: Howells, William Dean, 1837-1920.
+    IRI: http://id.loc.gov/authorities/names/n87874580
+    title Howells, William Dean, 1837-1920. Novels. Selections
+
+Original label: Austen, Jane, 1775-1817.
+    IRI: http://id.loc.gov/authorities/names/n81061267
+    title Austen, Jane, 1775-1817. Novels
+
+>>> 
+</code></pre>
+        </article>
+    </div>
+</div>
+
+    
+<div class="uk-container uk-margin-large-top">
+   <ul class="uk-iconnav">
+      
+      <a href="bibcat-linking.html" 
+         uk-icon="icon:  chevron-left"></a>
+      
+      <a href="../index.html"
+         uk-icon="icon: home"></a>
+       
+      <a href="geonames-linker.html" 
+         uk-icon="icon:  chevron-right"></a>
+      
+   </ul>
+</div>
+
+    <div class="uk-container uk-margin-large-top">
+        <p class="uk-text-muted">
+            Original contented Copyrighted &copy; 2017 by Jeremy Nelson and 
+            <a href="http://knowledgelinks.io">KnowledgeLinks</a> under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                <img alt="Creative Commons License" style="border-width:0" 
+                src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>,
+            Source code repository licensed under the Apache 2 and available on 
+            <a href="https://github.com/KnowledgeLinks/introduction-to-bibcat">Github</a>.
+        </p>
+    </div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-70910607-1"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+
+     gtag('config', 'UA-70910607-1');
+    </script>
+    <script async defer src="https://hypothes.is/embed.js"></script>
+
+    </body>
+</html>

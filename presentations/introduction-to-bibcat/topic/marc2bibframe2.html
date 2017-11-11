@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+    <head>
+        <title></title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" 
+              href="../static/css/uikit.min.css" />
+        <!-- UIkit JS -->
+        <script src="../static/js/uikit.min.js"></script>
+        <script src="../static/js/uikit-icons.min.js"></script>
+    </head>
+    <body>
+    
+    <nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li><a href="http://knowledgelinks.io">KL</a></li>
+            <li class=""><a href="../index.html">Introduction to BIBCAT</a></li>
+            <li >
+                <a href="quickstart.html">Quickstart</a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="install.html">
+                                Installing BIBCAT
+                            </a>
+                        </li>
+                        <li>
+                            <a href="importing-bibcat.html">
+                                Importing BIBCAT and Overview of Functions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="marc2bibframe2.html">
+                                Using marc2bibframe2 XSLT
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li >
+                <a href="rdf-mapping.html">
+                        RDF Mapping Language (RML)
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="filtering-bibframe.html">
+                                Filtering BIBFRAME 2.0
+                            </a>
+                        </li>
+                        <li>
+                           <a href="mods-to-bibframe-map.html">
+                                MODS XML to BIBFRAME 2.0 Map
+                            </a>
+                        </li>
+                        <li>
+                           <a href="dublin-core-to-bibframe-map.html">
+                                Dublin Core to BIBFRAME Map
+                            </a>
+                        </li>
+                        <li></li>
+                        <li>
+                           <a href="bibframe-to-dpla-map4-map.html">
+                                BIBFRAME 2.0 to DP.LA MAPv4
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="bibframe-to-schema-org-map.html">
+                                BIBFRAME to Schema.org Linked Data
+                            </a>
+                        </li>
+                        <li>
+                            <a href="custom-rml-rule.html">
+                                Custom RML Rules
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-linking.html">
+                    BIBCAT Linking
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li>
+                            <a href="loc-authorities-linker.html">
+                                Library of Congress Authorities Linker
+                            </a>
+                        </li>
+                        <li>
+                            <a href="geonames-linker.html">
+                                Geonames.org Linker
+                            </a>
+                        </li>
+                        
+                    </ul> 
+                </div>
+            </li>
+            <li >
+                <a href="bibcat-future.html">
+                    Future of BIBCAT
+                </a>
+                </li>
+       </ul>
+
+    </div>
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            
+            <li><a href="importing-bibcat.html" 
+               uk-icon="icon:  chevron-left"></a>
+            </li>
+            
+            <li><a href="../index.html"
+               uk-icon="icon: home"></a>
+            </li>
+            
+            <li><a href="rdf-mapping.html" 
+               uk-icon="icon:  chevron-right"></a>
+            </li>
+            
+            <li><a href="#">About</a></li>
+        </ul>
+    </div>
+</nav>
+    
+    
+<div class="uk-container">
+    <div uk-grid>
+        <article class="uk-article">
+           <h1 class="uk-article-title">Using marc2bibframe2 XSLT</h1>
+           <p class="uk-article-meta">Written by 
+               <a href="http://orcid.org/0000-0002-7543-3893">Jeremy Nelson</a> on
+               2017-11-30
+           </p>
+           <p>Last year the <a href="http://loc.gov">Library of Congress</a> released an official 
+MARCXML-to-BIBFRAME 2.0 RDF XML project on Github at <a href="https://github.com/">https://github.com/</a>
+We'll now go through the steps of converting MARC 21 to MARC XML, and then create an 
+XSLT transform script to convert the MARC record to BIBFRAME 2.0 RDF XML.</p>
+<h3>Clone or Download marc2bibframe2</h3>
+<p>Open up a new command-line to set-up <code>marc2bibframe2</code> environment.
+If you have <a href="https://git-scm.com/">git</a> installed, you can clone the Library of 
+Congress <a href="https://github.com/lcnetdev/marc2bibframe2.git">marc2bibframe2</a> project directly from Github.</p>
+<pre><code>(bibcat-env) $ git clone https://github.com/lcnetdev/marc2bibframe2.git</code></pre>
+
+<p>If you don't have <a href="https://git-scm.com/">git</a> on your system, you can still download a zip file of the 
+latest release from <a href="https://github.com/lcnetdev/marc2bibframe2/releases/latest">https://github.com/lcnetdev/marc2bibframe2/releases/latest</a>,
+unzip the file, and then for convenience later on, rename the directory to <code>marc2bibframe2</code>..</p>
+<pre><code>(bibcat-env)$ wget https://github.com/lcnetdev/marc2bibframe2/archive/v1.3.1.zip
+(bibcat-env)$ unzip v1.3.1.zip
+(bibcat-env)$ mv marc2bibframe2-1.3.1/ marc2bibframe2</code></pre>
+
+<h2>Opening MARC 21 file with pymarc</h2>
+<p>If you have a MARC21 file already, use that file. Otherwise, you can 
+download a sample <a href="/static/data/pride-and-prejudice.mrc">MARC21 file</a> made up of a collection of Jane Austen
+MARC21 records from Colorado College.</p>
+<p><strong>First</strong>, go back to your Python IDLE program and import <a href="https://github.com/edsu/pymarc"><code>pymarc</code></a>
+and create a MARC Reader class using your MARC 21 file. </p>
+<pre><code>>>> import pymarc
+>>> marc_reader = pymarc.MARCReader(open("/path/to/pride-and-prejudice.mrc", "rb"), 
+                                to_unicode=True)
+</code></pre>
+
+<p>Now we will read all of the MARC 21 records into a Python list and see 
+how many MARC records are in the list.</p>
+<pre><code>>>>> marc_records = []
+>>> for row in marc_reader:
+        marc_records.append(row)
+
+>>> len(marc_records)
+30</code></pre>
+
+<p>With the <a href="https://github.com/edsu/pymarc"><code>pymarc.Record</code></a>, we can print out any of these 30 MARC records</p>
+<pre><code>>>> print(marc_records[4])
+=LDR  00961nam  2200289Ia 4500
+=001  8383316
+=003  OCoLC
+=005  19981012112243.0
+=008  820430s1918\\\\nyu\\\\\\\\\\\000\1\eng\\
+=010  \\$a18007296
+=040  \\$aDLC$cZMM$dZMM
+=049  \\$aCOCA
+=090  \\$aPR4034$b.P7 1918
+=090  \\$aPR4034$b.P7 1918
+=100  1\$aAusten, Jane,$d1775-1817.
+=245  10$aPride and prejudice /$cby Jane Austen; with an introduction by William Dean Howells.
+=260  \\$aNew York, Chicago [etc.] :$bC. Scribner's sons,$c[c1918]
+=300  \\$axxiii, 401 p. ;$c18 cm.
+=490  1\$aThe modern student's library.
+=500  \\$aSeries title also at head of t.-p.
+=700  1\$aHowells, William Dean,$d1837-1920.
+=830  \0$aModern student's library.
+=907  \\$a.b13290083
+=902  \\$a130106
+=999  \\$b1$c981012$dm$ea$f-$g0
+=994  \\$atbp
+=945  \\$aPR4034$b.P7 1918$g1$i33027003636366$j0$ltbp  $h0$oh$p$0.00$q $r-$s-$t1$u5$v0$w0$x0$y.i13884177$z981012
+</code></pre>
+
+<h2>Creating an XSLT Transformation to BIBFRAME RDF</h2>
+<p>Using the <code>lxml.etree</code> module, we will create an XLST instance</p>
+<pre><code>>>> import lxml.etree
+>>>> marc2bibframe2 = lxml.etree.XSLT(
+    lxml.etree.parse("/path/to/marc2bibframe2/xsl/marc2bibframe2.xsl"))
+</code></pre>
+
+<p>Using <code>pymarc</code>, we will convert a MARC record to an XML string and then 
+parse it with <code>lxml.etree.XML</code> function call.</p>
+<pre><code>>>> raw_xml = pymarc.record_to_xml(marc_records[4], namespace=True)
+>>> marc_xml = lxml.etree.XML(raw_xml)
+>>> marc_xml
+&lt;Element {http://www.loc.gov/MARC21/slim}record at 0x105d5ee08&gt;
+</code></pre>
+
+<p>Then running the transform, convert the <code>marc_xml</code> to BIBFRAME RDF XML</p>
+<pre><code>>>> bf_rdf_xml = marc2bibframe2(marc_xml)
+>>> raw_rdf_xml = lxml.etree.tostring(bf_rdf_xml)</code></pre>
+
+<p>Our final step is parse the <code>raw_rdf_xml</code> to a <code>rdflib.Graph</code> and
+then print the output as RDF Turtle format:</p>
+<pre><code>>>> bf_rdf = rdflib.Graph()
+>>> bf_rdf.parse(data=raw_rdf_xml, format='xml')
+<Graph identifier=N8100f11eb0fd48d0a805d91f03d6af94 (<class 'rdflib.graph.Graph'>)>
+>>> print(bf_rdf.serialize(format='turtle').decode())
+@prefix bf: &lt;http://id.loc.gov/ontologies/bibframe/&gt; .
+@prefix bflc: &lt;http://id.loc.gov/ontologies/bflc/&gt; .
+@prefix madsrdf: &lt;http://www.loc.gov/mads/rdf/v1#&gt; .
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xml: &lt;http://www.w3.org/XML/1998/namespace&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+&lt;http://example.org/8383316#Agent100-11&gt; a bf:Agent,
+        bf:Person ;
+    rdfs:label "Austen, Jane, 1775-1817." ;
+    bflc:name00MarcKey "1001 $aAusten, Jane,$d1775-1817." ;
+    bflc:name00MatchKey "Austen, Jane, 1775-1817." ;
+    bflc:primaryContributorName00MatchKey "Austen, Jane, 1775-1817." .
+
+&lt;http://example.org/8383316#Agent700-17&gt; a bf:Agent,
+        bf:Person ;
+    rdfs:label "Howells, William Dean, 1837-1920." ;
+    bflc:name00MarcKey "7001 $aHowells, William Dean,$d1837-1920." ;
+    bflc:name00MatchKey "Howells, William Dean, 1837-1920." .
+
+&lt;http://example.org/8383316#Instance&gt; a bf:Instance ;
+    rdfs:label "Pride and prejudice /" ;
+    bf:dimensions "18 cm." ;
+    bf:extent [ a bf:Extent ;
+            rdfs:label "xxiii, 401 p." ] ;
+    bf:hasSeries [ a bf:Instance ;
+            rdfs:label "The modern student's library." ;
+            bf:instanceOf &lt;http://example.org/8383316#Work830-18&gt; ;
+            bf:seriesStatement "The modern student's library." ] ;
+    bf:identifiedBy [ a bf:Lccn ;
+            rdf:value "18007296" ] ;
+    bf:instanceOf &lt;http://example.org/8383316#Work&gt; ;
+    bf:issuance &lt;http://id.loc.gov/vocabulary/issuance/mono&gt; ;
+    bf:note [ a bf:Note ;
+            rdfs:label "Series title also at head of t.-p." ] ;
+    bf:provisionActivity [ a bf:ProvisionActivity,
+                bf:Publication ;
+            bf:agent [ a bf:Agent ;
+                    rdfs:label "C. Scribner's sons" ] ;
+            bf:date "c1918" ;
+            bf:place [ a bf:Place ;
+                    rdfs:label "New York, Chicago [etc." ] ],
+        [ a bf:ProvisionActivity,
+                bf:Publication ;
+            bf:date "1918"^^&lt;http://id.loc.gov/datatypes/edtf&gt; ;
+            bf:place &lt;http://id.loc.gov/vocabulary/countries/nyu&gt; ] ;
+    bf:provisionActivityStatement "New York, Chicago [etc.] : C. Scribner's sons, [c1918]" ;
+    bf:responsibilityStatement "by Jane Austen; with an introduction by William Dean Howells" ;
+    bf:title [ a bf:Title ;
+            rdfs:label "Pride and prejudice /" ;
+            bflc:titleSortKey "Pride and prejudice /" ;
+            bf:mainTitle "Pride and prejudice" ] .
+
+&lt;http://example.org/8383316#Work&gt; a bf:Text,
+        bf:Work ;
+    rdfs:label "Pride and prejudice /" ;
+    bf:adminMetadata [ a bf:AdminMetadata ;
+            bflc:encodingLevel [ a bflc:EncodingLevel ;
+                    bf:code "u" ] ;
+            bf:changeDate "1998-10-12T11:22:43"^^xsd:dateTime ;
+            bf:creationDate "1982-04-30"^^xsd:date ;
+            bf:descriptionConventions [ a bf:DescriptionConventions ;
+                    bf:code "aacr" ] ;
+            bf:descriptionModifier [ a bf:Agent ;
+                    rdfs:label "ZMM" ] ;
+            bf:generationProcess [ a bf:GenerationProcess ;
+                    rdfs:label "DLC marc2bibframe2 v1.4.0-SNAPSHOT: 2017-10-29T16:53:00-06:00" ] ;
+            bf:identifiedBy [ a bf:Local ;
+                    rdf:value "8383316" ] ;
+            bf:source [ a bf:Agent,
+                        bf:Source ;
+                    rdfs:label "ZMM" ],
+                [ a bf:Source ;
+                    bf:code "OCoLC" ],
+                [ a bf:Agent,
+                        bf:Source ;
+                    rdfs:label "DLC" ] ;
+            bf:status [ a bf:Status ;
+                    bf:code "n" ] ] ;
+    bf:contribution [ a bf:Contribution ;
+            bf:agent &lt;http://example.org/8383316#Agent700-17&gt; ;
+            bf:role &lt;http://id.loc.gov/vocabulary/relators/ctb&gt; ],
+        [ a bflc:PrimaryContribution,
+                bf:Contribution ;
+            bf:agent &lt;http://example.org/8383316#Agent100-11&gt; ;
+            bf:role &lt;http://id.loc.gov/vocabulary/relators/ctb&gt; ] ;
+    bf:genreForm &lt;http://id.loc.gov/vocabulary/marcgt/fic&gt; ;
+    bf:hasInstance &lt;http://example.org/8383316#Instance&gt; ;
+    bf:language &lt;http://id.loc.gov/vocabulary/languages/eng&gt; ;
+    bf:title [ a bf:Title ;
+            rdfs:label "Pride and prejudice /" ;
+            bflc:titleSortKey "Pride and prejudice /" ;
+            bf:mainTitle "Pride and prejudice" ] .
+
+&lt;http://example.org/8383316#Work830-18&gt; a bf:Work ;
+    rdfs:label "Modern student's library." ;
+    bf:title [ a bf:Title ;
+            rdfs:label "Modern student's library." ;
+            bflc:title30MarcKey "830 0$aModern student's library." ;
+            bflc:title30MatchKey "Modern student's library." ;
+            bflc:titleSortKey "Modern student's library." ;
+            bf:mainTitle "Modern student's library" ] .
+
+&lt;http://id.loc.gov/vocabulary/countries/nyu&gt; a bf:Place .
+
+&lt;http://id.loc.gov/vocabulary/issuance/mono&gt; a bf:Issuance .
+
+&lt;http://id.loc.gov/vocabulary/languages/eng&gt; a bf:Language .
+
+&lt;http://id.loc.gov/vocabulary/marcgt/fic&gt; a bf:GenreForm ;
+    rdfs:label "fiction" .
+
+&lt;http://id.loc.gov/vocabulary/relators/ctb&gt; a bf:Role .</code></pre>
+
+<h2>Next: Using RDF Mapping Language</h2>
+<p>In the next series of topics, we will introduce the <a href="/topic/rdf-mapping">RDF Mapping Language</a> and
+show how using <code>bibcat.rml</code>, we can convert a <a href="/topic/filtering-bibframe">simplified BIBFRAME 2.0</a> 
+graph for use in a production application. </p>
+        </article>
+    </div>
+</div>
+
+    
+<div class="uk-container uk-margin-large-top">
+   <ul class="uk-iconnav">
+      
+      <a href="importing-bibcat.html" 
+         uk-icon="icon:  chevron-left"></a>
+      
+      <a href="../index.html"
+         uk-icon="icon: home"></a>
+       
+      <a href="rdf-mapping.html" 
+         uk-icon="icon:  chevron-right"></a>
+      
+   </ul>
+</div>
+
+    <div class="uk-container uk-margin-large-top">
+        <p class="uk-text-muted">
+            Original contented Copyrighted &copy; 2017 by Jeremy Nelson and 
+            <a href="http://knowledgelinks.io">KnowledgeLinks</a> under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                <img alt="Creative Commons License" style="border-width:0" 
+                src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>,
+            Source code repository licensed under the Apache 2 and available on 
+            <a href="https://github.com/KnowledgeLinks/introduction-to-bibcat">Github</a>.
+        </p>
+    </div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-70910607-1"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+
+     gtag('config', 'UA-70910607-1');
+    </script>
+    <script async defer src="https://hypothes.is/embed.js"></script>
+
+    </body>
+</html>
