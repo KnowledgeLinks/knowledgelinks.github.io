@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Code4Lib 2018 - Preconference: Transforming MARC to RDF Applications
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <!-- UIkit CSS -->
+         <link rel="stylesheet" href="static/css/uikit.min.css" />
+
+         <!-- UIkit JS -->
+         <script src="static/js/uikit.min.js"></script>
+         <script src="static/js/uikit-icons.min.js"></script>
+        
+<style>
+</style>
+
+    </head>
+    <body class="uk-container">
+    
+<div class="uk-align-right" >
+    <div class="uk-sticky">
+        <img src="static/img/bibcat-kl-logos.png">
+    </div>
+</div>
+<img src="static/img/line.png">
+<h1 class="uk-heading-primary">
+    Transforming MARC and Metadata into RDF-based Applications
+</h1>
+<h2 class="uk-text-muted">Tuesday, February 13, 2018 - 9:30 to 12:30</h2>
+<p class="uk-text-right uk-text-lead">Jeremy Nelson<br>
+    Metadata &amp; Systems Librarian, Colorado College<br>
+    Partner, KnowledgeLinks</p>
+ <p class="uk-text-right uk-text-lead">Mike Stabile<br>
+    Partner &amp; CEO, KnowledgeLinks
+</p>
+<hr style="margin-top: 10em">
+<h2 class="uk-text-muted uk-heading-primary">Agenda</h2>
+<div uk-grid>
+    <div class="uk-width-1-2">
+    <h4 class="uk-text-danger">Tuesday, February 13, 2018</h4>
+    <p class="uk-text-muted">&nbsp;9:30 -  Welcome and Overview<br/>
+    10:00 -  Computer setup<br/>
+    10:20 -  Break<br/>
+    10:30 -  BIBCAT Introduction<br/>
+    11:20 -  Break<br/>
+    11:30 -  Next Steps, Questions and Comments<br/>
+    12:30 -  End Session</p>
+
+    </div>
+    <div class="uk-width-1-2">
+    <h4 class="uk-text-danger">Resources</h4>
+    <ul>
+        <li><a href="https://bibcat.org/">BIBCAT Home</a></li>
+        <li><a href="https://bibcat.org/introduction">Introduction to BIBCAT</a></li>
+        <li><a href="http://knowledgelinks.io/">KnowledgeLinks.io</a></li>
+    </ul>
+
+    </div>
+</div>
+<hr style="margin-top: 10em">
+<div style="background-color: rgb(41, 134,195); height: 500px" 
+     class="uk-width-1-1">
+        <h1 class="uk-heading-inverse uk-text-center" 
+            style="padding-top: 3em; color: white; font-size: 5em">Overview</h1>
+    </div>
+</div>
+<img src="static/img/line-2.png">
+<hr style="margin-top: 8em;">
+<h1 class="uk-heading-primary uk-text-muted">RDF Applications Technologies</h1>
+<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+    <div>
+        
+        <img src="static/img/rdf.png"
+        class="uk-align-center">
+
+        <h3 class="text-muted uk-text-center">Data Formats</h3>
+        <ul>
+            <li>RDF - Triples (XML, Turtle, N3 serializations</li>
+            <li><a href="#">MODS</a>, <a href="#">MARC</a>, 
+                <a href="#">Dublin Core</a>,  XML format</li>
+            <li>CSV - Comma Separated Value</li>
+            <li>JSON - Feeds both incoming and outgoing</li>
+        </uL>
+    </div>
+    <div>
+        <img src="static/img/databases.png"
+            class="uk-align-center">
+        <h3 class="text-muted uk-text-center">Datastores</h3>
+        <ul>
+            <li>Triplestore - Stores RDF</li>
+            <li>SQL DBs - Relational table structures</li>
+            <li>Repositories - Store digital objects</li>
+            <li>NOSQL- key-value, document, types</li>
+            <li>Filesystems - Store digital files and cached 
+                resources</li>
+        </ul>
+    </div>
+    <div>
+        <img src="static/img/query-lang.png"
+            class="uk-align-center">
+        <h3 class="text-muted uk-text-center">Query Languages</h3>
+        <ul>
+            <li>SPARQL - for RDF Triplestores</li> 
+            <li>SQL - Relational DBs</li>
+            <li>XPath for XML document processing/query</li>
+            <li>DSL - an example of a NOSQL query language 
+            (Elasticsearch)</li>
+        </ul>
+    </div>
+</div>
+<p style="margin: 5em;"></p>
+<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+    <div>
+        <img src="static/img/python.png"
+            class="uk-align-center">
+        <h3 class="text-muted uk-text-center">Python Modules</h3>
+        <ul>
+            <li>Flask - Build HTML5 Applications using <a href="https://getbootstrap.com">Bootstrap</a>,
+<a href="https://jquery.com/">JQuery</a></li>
+            <li><a href="#">RDFLib</a></li>
+            <li><a href="#">lxml</a></li>
+            <li><a href="#">Pymarc</a></li>
+            <li><a href="#">bibcat</a></li>
+    </div>
+    <div>
+        <img src="static/img/blazegraph-elasticsearch.png" class="uk-align-center">
+        <h3 class="text-muted uk-text-center">Open-Source Enterprise Tools</h3>
+        <ul>
+            <li>Triplestore - 
+                <a href="https://www.blazegraph.com/">Blazegraph</a>, 
+                <a href="#">rdflib</a>
+            </li>
+            <li>
+                Digital Object Repository - <a href="https://fedorarepository.org/">Fedora 4</a>
+            <li>Search index - <a href="https://elatic.co/">Elasticsearch</a>
+            <li>Filesystem - Linux, MacOS, and Windows</li>
+        </ul>
+    </div>
+    <div>
+        <img src="static/img/github-docker.png"
+            class="uk-align-center">
+        <h3 class="text-muted uk-text-center">Source Control, Packaging, and Deployment</h3>
+        <ul>
+            <li>
+                <a href="#">Git</a> and <a href="https://github.com/">Github</a>
+            </li>
+            <li>Python Module Repository <a href="#">PyPi</a></li>
+            <li><a href="https://docker.com/">Docker</a></li>
+        </ul>
+    </div>
+</div> 
+<hr style="margin-top: 6em">
+<h1 class="uk-heading-primary uk-text-muted" 
+    style="margin-bottom: 2em">Our Approach</h1>
+<img src="static/img/workflow.png">
+<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+    <div>
+    <h2>Data Sources</h2>
+    <p>MARC 21 and MARC XML records
+    are exported from an ILS
+    </p>
+    <p>MODS XML, OAI-PMH Dublin Core, Fedora Commons XML,
+       are harvested from OAI-PMH Ingesters typically from external
+       repositories like <a href="https://islandora.ca/">Islandora</a>,
+       <a href="#">Omeka</a>, or <a href="#">Content DM</a> digital
+       repositories.</p>
+    <p>Excel and Comma-Separate-Value, in a couple of instances, the
+       data source are spreadsheets that either start as Microsoft Excel
+       that are converted to CSV, or the original source is CSV.</p>
+    <p>JSON feeds, for some projects, a JSON feed of Dublin Core metadata
+       is the record source</p>
+    <p>SPARQL endpoints</p>
+    <p>Application Programming Interfaces API</p>
+
+    <h2>BIBCAT Ingesters</h2>
+    <ol>
+        <li>Data harvested over OAI-PMH endpoints,
+            HTTP connections, 
+            or provided data files</li>
+             
+        <li>Usually executed from the command-line and can
+            be long-running processes</li>
+    </ol> 
+    </div>
+    <div>
+    <h2>BIBCAT RML Processors</h2>
+    <p>BIBCAT uses <a href="#">RDF Mapping Language</a> to preform
+     the following processing of incoming data to the final 
+     RDF Linked Data output, stored either in triplestore or on 
+     disk</p>
+    <ul>
+        <li>Simplification - Library of Congress BIBFRAME RDF to 
+        <i>Lean</i> BIBFRAME RDF for production efficiency</li>
+        <li>Normalization, try to match new RDF entities with 
+        existing entities ether locally or through external sources
+        like LOC name and subject authorities, FAST, or ORCID</li> 
+        <li>Standardization - minting IRIs that follow certain
+        patterns, like a title and author slug in BIBFRAME Instance
+        and Items IRIs</li>
+        <li>Mappings - Sometimes complex mapping logic between 
+        incoming data and production RDF</li>  
+        <li>Indexing/Search - flatten and expand RDF entities to 
+        be indexed into search engine</li>
+    </ul>
+    <p>BIBCAT uses the Rdfframework for configuration
+       and data management</p>
+    </div>
+    <div>
+    <h2>Access &amp; Discovery</h2>
+    <p>Using RML Processors, BIBCAT is easily able to generate
+     multiple formats and vocabularies outputs depending on the
+     project.</p>
+    <ul>
+        <li>Search Engine indexing by Google and Microsoft Bing using
+          <a href="http://schema.org/">schema.org</a> JSON-LD for 
+           the Colorado Alliance's GoldRush BIBCAT project.
+        </li> 
+        <li>DP.LA Service Hubs, BIBCAT is used in the regional service
+        hub for Colorado and Wyoming, generates a 
+        <a href="#">ResourceSync</a> XML feed linking 
+        MAPv4 JSON-LD for inclusion in DP.LA</li>
+        <li>JSON API for Kean University's Academic Concierge 
+        iOS App</li>
+        <li>Web front-end user interface - currently being actively 
+        developed as BIBCAT Publisher - projected release second
+        quarter 2018</li>
+    </ul>
+    </div>
+</div>
+<hr style="margin-top: 10em;">
+<div style="background-color: rgb(41, 134,195); height: 500px" 
+     class="uk-width-1-1">
+        <h1 class="uk-heading-inverse uk-text-center" 
+            style="padding-top: 3em; color: white; font-size: 5em">BIBCAT Introduction</h1>
+    </div>
+</div>
+<img src="static/img/line-2.png">
+<hr>
+<h1><a href="https://bibcat.org/introduction/">https://bibcat.org/introduction/</a></h1>
+    <p class="uk-text-lead">We will now introduce the 
+    <a href="https://bibcat.org/">bibcat</a> catalog pull platform for
+    building RDF-based bibliographic applications. We'll go through a
+    quick-start to get your Python environment set-up to use bibcat,
+    followed by some useful helper functions bibcat provides for building
+    RDF applications. We'll then go through and convert MARC records to
+    Library of Congress BIBFRAME RDF and then demonstrate the use of a 
+    RML map to produce "lean" BIBFRAME RDF. From this lean BIBFRAME RDF,
+    we'll generate schema.org JSON-LD. Finally, we will look at some of 
+    the other input data format/vocabulary workflows to produce BIBFRAME
+    RDF.</p> 
+<hr style="margin-top: 20em;">    
+<div style="background-color: rgb(41, 134,195); height: 500px" 
+     class="uk-width-1-1">
+        <h1 class="uk-heading-inverse uk-text-center" 
+            style="padding-top: 3em; color: white; font-size: 5em">Next Steps with the RDF Framework</h1>
+
+    </div>
+</div>
+<img src="static/img/line-2.png">
+<hr style="margin-top: 10em">
+<h1 class="uk-heading-primary uk-text-muted">RDF Applications</h1>
+<h2 class="uk-text-primary">Building semantic solutions for knowledge organizations</h2>
+<div class="uk-align-center">
+    <img src="static/img/rdfframework-data-flow.png">
+</div>
+<hr style="margin-top: 15em;">
+<h1 class="uk-heading-primary uk-text-muted">RdfFramework for Managing Linked Data</h1>
+<ul class="uk-text-lead">
+    <li>Configuration validation and access
+        <ol><li>RdfConfigManager</li></ol>
+    </li>
+    <li>Database Connection Management
+        <ol><li>ConnManager</li></ol>
+    </li>
+    <li>Data Management
+    <ol><li>DataManager</li>
+        <li>DefManager</li></ol>
+    </li>
+    <li>RDF Vocabulary Class Generation
+        <ol>
+            <li>Class inheritance</li>
+            <li>Augmentation</li>
+        </ol>
+    </li>
+</ul>
+<hr style="margin-top: 15em;">
+
+<div style="background-color: rgb(41, 134,195); height: 600px" 
+     class="uk-width-1-1">
+        <h1 class="uk-heading-hero uk-text-center" 
+            style="color: rgb(129,207,251); padding-top: 1em;">Thanks!</h1>
+        <h1 class="uk-heading-inverse uk-text-center" 
+            style="color: white; font-size: 4em">Questions, &amp;
+            Comments</h1>
+        <p class="uk-text-center uk-text-lead">
+         <a href="mailto:knowledgelinks.io@gmail.com" 
+             style="color: white">
+            knowledgelinks.io@gmail.com</a>
+        </p>
+        <p class="uk-text-lead uk-text-center" style="color: white">
+        +1-719-301-7017
+        </p>
+        <p class="uk-text-center uk-text-lead">
+        <a href="http://knowledgelinks.io/" style="color: white">
+            http://knowledgelinks.io/
+        </a>
+        </p>
+    </div>
+</div>
+<hr style="margin-bottom: 3em">
+
+    </body>
+</html>
