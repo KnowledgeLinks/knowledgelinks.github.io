@@ -1,0 +1,1077 @@
+jpnelson@KL-ThinkPad-T470:~/2018$ python3
+Python 3.6.4 (default, Feb  8 2018, 13:45:45) 
+[GCC 5.4.0 20160609] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> exit()
+jpnelson@KL-ThinkPad-T470:~/2018$ clear
+
+jpnelson@KL-ThinkPad-T470:~/2018$ python3
+Python 3.6.4 (default, Feb  8 2018, 13:45:45) 
+[GCC 5.4.0 20160609] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> exit()
+jpnelson@KL-ThinkPad-T470:~/2018$ python3 -m venv test-py3
+jpnelson@KL-ThinkPad-T470:~/2018$ ls 
+alliance-bibcat         grow-hub                  py3-env
+bibcat                  introduction-to-bibcat    rdfframework
+bibcat-publisher        intro-to-elastic          test-py3
+cc-scholarship-graph    intro-to-mongodb          tiger-catalog
+code4lib-2018           knowledgelinks.github.io  tmp
+digital-cc              marc2bibframe2            uikit
+dpla-service-hub        melissa-arches            year-in-aiki
+floyds-dreams-of-dylan  openrefine-2.8
+garage-workshop         Plains2PeaksPilot
+jpnelson@KL-ThinkPad-T470:~/2018$ cd test-py3/
+jpnelson@KL-ThinkPad-T470:~/2018/test-py3$ ls
+bin  include  lib  lib64  pyvenv.cfg
+jpnelson@KL-ThinkPad-T470:~/2018/test-py3$ cd ..
+jpnelson@KL-ThinkPad-T470:~/2018$ source test-py3/bin/activate
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018$ pip install bibcat
+Collecting bibcat
+  Downloading bibcat-2.0.5.tar.gz (62kB)
+    100% |████████████████████████████████| 71kB 503kB/s 
+Collecting Flask (from bibcat)
+  Using cached Flask-0.12.2-py2.py3-none-any.whl
+Collecting jsonpath_ng (from bibcat)
+  Using cached jsonpath_ng-1.4.3-py2.py3-none-any.whl
+Collecting lxml (from bibcat)
+  Using cached lxml-4.1.1-cp36-cp36m-manylinux1_x86_64.whl
+Collecting pymarc (from bibcat)
+  Using cached pymarc-3.1.7.tar.gz
+Requirement already satisfied: rdflib in ./test-py3/lib/python3.6/site-packages (from bibcat)
+Collecting rdflib-jsonld (from bibcat)
+  Using cached rdflib-jsonld-0.4.0.tar.gz
+Collecting requests (from bibcat)
+  Using cached requests-2.18.4-py2.py3-none-any.whl
+Collecting itsdangerous>=0.21 (from Flask->bibcat)
+  Using cached itsdangerous-0.24.tar.gz
+Collecting Jinja2>=2.4 (from Flask->bibcat)
+  Using cached Jinja2-2.10-py2.py3-none-any.whl
+Collecting Werkzeug>=0.7 (from Flask->bibcat)
+  Using cached Werkzeug-0.14.1-py2.py3-none-any.whl
+Collecting click>=2.0 (from Flask->bibcat)
+  Using cached click-6.7-py2.py3-none-any.whl
+Collecting decorator (from jsonpath_ng->bibcat)
+  Using cached decorator-4.2.1-py2.py3-none-any.whl
+Requirement already satisfied: six in ./test-py3/lib/python3.6/site-packages (from jsonpath_ng->bibcat)
+Collecting ply (from jsonpath_ng->bibcat)
+  Using cached ply-3.10.tar.gz
+Requirement already satisfied: pyparsing in ./test-py3/lib/python3.6/site-packages (from rdflib->bibcat)
+Requirement already satisfied: isodate in ./test-py3/lib/python3.6/site-packages (from rdflib->bibcat)
+Collecting chardet<3.1.0,>=3.0.2 (from requests->bibcat)
+  Using cached chardet-3.0.4-py2.py3-none-any.whl
+Collecting certifi>=2017.4.17 (from requests->bibcat)
+  Using cached certifi-2018.1.18-py2.py3-none-any.whl
+Collecting idna<2.7,>=2.5 (from requests->bibcat)
+  Using cached idna-2.6-py2.py3-none-any.whl
+Collecting urllib3<1.23,>=1.21.1 (from requests->bibcat)
+  Using cached urllib3-1.22-py2.py3-none-any.whl
+Collecting MarkupSafe>=0.23 (from Jinja2>=2.4->Flask->bibcat)
+  Using cached MarkupSafe-1.0.tar.gz
+Installing collected packages: itsdangerous, MarkupSafe, Jinja2, Werkzeug, click, Flask, decorator, ply, jsonpath-ng, lxml, pymarc, rdflib-jsonld, chardet, certifi, idna, urllib3, requests, bibcat
+  Running setup.py install for itsdangerous ... done
+  Running setup.py install for MarkupSafe ... done
+  Running setup.py install for ply ... done
+  Running setup.py install for pymarc ... done
+  Running setup.py install for rdflib-jsonld ... done
+  Running setup.py install for bibcat ... done
+Successfully installed Flask-0.12.2 Jinja2-2.10 MarkupSafe-1.0 Werkzeug-0.14.1 bibcat-2.0.5 certifi-2018.1.18 chardet-3.0.4 click-6.7 decorator-4.2.1 idna-2.6 itsdangerous-0.24 jsonpath-ng-1.4.3 lxml-4.1.1 ply-3.10 pymarc-3.1.7 rdflib-jsonld-0.4.0 requests-2.18.4 urllib3-1.22
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018$ python
+Python 3.6.4 (default, Feb  8 2018, 13:45:45) 
+[GCC 5.4.0 20160609] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import bibcat
+INFO:rdflib:RDFLib Version: 4.2.2
+>>> bibcat.__version__
+'2.0.5'
+>>> import rdflib
+>>> graph1 = rdflib.Graph()
+>>> graph1
+<Graph identifier=N69d122cfab00483ab63601b6318ac675 (<class 'rdflib.graph.Graph'>)>
+>>> BF = rdflib.Namespace("http://id.loc.gov/ontologies/bibframe/")
+>>> len(graph1)
+0
+>>> graph1.namespace_manager.bind("bf", BF)
+>>> first_iri = rdflib.URIRef("http://example.com/1234")
+>>> graph1.add((first_iri, rdflib.RDF.type, BF.Item))
+>>> len(graph1)
+1
+>>> print(graph1.serialize(format='turtle').decode())
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.com/1234> a bf:Item .
+
+
+>>> bibcat._is_valid_iri("http://example.com/12345")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: module 'bibcat' has no attribute '_is_valid_iri'
+>>> bibcat._is_valid_uri("http://example.com/2345")
+True
+>>> bibcat._is_valid_uri("http://example.com/123445  ")
+False
+>>> bibcat.slugify("A very good morning to all of us")
+'a-very-good-morning-to-all-of-us'
+>>> bibcat.wikify("A Very Good morning")
+'A_Very_Good_morning'
+>>> exit()
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018$ ls
+alliance-bibcat         grow-hub                  py3-env
+bibcat                  introduction-to-bibcat    rdfframework
+bibcat-publisher        intro-to-elastic          test-py3
+cc-scholarship-graph    intro-to-mongodb          tiger-catalog
+code4lib-2018           knowledgelinks.github.io  tmp
+digital-cc              marc2bibframe2            uikit
+dpla-service-hub        melissa-arches            year-in-aiki
+floyds-dreams-of-dylan  openrefine-2.8
+garage-workshop         Plains2PeaksPilot
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018$ git clone https://github.com/lcnetdev/marc2bibframe2.git
+fatal: destination path 'marc2bibframe2' already exists and is not an empty directory.
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018$ cd tmp
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018/tmp$ ls
+eskean                openrefine-linux-2.8.tar.gz  rdfw_base
+eskean_100.tar.gz     Python-3.6.4                 title.py
+full-record-load.mrc  Python-3.6.4.tar.xz          tutt-marc-full-01-08-18.out
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018/tmp$ git clone https://github.com/lcnetdev/marc2bibframe2.git
+Cloning into 'marc2bibframe2'...
+remote: Counting objects: 3404, done.
+remote: Total 3404 (delta 0), reused 0 (delta 0), pack-reused 3404
+Receiving objects: 100% (3404/3404), 1.73 MiB | 1.35 MiB/s, done.
+Resolving deltas: 100% (2528/2528), done.
+Checking connectivity... done.
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018/tmp$ ls
+eskean                openrefine-linux-2.8.tar.gz  title.py
+eskean_100.tar.gz     Python-3.6.4                 tutt-marc-full-01-08-18.out
+full-record-load.mrc  Python-3.6.4.tar.xz
+marc2bibframe2        rdfw_base
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018/tmp$ cd marc2bibframe2/
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018/tmp/marc2bibframe2$ ls
+dataset  IDMETA      marc2bibframe2.spec  NEWS       record-conv.xml  xsl
+deploy   LICENSE.md  metaproxy            README.md  test
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018/tmp/marc2bibframe2$ cd ../../
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018$ cd marc2bibframe2/
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018/marc2bibframe2$ cd ..
+(test-py3) jpnelson@KL-ThinkPad-T470:~/2018$ python
+Python 3.6.4 (default, Feb  8 2018, 13:45:45) 
+[GCC 5.4.0 20160609] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pymarc
+>>> marc_reader = pymarc.MARCReader(open("/home/jpnelson/Downloads/pride-and-prejudice.mrc", "rb"), to_unicode=True)
+>>> first_rec = next(marc_reader)
+>>> first_rec
+<pymarc.record.Record object at 0x7f74bf981780>
+>>> print(first_rec)
+=LDR  03165cgm  2200721Ia 45 0
+=001  48075651
+=003  OCoLC
+=005  20041012112205.0
+=007  vd\\v\\\
+=008  011003s2001\\\\enk300\g\\\\\\\\\\vleng\d
+=020  \\$a0767038266 :
+=020  \\$a0767038274 (v. 1)
+=020  \\$a0767038282 (v. 2)
+=028  42$aAAE-70255--AAE-72056$bA & E Home Video
+=035  \\$a.b1629290x$btvdvd$cc
+=040  \\$aIFJ$cIFJ$dOCLCQ$dRLS$dOCLCQ$dIHI$dOCLCQ$dFVC$dOCLCQ
+=043  \\$ae-uk-en
+=049  \\$aCOCA
+=090  \\$aPN1997$b.P761 2001
+=090  \\$aPN1997$b.P761 2001
+=245  00$aJane Austen's Pride and prejudice$h[videorecording] /$ca co-production of BBC Television and BBC Worldwide Americas, Inc. in association with A & E Network ; screenplay by Andrew Davies ; directed by Simon Langton ; produced by Sue Birtwistle.
+=246  30$aPride and prejudice.
+=250  \\$aSpecial ed.
+=260  \\$a[London?] :$bBritish Broadcasting Corp.,$c2001.
+=300  \\$a2 videodiscs (300 min.) :$bsd., col. ;$c4 3/4 in. +$e1 booklet.
+=538  \\$aDVD; Dolby, digital, stereo.
+=511  1\$aColin Firth, Jennifer Ehle, Alison Steadman, Benjamin Whitrow, Susannah Harker, Crispin Bonham-Carter, Anna Chancellor, Julia Sawalha, David Bamber, David Bark-Jones.
+=508  \\$aPhotography, John Kenway ; film editor, Peter Coulson ; music, Carl Davis.
+=500  \\$aOriginally produced for 1995 miniseries television broadcast.
+=500  \\$aBased on the novel by Jane Austen.
+=500  \\$aFilm format: anamorphic widescreen (2.35:1)
+=500  \\$aBooklet (7 p.) includes list of chapters, and cast and crew reminiscences.
+=521  8\$aNot rated.
+=520  \\$aThe story of lively and rebellious Elizabeth, one of five unmarried daughters living in the countryside of 19th century England, in a world where an advantageous marriage is a woman's sole occupation.
+=500  \\$aSpecial features: vol. 1: biographies ; vol. 2: featurette (The making of Pride and prejudice)
+=600  10$aAusten, Jane,$d1775-1817$vFilm adaptations.
+=650  \0$aYoung women$zEngland$vDrama.
+=650  \0$aCourtship$zEngland$vDrama.
+=650  \0$aTelevision adaptations.
+=650  \0$aTelevision mini-series.
+=651  \0$aEngland$xSocial life and customs$y19th century$vDrama.
+=655  \7$aLove stories.
+=690  \\$aFeature films$vDVD.
+=690  \\$aLiterature$vDVD.
+=700  1\$aFirth, Colin,$d1960-
+=700  1\$aEhle, Jennifer,$d1969-
+=700  1\$aSteadman, Alison,$d1946-
+=700  1\$aWhitrow, Benjamin.
+=700  1\$aHarker, Susannah.
+=700  1\$aBonham-Carter, Crispin.
+=700  1\$aChancellor, Anna.
+=700  1\$aSawalha, Julia,$d1968-
+=700  1\$aBamber, David.
+=700  1\$aLangton, Simon.
+=700  1\$aAusten, Jane,$d1775-1817.$tPride and prejudice.
+=710  2\$aArts and Entertainment Network.
+=710  2\$aBritish Broadcasting Corporation.
+=710  2\$aA & E Home Video (Firm)
+=907  \\$a.b1629290x
+=902  \\$a130106
+=999  \\$b2$c041012$dm$eg$fc$g0
+=994  \\$atvdvd
+=945  \\$aPN1997$b.P761 2001$cv.  1$g1$i33027005139922$j0$ltvdvd$h0$o2$p$0.00$qn$r-$s-$t14$u31$v0$w0$x1$y.i1672253x$z050628
+
+>>> print(first_rec)                 
+=LDR  03165cgm  2200721Ia 45 0
+=001  48075651
+=003  OCoLC
+=005  20041012112205.0
+=007  vd\\v\\\
+=008  011003s2001\\\\enk300\g\\\\\\\\\\vleng\d
+=020  \\$a0767038266 :
+=020  \\$a0767038274 (v. 1)
+=020  \\$a0767038282 (v. 2)
+=028  42$aAAE-70255--AAE-72056$bA & E Home Video
+=035  \\$a.b1629290x$btvdvd$cc
+=040  \\$aIFJ$cIFJ$dOCLCQ$dRLS$dOCLCQ$dIHI$dOCLCQ$dFVC$dOCLCQ
+=043  \\$ae-uk-en
+=049  \\$aCOCA
+=090  \\$aPN1997$b.P761 2001
+=090  \\$aPN1997$b.P761 2001
+=245  00$aJane Austen's Pride and prejudice$h[videorecording] /$ca co-production of BBC Television and BBC Worldwide Americas, Inc. in association with A & E Network ; screenplay by Andrew Davies ; directed by Simon Langton ; produced by Sue Birtwistle.
+=246  30$aPride and prejudice.
+=250  \\$aSpecial ed.
+=260  \\$a[London?] :$bBritish Broadcasting Corp.,$c2001.
+=300  \\$a2 videodiscs (300 min.) :$bsd., col. ;$c4 3/4 in. +$e1 booklet.
+=538  \\$aDVD; Dolby, digital, stereo.
+=511  1\$aColin Firth, Jennifer Ehle, Alison Steadman, Benjamin Whitrow, Susannah Harker, Crispin Bonham-Carter, Anna Chancellor, Julia Sawalha, David Bamber, David Bark-Jones.
+=508  \\$aPhotography, John Kenway ; film editor, Peter Coulson ; music, Carl Davis.
+=500  \\$aOriginally produced for 1995 miniseries television broadcast.
+=500  \\$aBased on the novel by Jane Austen.
+=500  \\$aFilm format: anamorphic widescreen (2.35:1)
+=500  \\$aBooklet (7 p.) includes list of chapters, and cast and crew reminiscences.
+=521  8\$aNot rated.
+=520  \\$aThe story of lively and rebellious Elizabeth, one of five unmarried daughters living in the countryside of 19th century England, in a world where an advantageous marriage is a woman's sole occupation.
+=500  \\$aSpecial features: vol. 1: biographies ; vol. 2: featurette (The making of Pride and prejudice)
+=600  10$aAusten, Jane,$d1775-1817$vFilm adaptations.
+=650  \0$aYoung women$zEngland$vDrama.
+=650  \0$aCourtship$zEngland$vDrama.
+=650  \0$aTelevision adaptations.
+=650  \0$aTelevision mini-series.
+=651  \0$aEngland$xSocial life and customs$y19th century$vDrama.
+=655  \7$aLove stories.
+=690  \\$aFeature films$vDVD.
+=690  \\$aLiterature$vDVD.
+=700  1\$aFirth, Colin,$d1960-
+=700  1\$aEhle, Jennifer,$d1969-
+=700  1\$aSteadman, Alison,$d1946-
+=700  1\$aWhitrow, Benjamin.
+=700  1\$aHarker, Susannah.
+=700  1\$aBonham-Carter, Crispin.
+=700  1\$aChancellor, Anna.
+=700  1\$aSawalha, Julia,$d1968-
+=700  1\$aBamber, David.
+=700  1\$aLangton, Simon.
+=700  1\$aAusten, Jane,$d1775-1817.$tPride and prejudice.
+=710  2\$aArts and Entertainment Network.
+=710  2\$aBritish Broadcasting Corporation.
+=710  2\$aA & E Home Video (Firm)
+=907  \\$a.b1629290x
+=902  \\$a130106
+=999  \\$b2$c041012$dm$eg$fc$g0
+=994  \\$atvdvd
+=945  \\$aPN1997$b.P761 2001$cv.  1$g1$i33027005139922$j0$ltvdvd$h0$o2$p$0.00$qn$r-$s-$t14$u31$v0$w0$x1$y.i1672253x$z050628
+
+>>> first_rec
+<pymarc.record.Record object at 0x7f74bf981780>
+>>> import lxml.etree
+>>> marc2bibframe2 = lxml.etree.XSLT(lxml.etree.parse("/home/jpnelson/2018/marc2bibframe2/xsl/marc2bibframe2.xsl")
+... )
+>>> marc2bibframe2
+<lxml.etree.XSLT object at 0x7f74bcae7200>
+>>> raw_xml = pymarc.record_to_xml(first_rec, namespace=True)
+>>> raw_xml
+b'<record xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"><leader>03165cgm  2200721Ia 45 0</leader><controlfield tag="001">48075651</controlfield><controlfield tag="003">OCoLC</controlfield><controlfield tag="005">20041012112205.0</controlfield><controlfield tag="007">vd  v   </controlfield><controlfield tag="008">011003s2001    enk300 g          vleng d</controlfield><datafield ind1=" " ind2=" " tag="020"><subfield code="a">0767038266 :</subfield></datafield><datafield ind1=" " ind2=" " tag="020"><subfield code="a">0767038274 (v. 1)</subfield></datafield><datafield ind1=" " ind2=" " tag="020"><subfield code="a">0767038282 (v. 2)</subfield></datafield><datafield ind1="4" ind2="2" tag="028"><subfield code="a">AAE-70255--AAE-72056</subfield><subfield code="b">A &amp; E Home Video</subfield></datafield><datafield ind1=" " ind2=" " tag="035"><subfield code="a">.b1629290x</subfield><subfield code="b">tvdvd</subfield><subfield code="c">c</subfield></datafield><datafield ind1=" " ind2=" " tag="040"><subfield code="a">IFJ</subfield><subfield code="c">IFJ</subfield><subfield code="d">OCLCQ</subfield><subfield code="d">RLS</subfield><subfield code="d">OCLCQ</subfield><subfield code="d">IHI</subfield><subfield code="d">OCLCQ</subfield><subfield code="d">FVC</subfield><subfield code="d">OCLCQ</subfield></datafield><datafield ind1=" " ind2=" " tag="043"><subfield code="a">e-uk-en</subfield></datafield><datafield ind1=" " ind2=" " tag="049"><subfield code="a">COCA</subfield></datafield><datafield ind1=" " ind2=" " tag="090"><subfield code="a">PN1997</subfield><subfield code="b">.P761 2001</subfield></datafield><datafield ind1=" " ind2=" " tag="090"><subfield code="a">PN1997</subfield><subfield code="b">.P761 2001</subfield></datafield><datafield ind1="0" ind2="0" tag="245"><subfield code="a">Jane Austen\'s Pride and prejudice</subfield><subfield code="h">[videorecording] /</subfield><subfield code="c">a co-production of BBC Television and BBC Worldwide Americas, Inc. in association with A &amp; E Network ; screenplay by Andrew Davies ; directed by Simon Langton ; produced by Sue Birtwistle.</subfield></datafield><datafield ind1="3" ind2="0" tag="246"><subfield code="a">Pride and prejudice.</subfield></datafield><datafield ind1=" " ind2=" " tag="250"><subfield code="a">Special ed.</subfield></datafield><datafield ind1=" " ind2=" " tag="260"><subfield code="a">[London?] :</subfield><subfield code="b">British Broadcasting Corp.,</subfield><subfield code="c">2001.</subfield></datafield><datafield ind1=" " ind2=" " tag="300"><subfield code="a">2 videodiscs (300 min.) :</subfield><subfield code="b">sd., col. ;</subfield><subfield code="c">4 3/4 in. +</subfield><subfield code="e">1 booklet.</subfield></datafield><datafield ind1=" " ind2=" " tag="538"><subfield code="a">DVD; Dolby, digital, stereo.</subfield></datafield><datafield ind1="1" ind2=" " tag="511"><subfield code="a">Colin Firth, Jennifer Ehle, Alison Steadman, Benjamin Whitrow, Susannah Harker, Crispin Bonham-Carter, Anna Chancellor, Julia Sawalha, David Bamber, David Bark-Jones.</subfield></datafield><datafield ind1=" " ind2=" " tag="508"><subfield code="a">Photography, John Kenway ; film editor, Peter Coulson ; music, Carl Davis.</subfield></datafield><datafield ind1=" " ind2=" " tag="500"><subfield code="a">Originally produced for 1995 miniseries television broadcast.</subfield></datafield><datafield ind1=" " ind2=" " tag="500"><subfield code="a">Based on the novel by Jane Austen.</subfield></datafield><datafield ind1=" " ind2=" " tag="500"><subfield code="a">Film format: anamorphic widescreen (2.35:1)</subfield></datafield><datafield ind1=" " ind2=" " tag="500"><subfield code="a">Booklet (7 p.) includes list of chapters, and cast and crew reminiscences.</subfield></datafield><datafield ind1="8" ind2=" " tag="521"><subfield code="a">Not rated.</subfield></datafield><datafield ind1=" " ind2=" " tag="520"><subfield code="a">The story of lively and rebellious Elizabeth, one of five unmarried daughters living in the countryside of 19th century England, in a world where an advantageous marriage is a woman\'s sole occupation.</subfield></datafield><datafield ind1=" " ind2=" " tag="500"><subfield code="a">Special features: vol. 1: biographies ; vol. 2: featurette (The making of Pride and prejudice)</subfield></datafield><datafield ind1="1" ind2="0" tag="600"><subfield code="a">Austen, Jane,</subfield><subfield code="d">1775-1817</subfield><subfield code="v">Film adaptations.</subfield></datafield><datafield ind1=" " ind2="0" tag="650"><subfield code="a">Young women</subfield><subfield code="z">England</subfield><subfield code="v">Drama.</subfield></datafield><datafield ind1=" " ind2="0" tag="650"><subfield code="a">Courtship</subfield><subfield code="z">England</subfield><subfield code="v">Drama.</subfield></datafield><datafield ind1=" " ind2="0" tag="650"><subfield code="a">Television adaptations.</subfield></datafield><datafield ind1=" " ind2="0" tag="650"><subfield code="a">Television mini-series.</subfield></datafield><datafield ind1=" " ind2="0" tag="651"><subfield code="a">England</subfield><subfield code="x">Social life and customs</subfield><subfield code="y">19th century</subfield><subfield code="v">Drama.</subfield></datafield><datafield ind1=" " ind2="7" tag="655"><subfield code="a">Love stories.</subfield></datafield><datafield ind1=" " ind2=" " tag="690"><subfield code="a">Feature films</subfield><subfield code="v">DVD.</subfield></datafield><datafield ind1=" " ind2=" " tag="690"><subfield code="a">Literature</subfield><subfield code="v">DVD.</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Firth, Colin,</subfield><subfield code="d">1960-</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Ehle, Jennifer,</subfield><subfield code="d">1969-</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Steadman, Alison,</subfield><subfield code="d">1946-</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Whitrow, Benjamin.</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Harker, Susannah.</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Bonham-Carter, Crispin.</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Chancellor, Anna.</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Sawalha, Julia,</subfield><subfield code="d">1968-</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Bamber, David.</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Langton, Simon.</subfield></datafield><datafield ind1="1" ind2=" " tag="700"><subfield code="a">Austen, Jane,</subfield><subfield code="d">1775-1817.</subfield><subfield code="t">Pride and prejudice.</subfield></datafield><datafield ind1="2" ind2=" " tag="710"><subfield code="a">Arts and Entertainment Network.</subfield></datafield><datafield ind1="2" ind2=" " tag="710"><subfield code="a">British Broadcasting Corporation.</subfield></datafield><datafield ind1="2" ind2=" " tag="710"><subfield code="a">A &amp; E Home Video (Firm)</subfield></datafield><datafield ind1=" " ind2=" " tag="907"><subfield code="a">.b1629290x</subfield></datafield><datafield ind1=" " ind2=" " tag="902"><subfield code="a">130106</subfield></datafield><datafield ind1=" " ind2=" " tag="999"><subfield code="b">2</subfield><subfield code="c">041012</subfield><subfield code="d">m</subfield><subfield code="e">g</subfield><subfield code="f">c</subfield><subfield code="g">0</subfield></datafield><datafield ind1=" " ind2=" " tag="994"><subfield code="a">tvdvd</subfield></datafield><datafield ind1=" " ind2=" " tag="945"><subfield code="a">PN1997</subfield><subfield code="b">.P761 2001</subfield><subfield code="c">v.  1</subfield><subfield code="g">1</subfield><subfield code="i">33027005139922</subfield><subfield code="j">0</subfield><subfield code="l">tvdvd</subfield><subfield code="h">0</subfield><subfield code="o">2</subfield><subfield code="p">$0.00</subfield><subfield code="q">n</subfield><subfield code="r">-</subfield><subfield code="s">-</subfield><subfield code="t">14</subfield><subfield code="u">31</subfield><subfield code="v">0</subfield><subfield code="w">0</subfield><subfield code="x">1</subfield><subfield code="y">.i1672253x</subfield><subfield code="z">050628</subfield></datafield></record>'
+>>> marc_xml = lxml.etree.XML(raw_xml)
+>>> marc_xml
+<Element {http://www.loc.gov/MARC21/slim}record at 0x7f74bcae5848>
+>>> bf_rdf_xml = marc2bibframe2(marc_xml)
+>>> bf_rdf_xml
+<lxml.etree._XSLTResultTree object at 0x7f74bcb05528>
+>>> bf_raw_xml = lxml.etree.to_string(bf_rdf_xml)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: module 'lxml.etree' has no attribute 'to_string'
+>>> bf_raw_xml= lxml.etree.tostring(bf_rdf_xml)
+>>> bf_raw_xml
+b'<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:bf="http://id.loc.gov/ontologies/bibframe/" xmlns:bflc="http://id.loc.gov/ontologies/bflc/" xmlns:madsrdf="http://www.loc.gov/mads/rdf/v1#"><bf:Work rdf:about="http://example.org/48075651#Work"><bf:adminMetadata><bf:AdminMetadata><bf:generationProcess><bf:GenerationProcess><rdfs:label>DLC marc2bibframe2 v1.4.0-SNAPSHOT: 2018-02-13T11:07:39-05:00</rdfs:label></bf:GenerationProcess></bf:generationProcess><bf:status><bf:Status><bf:code>c</bf:code></bf:Status></bf:status><bflc:encodingLevel><bflc:EncodingLevel><bf:code>u</bf:code></bflc:EncodingLevel></bflc:encodingLevel><bf:descriptionConventions><bf:DescriptionConventions><bf:code>aacr</bf:code></bf:DescriptionConventions></bf:descriptionConventions><bf:identifiedBy><bf:Local><rdf:value>48075651</rdf:value></bf:Local></bf:identifiedBy><bf:source><bf:Source><bf:code>OCoLC</bf:code></bf:Source></bf:source><bf:changeDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2004-10-12T11:22:05</bf:changeDate><bf:creationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2001-10-03</bf:creationDate><bf:source><bf:Source><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Agent"/><rdfs:label>IFJ</rdfs:label></bf:Source></bf:source><bf:source><bf:Source><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Agent"/><rdfs:label>IFJ</rdfs:label></bf:Source></bf:source><bf:descriptionModifier><bf:Agent><rdfs:label>OCLCQ</rdfs:label></bf:Agent></bf:descriptionModifier><bf:descriptionModifier><bf:Agent><rdfs:label>RLS</rdfs:label></bf:Agent></bf:descriptionModifier><bf:descriptionModifier><bf:Agent><rdfs:label>OCLCQ</rdfs:label></bf:Agent></bf:descriptionModifier><bf:descriptionModifier><bf:Agent><rdfs:label>IHI</rdfs:label></bf:Agent></bf:descriptionModifier><bf:descriptionModifier><bf:Agent><rdfs:label>OCLCQ</rdfs:label></bf:Agent></bf:descriptionModifier><bf:descriptionModifier><bf:Agent><rdfs:label>FVC</rdfs:label></bf:Agent></bf:descriptionModifier><bf:descriptionModifier><bf:Agent><rdfs:label>OCLCQ</rdfs:label></bf:Agent></bf:descriptionModifier></bf:AdminMetadata></bf:adminMetadata><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/MovingImage"/><bf:genreForm><bf:GenreForm rdf:about="http://id.loc.gov/authorities/genreForms/gf2011026723"/></bf:genreForm><bf:language><bf:Language rdf:about="http://id.loc.gov/vocabulary/languages/eng"/></bf:language><bf:intendedAudience><bf:IntendedAudience rdf:about="http://id.loc.gov/vocabulary/maudience/gen"><rdfs:label>general</rdfs:label></bf:IntendedAudience></bf:intendedAudience><bf:genreForm><bf:GenreForm rdf:about="http://id.loc.gov/vocabulary/marcgt/vid"><rdfs:label>videorecording</rdfs:label></bf:GenreForm></bf:genreForm><bf:duration rdf:datatype="http://www.w3.org/2001/XMLSchema#duration">300</bf:duration><bf:geographicCoverage><bf:GeographicCoverage rdf:about="http://id.loc.gov/vocabulary/geographicAreas/e-uk-en"/></bf:geographicCoverage><rdfs:label>Jane Austen\'s Pride and prejudice</rdfs:label><bf:title><bf:Title><rdfs:label>Jane Austen\'s Pride and prejudice</rdfs:label><bflc:titleSortKey>Jane Austen\'s Pride and prejudice</bflc:titleSortKey><bf:mainTitle>Jane Austen\'s Pride and prejudice</bf:mainTitle></bf:Title></bf:title><bf:genreForm><bf:GenreForm><rdfs:label>videorecording</rdfs:label></bf:GenreForm></bf:genreForm><bf:credits>Cast: Colin Firth, Jennifer Ehle, Alison Steadman, Benjamin Whitrow, Susannah Harker, Crispin Bonham-Carter, Anna Chancellor, Julia Sawalha, David Bamber, David Bark-Jones.</bf:credits><bf:credits>Photography, John Kenway ; film editor, Peter Coulson ; music, Carl Davis.</bf:credits><bf:summary><bf:Summary><rdfs:label>The story of lively and rebellious Elizabeth, one of five unmarried daughters living in the countryside of 19th century England, in a world where an advantageous marriage is a woman\'s sole occupation.</rdfs:label></bf:Summary></bf:summary><bf:subject><bf:Agent rdf:about="http://example.org/48075651#Agent600-32"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><rdf:type rdf:resource="http://www.loc.gov/mads/rdf/v1#ComplexSubject"/><madsrdf:authoritativeLabel>Austen, Jane, 1775-1817--Film adaptations.</madsrdf:authoritativeLabel><madsrdf:isMemberofMADSScheme rdf:resource="http://id.loc.gov/authorities/subjects"/><bf:source><bf:Source><bf:code>lcsh</bf:code></bf:Source></bf:source><bflc:name00MatchKey>Austen, Jane, 1775-1817</bflc:name00MatchKey><bflc:name00MarcKey>60010$aAusten, Jane,$d1775-1817$vFilm adaptations.</bflc:name00MarcKey><rdfs:label>Austen, Jane, 1775-1817</rdfs:label></bf:Agent></bf:subject><bf:subject><bf:Topic rdf:about="http://example.org/48075651#Topic650-33"><rdf:type rdf:resource="http://www.loc.gov/mads/rdf/v1#ComplexSubject"/><rdfs:label>Young women--England--Drama.</rdfs:label><madsrdf:authoritativeLabel>Young women--England--Drama.</madsrdf:authoritativeLabel><madsrdf:isMemberofMADSScheme rdf:resource="http://id.loc.gov/authorities/subjects"/><madsrdf:componentList rdf:parseType="Collection"><madsrdf:Topic><madsrdf:authoritativeLabel>Young women</madsrdf:authoritativeLabel></madsrdf:Topic><madsrdf:Geographic><madsrdf:authoritativeLabel>England</madsrdf:authoritativeLabel></madsrdf:Geographic><madsrdf:GenreForm><madsrdf:authoritativeLabel>Drama</madsrdf:authoritativeLabel></madsrdf:GenreForm></madsrdf:componentList><bf:source><bf:Source><bf:code>lcsh</bf:code></bf:Source></bf:source></bf:Topic></bf:subject><bf:subject><bf:Topic rdf:about="http://example.org/48075651#Topic650-34"><rdf:type rdf:resource="http://www.loc.gov/mads/rdf/v1#ComplexSubject"/><rdfs:label>Courtship--England--Drama.</rdfs:label><madsrdf:authoritativeLabel>Courtship--England--Drama.</madsrdf:authoritativeLabel><madsrdf:isMemberofMADSScheme rdf:resource="http://id.loc.gov/authorities/subjects"/><madsrdf:componentList rdf:parseType="Collection"><madsrdf:Topic><madsrdf:authoritativeLabel>Courtship</madsrdf:authoritativeLabel></madsrdf:Topic><madsrdf:Geographic><madsrdf:authoritativeLabel>England</madsrdf:authoritativeLabel></madsrdf:Geographic><madsrdf:GenreForm><madsrdf:authoritativeLabel>Drama</madsrdf:authoritativeLabel></madsrdf:GenreForm></madsrdf:componentList><bf:source><bf:Source><bf:code>lcsh</bf:code></bf:Source></bf:source></bf:Topic></bf:subject><bf:subject><bf:Topic rdf:about="http://example.org/48075651#Topic650-35"><rdf:type rdf:resource="http://www.loc.gov/mads/rdf/v1#Topic"/><rdfs:label>Television adaptations.</rdfs:label><madsrdf:authoritativeLabel>Television adaptations.</madsrdf:authoritativeLabel><madsrdf:isMemberofMADSScheme rdf:resource="http://id.loc.gov/authorities/subjects"/><bf:source><bf:Source><bf:code>lcsh</bf:code></bf:Source></bf:source></bf:Topic></bf:subject><bf:subject><bf:Topic rdf:about="http://example.org/48075651#Topic650-36"><rdf:type rdf:resource="http://www.loc.gov/mads/rdf/v1#Topic"/><rdfs:label>Television mini-series.</rdfs:label><madsrdf:authoritativeLabel>Television mini-series.</madsrdf:authoritativeLabel><madsrdf:isMemberofMADSScheme rdf:resource="http://id.loc.gov/authorities/subjects"/><bf:source><bf:Source><bf:code>lcsh</bf:code></bf:Source></bf:source></bf:Topic></bf:subject><bf:subject><bf:Place rdf:about="http://example.org/48075651#Topic651-37"><rdf:type rdf:resource="http://www.loc.gov/mads/rdf/v1#ComplexSubject"/><rdfs:label>England--Social life and customs--19th century--Drama.</rdfs:label><madsrdf:authoritativeLabel>England--Social life and customs--19th century--Drama.</madsrdf:authoritativeLabel><madsrdf:isMemberofMADSScheme rdf:resource="http://id.loc.gov/authorities/subjects"/><madsrdf:componentList rdf:parseType="Collection"><madsrdf:Geographic><madsrdf:authoritativeLabel>England</madsrdf:authoritativeLabel></madsrdf:Geographic><madsrdf:Topic><madsrdf:authoritativeLabel>Social life and customs</madsrdf:authoritativeLabel></madsrdf:Topic><madsrdf:Temporal><madsrdf:authoritativeLabel>19th century</madsrdf:authoritativeLabel></madsrdf:Temporal><madsrdf:GenreForm><madsrdf:authoritativeLabel>Drama</madsrdf:authoritativeLabel></madsrdf:GenreForm></madsrdf:componentList><bf:source><bf:Source><bf:code>lcsh</bf:code></bf:Source></bf:source></bf:Place></bf:subject><bf:genreForm><bf:GenreForm rdf:about="http://example.org/48075651#GenreForm655-38"><rdf:type rdf:resource="http://www.loc.gov/mads/rdf/v1#GenreForm"/><rdfs:label>Love stories.</rdfs:label><madsrdf:authoritativeLabel>Love stories.</madsrdf:authoritativeLabel><bf:source><bf:Source><bf:code/></bf:Source></bf:source></bf:GenreForm></bf:genreForm><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-41"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Firth, Colin, 1960-</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aFirth, Colin,$d1960-</bflc:name00MarcKey><rdfs:label>Firth, Colin, 1960-</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-42"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Ehle, Jennifer, 1969-</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aEhle, Jennifer,$d1969-</bflc:name00MarcKey><rdfs:label>Ehle, Jennifer, 1969-</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-43"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Steadman, Alison, 1946-</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aSteadman, Alison,$d1946-</bflc:name00MarcKey><rdfs:label>Steadman, Alison, 1946-</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-44"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Whitrow, Benjamin.</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aWhitrow, Benjamin.</bflc:name00MarcKey><rdfs:label>Whitrow, Benjamin.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-45"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Harker, Susannah.</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aHarker, Susannah.</bflc:name00MarcKey><rdfs:label>Harker, Susannah.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-46"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Bonham-Carter, Crispin.</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aBonham-Carter, Crispin.</bflc:name00MarcKey><rdfs:label>Bonham-Carter, Crispin.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-47"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Chancellor, Anna.</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aChancellor, Anna.</bflc:name00MarcKey><rdfs:label>Chancellor, Anna.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-48"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Sawalha, Julia, 1968-</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aSawalha, Julia,$d1968-</bflc:name00MarcKey><rdfs:label>Sawalha, Julia, 1968-</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-49"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Bamber, David.</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aBamber, David.</bflc:name00MarcKey><rdfs:label>Bamber, David.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-50"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Langton, Simon.</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aLangton, Simon.</bflc:name00MarcKey><rdfs:label>Langton, Simon.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:relatedTo><bf:Work rdf:about="http://example.org/48075651#Work700-51"><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent700-51"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Person"/><bflc:name00MatchKey>Austen, Jane, 1775-1817.</bflc:name00MatchKey><bflc:name00MarcKey>7001 $aAusten, Jane,$d1775-1817.$tPride and prejudice.</bflc:name00MarcKey><rdfs:label>Austen, Jane, 1775-1817.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><rdfs:label>Pride and prejudice.</rdfs:label><bf:title><bf:Title><bflc:title00MatchKey>Pride and prejudice.</bflc:title00MatchKey><bflc:title00MarcKey>7001 $aAusten, Jane,$d1775-1817.$tPride and prejudice.</bflc:title00MarcKey><rdfs:label>Pride and prejudice.</rdfs:label><bflc:titleSortKey>Pride and prejudice.</bflc:titleSortKey><bf:mainTitle>Pride and prejudice</bf:mainTitle></bf:Title></bf:title></bf:Work></bf:relatedTo><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent710-52"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Organization"/><bflc:name10MatchKey>Arts and Entertainment Network.</bflc:name10MatchKey><bflc:name10MarcKey>7102 $aArts and Entertainment Network.</bflc:name10MarcKey><rdfs:label>Arts and Entertainment Network.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent710-53"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Organization"/><bflc:name10MatchKey>British Broadcasting Corporation.</bflc:name10MatchKey><bflc:name10MarcKey>7102 $aBritish Broadcasting Corporation.</bflc:name10MarcKey><rdfs:label>British Broadcasting Corporation.</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:contribution><bf:Contribution><bf:agent><bf:Agent rdf:about="http://example.org/48075651#Agent710-54"><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Organization"/><bflc:name10MatchKey>A &amp; E Home Video (Firm)</bflc:name10MatchKey><bflc:name10MarcKey>7102 $aA &amp; E Home Video (Firm)</bflc:name10MarcKey><rdfs:label>A &amp; E Home Video (Firm)</rdfs:label></bf:Agent></bf:agent><bf:role><bf:Role rdf:about="http://id.loc.gov/vocabulary/relators/ctb"/></bf:role></bf:Contribution></bf:contribution><bf:hasInstance rdf:resource="http://example.org/48075651#Instance"/></bf:Work><bf:Instance rdf:about="http://example.org/48075651#Instance"><bf:issuance><bf:Issuance rdf:about="http://id.loc.gov/vocabulary/issuance/mono"/></bf:issuance><bf:media><bf:Media rdf:about="http://id.loc.gov/vocabulary/mediaTypes/v"/></bf:media><bf:carrier><bf:Carrier rdf:about="http://id.loc.gov/vocabulary/carriers/vd"><rdfs:label>videodisc</rdfs:label></bf:Carrier></bf:carrier><bf:videoCharacteristic><bf:VideoFormat><rdfs:label>DVD</rdfs:label></bf:VideoFormat></bf:videoCharacteristic><bf:provisionActivity><bf:ProvisionActivity><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Publication"/><bf:date rdf:datatype="http://id.loc.gov/datatypes/edtf">2001</bf:date><bf:place><bf:Place rdf:about="http://id.loc.gov/vocabulary/countries/enk"/></bf:place></bf:ProvisionActivity></bf:provisionActivity><bf:note><bf:Note><bf:noteType>technique</bf:noteType><rdfs:label>live action</rdfs:label></bf:Note></bf:note><bf:identifiedBy><bf:Isbn><rdf:value>0767038266</rdf:value></bf:Isbn></bf:identifiedBy><bf:identifiedBy><bf:Isbn><rdf:value>0767038274 (v. 1)</rdf:value></bf:Isbn></bf:identifiedBy><bf:identifiedBy><bf:Isbn><rdf:value>0767038282 (v. 2)</rdf:value></bf:Isbn></bf:identifiedBy><bf:identifiedBy><bf:VideoRecordingNumber><rdf:value>AAE-70255--AAE-72056</rdf:value><bf:source><bf:Source><rdfs:label>A &amp; E Home Video</rdfs:label></bf:Source></bf:source></bf:VideoRecordingNumber></bf:identifiedBy><bf:identifiedBy><bf:Local><rdf:value>.b1629290x</rdf:value><bf:acquisitionTerms>c</bf:acquisitionTerms></bf:Local></bf:identifiedBy><rdfs:label>Jane Austen\'s Pride and prejudice</rdfs:label><bf:title><bf:Title><rdfs:label>Jane Austen\'s Pride and prejudice</rdfs:label><bflc:titleSortKey>Jane Austen\'s Pride and prejudice</bflc:titleSortKey><bf:mainTitle>Jane Austen\'s Pride and prejudice</bf:mainTitle></bf:Title></bf:title><bf:responsibilityStatement>a co-production of BBC Television and BBC Worldwide Americas, Inc. in association with A &amp; E Network ; screenplay by Andrew Davies ; directed by Simon Langton ; produced by Sue Birtwistle</bf:responsibilityStatement><bf:genreForm><bf:GenreForm><rdfs:label>videorecording</rdfs:label></bf:GenreForm></bf:genreForm><bf:title><bf:Title><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/VariantTitle"/><bf:variantType>portion</bf:variantType><rdfs:label>Pride and prejudice.</rdfs:label><bflc:titleSortKey>Pride and prejudice.</bflc:titleSortKey><bf:mainTitle>Pride and prejudice</bf:mainTitle></bf:Title></bf:title><bf:editionStatement>Special ed</bf:editionStatement><bf:provisionActivity><bf:ProvisionActivity><rdf:type rdf:resource="http://id.loc.gov/ontologies/bibframe/Publication"/><bf:place><bf:Place><rdfs:label>London?</rdfs:label></bf:Place></bf:place><bf:agent><bf:Agent><rdfs:label>British Broadcasting Corp.</rdfs:label></bf:Agent></bf:agent><bf:date>2001</bf:date></bf:ProvisionActivity></bf:provisionActivity><bf:provisionActivityStatement>[London?] : British Broadcasting Corp., 2001.</bf:provisionActivityStatement><bf:extent><bf:Extent><rdfs:label>2 videodiscs (300 min.)</rdfs:label></bf:Extent></bf:extent><bf:note><bf:Note><bf:noteType>Physical details</bf:noteType><rdfs:label>sd., col.</rdfs:label></bf:Note></bf:note><bf:note><bf:Note><bf:noteType>Accompanying materials</bf:noteType><rdfs:label>1 booklet.</rdfs:label></bf:Note></bf:note><bf:dimensions>4 3/4 in.</bf:dimensions><bf:systemRequirement><bf:SystemRequirement><rdfs:label>DVD; Dolby, digital, stereo.</rdfs:label></bf:SystemRequirement></bf:systemRequirement><bf:note><bf:Note><rdfs:label>Originally produced for 1995 miniseries television broadcast.</rdfs:label></bf:Note></bf:note><bf:note><bf:Note><rdfs:label>Based on the novel by Jane Austen.</rdfs:label></bf:Note></bf:note><bf:note><bf:Note><rdfs:label>Film format: anamorphic widescreen (2.35:1)</rdfs:label></bf:Note></bf:note><bf:note><bf:Note><rdfs:label>Booklet (7 p.) includes list of chapters, and cast and crew reminiscences.</rdfs:label></bf:Note></bf:note><bf:intendedAudience><bf:IntendedAudience><rdfs:label>Not rated.</rdfs:label></bf:IntendedAudience></bf:intendedAudience><bf:note><bf:Note><rdfs:label>Special features: vol. 1: biographies ; vol. 2: featurette (The making of Pride and prejudice)</rdfs:label></bf:Note></bf:note><bf:instanceOf rdf:resource="http://example.org/48075651#Work"/></bf:Instance></rdf:RDF>'
+>>> print     
+<built-in function print>
+>>> import rdflib
+INFO:rdflib:RDFLib Version: 4.2.2
+>>> first_rec_graph = rdflib.Graph()
+>>> first_rec_graph.parse(data=bf_rdf_xml, format='xml')
+<Graph identifier=Nd4f05614f2aa40778b40a5541eb54a31 (<class 'rdflib.graph.Graph'>)>
+>>> len(first_rec_graph)
+429
+>>> print(first_rec_graph.serialize(format='turtle').decode())
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bflc: <http://id.loc.gov/ontologies/bflc/> .
+@prefix madsrdf: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/48075651#Agent600-32> a bf:Agent,
+        bf:Person,
+        madsrdf:ComplexSubject ;
+    rdfs:label "Austen, Jane, 1775-1817" ;
+    bflc:name00MarcKey "60010$aAusten, Jane,$d1775-1817$vFilm adaptations." ;
+    bflc:name00MatchKey "Austen, Jane, 1775-1817" ;
+    bf:source [ a bf:Source ;
+            bf:code "lcsh" ] ;
+    madsrdf:authoritativeLabel "Austen, Jane, 1775-1817--Film adaptations." ;
+    madsrdf:isMemberofMADSScheme <http://id.loc.gov/authorities/subjects> .
+
+<http://example.org/48075651#Agent700-41> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Firth, Colin, 1960-" ;
+    bflc:name00MarcKey "7001 $aFirth, Colin,$d1960-" ;
+    bflc:name00MatchKey "Firth, Colin, 1960-" .
+
+<http://example.org/48075651#Agent700-42> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Ehle, Jennifer, 1969-" ;
+    bflc:name00MarcKey "7001 $aEhle, Jennifer,$d1969-" ;
+    bflc:name00MatchKey "Ehle, Jennifer, 1969-" .
+
+<http://example.org/48075651#Agent700-43> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Steadman, Alison, 1946-" ;
+    bflc:name00MarcKey "7001 $aSteadman, Alison,$d1946-" ;
+    bflc:name00MatchKey "Steadman, Alison, 1946-" .
+
+<http://example.org/48075651#Agent700-44> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Whitrow, Benjamin." ;
+    bflc:name00MarcKey "7001 $aWhitrow, Benjamin." ;
+    bflc:name00MatchKey "Whitrow, Benjamin." .
+
+<http://example.org/48075651#Agent700-45> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Harker, Susannah." ;
+    bflc:name00MarcKey "7001 $aHarker, Susannah." ;
+    bflc:name00MatchKey "Harker, Susannah." .
+
+<http://example.org/48075651#Agent700-46> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Bonham-Carter, Crispin." ;
+    bflc:name00MarcKey "7001 $aBonham-Carter, Crispin." ;
+    bflc:name00MatchKey "Bonham-Carter, Crispin." .
+
+<http://example.org/48075651#Agent700-47> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Chancellor, Anna." ;
+    bflc:name00MarcKey "7001 $aChancellor, Anna." ;
+    bflc:name00MatchKey "Chancellor, Anna." .
+
+<http://example.org/48075651#Agent700-48> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Sawalha, Julia, 1968-" ;
+    bflc:name00MarcKey "7001 $aSawalha, Julia,$d1968-" ;
+    bflc:name00MatchKey "Sawalha, Julia, 1968-" .
+
+<http://example.org/48075651#Agent700-49> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Bamber, David." ;
+    bflc:name00MarcKey "7001 $aBamber, David." ;
+    bflc:name00MatchKey "Bamber, David." .
+
+<http://example.org/48075651#Agent700-50> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Langton, Simon." ;
+    bflc:name00MarcKey "7001 $aLangton, Simon." ;
+    bflc:name00MatchKey "Langton, Simon." .
+
+<http://example.org/48075651#Agent700-51> a bf:Agent,
+        bf:Person ;
+    rdfs:label "Austen, Jane, 1775-1817." ;
+    bflc:name00MarcKey "7001 $aAusten, Jane,$d1775-1817.$tPride and prejudice." ;
+    bflc:name00MatchKey "Austen, Jane, 1775-1817." .
+
+<http://example.org/48075651#Agent710-52> a bf:Agent,
+        bf:Organization ;
+    rdfs:label "Arts and Entertainment Network." ;
+    bflc:name10MarcKey "7102 $aArts and Entertainment Network." ;
+    bflc:name10MatchKey "Arts and Entertainment Network." .
+
+<http://example.org/48075651#Agent710-53> a bf:Agent,
+        bf:Organization ;
+    rdfs:label "British Broadcasting Corporation." ;
+    bflc:name10MarcKey "7102 $aBritish Broadcasting Corporation." ;
+    bflc:name10MatchKey "British Broadcasting Corporation." .
+
+<http://example.org/48075651#Agent710-54> a bf:Agent,
+        bf:Organization ;
+    rdfs:label "A & E Home Video (Firm)" ;
+    bflc:name10MarcKey "7102 $aA & E Home Video (Firm)" ;
+    bflc:name10MatchKey "A & E Home Video (Firm)" .
+
+<http://example.org/48075651#GenreForm655-38> a bf:GenreForm,
+        madsrdf:GenreForm ;
+    rdfs:label "Love stories." ;
+    bf:source [ a bf:Source ;
+            bf:code "" ] ;
+    madsrdf:authoritativeLabel "Love stories." .
+
+<http://example.org/48075651#Instance> a bf:Instance ;
+    rdfs:label "Jane Austen's Pride and prejudice" ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/vd> ;
+    bf:dimensions "4 3/4 in." ;
+    bf:editionStatement "Special ed" ;
+    bf:extent [ a bf:Extent ;
+            rdfs:label "2 videodiscs (300 min.)" ] ;
+    bf:genreForm [ a bf:GenreForm ;
+            rdfs:label "videorecording" ] ;
+    bf:identifiedBy [ a bf:Isbn ;
+            rdf:value "0767038274 (v. 1)" ],
+        [ a bf:Local ;
+            bf:acquisitionTerms "c" ;
+            rdf:value ".b1629290x" ],
+        [ a bf:VideoRecordingNumber ;
+            bf:source [ a bf:Source ;
+                    rdfs:label "A & E Home Video" ] ;
+            rdf:value "AAE-70255--AAE-72056" ],
+        [ a bf:Isbn ;
+            rdf:value "0767038282 (v. 2)" ],
+        [ a bf:Isbn ;
+            rdf:value "0767038266" ] ;
+    bf:instanceOf <http://example.org/48075651#Work> ;
+    bf:intendedAudience [ a bf:IntendedAudience ;
+            rdfs:label "Not rated." ] ;
+    bf:issuance <http://id.loc.gov/vocabulary/issuance/mono> ;
+    bf:media <http://id.loc.gov/vocabulary/mediaTypes/v> ;
+    bf:note [ a bf:Note ;
+            rdfs:label "Originally produced for 1995 miniseries television broadcast." ],
+        [ a bf:Note ;
+            rdfs:label "Based on the novel by Jane Austen." ],
+        [ a bf:Note ;
+            rdfs:label "sd., col." ;
+            bf:noteType "Physical details" ],
+        [ a bf:Note ;
+            rdfs:label "1 booklet." ;
+            bf:noteType "Accompanying materials" ],
+        [ a bf:Note ;
+            rdfs:label "Booklet (7 p.) includes list of chapters, and cast and crew reminiscences." ],
+        [ a bf:Note ;
+            rdfs:label "Special features: vol. 1: biographies ; vol. 2: featurette (The making of Pride and prejudice)" ],
+        [ a bf:Note ;
+            rdfs:label "Film format: anamorphic widescreen (2.35:1)" ],
+        [ a bf:Note ;
+            rdfs:label "live action" ;
+            bf:noteType "technique" ] ;
+    bf:provisionActivity [ a bf:ProvisionActivity,
+                bf:Publication ;
+            bf:date "2001"^^<http://id.loc.gov/datatypes/edtf> ;
+            bf:place <http://id.loc.gov/vocabulary/countries/enk> ],
+        [ a bf:ProvisionActivity,
+                bf:Publication ;
+            bf:agent [ a bf:Agent ;
+                    rdfs:label "British Broadcasting Corp." ] ;
+            bf:date "2001" ;
+            bf:place [ a bf:Place ;
+                    rdfs:label "London?" ] ] ;
+    bf:provisionActivityStatement "[London?] : British Broadcasting Corp., 2001." ;
+    bf:responsibilityStatement "a co-production of BBC Television and BBC Worldwide Americas, Inc. in association with A & E Network ; screenplay by Andrew Davies ; directed by Simon Langton ; produced by Sue Birtwistle" ;
+    bf:systemRequirement [ a bf:SystemRequirement ;
+            rdfs:label "DVD; Dolby, digital, stereo." ] ;
+    bf:title [ a bf:Title ;
+            rdfs:label "Jane Austen's Pride and prejudice" ;
+            bflc:titleSortKey "Jane Austen's Pride and prejudice" ;
+            bf:mainTitle "Jane Austen's Pride and prejudice" ],
+        [ a bf:Title,
+                bf:VariantTitle ;
+            rdfs:label "Pride and prejudice." ;
+            bflc:titleSortKey "Pride and prejudice." ;
+            bf:mainTitle "Pride and prejudice" ;
+            bf:variantType "portion" ] ;
+    bf:videoCharacteristic [ a bf:VideoFormat ;
+            rdfs:label "DVD" ] .
+
+<http://example.org/48075651#Topic650-33> a bf:Topic,
+        madsrdf:ComplexSubject ;
+    rdfs:label "Young women--England--Drama." ;
+    bf:source [ a bf:Source ;
+            bf:code "lcsh" ] ;
+    madsrdf:authoritativeLabel "Young women--England--Drama." ;
+    madsrdf:componentList ( [ a madsrdf:Topic ;
+                madsrdf:authoritativeLabel "Young women" ] [ a madsrdf:Geographic ;
+                madsrdf:authoritativeLabel "England" ] [ a madsrdf:GenreForm ;
+                madsrdf:authoritativeLabel "Drama" ] ) ;
+    madsrdf:isMemberofMADSScheme <http://id.loc.gov/authorities/subjects> .
+
+<http://example.org/48075651#Topic650-34> a bf:Topic,
+        madsrdf:ComplexSubject ;
+    rdfs:label "Courtship--England--Drama." ;
+    bf:source [ a bf:Source ;
+            bf:code "lcsh" ] ;
+    madsrdf:authoritativeLabel "Courtship--England--Drama." ;
+    madsrdf:componentList ( [ a madsrdf:Topic ;
+                madsrdf:authoritativeLabel "Courtship" ] [ a madsrdf:Geographic ;
+                madsrdf:authoritativeLabel "England" ] [ a madsrdf:GenreForm ;
+                madsrdf:authoritativeLabel "Drama" ] ) ;
+    madsrdf:isMemberofMADSScheme <http://id.loc.gov/authorities/subjects> .
+
+<http://example.org/48075651#Topic650-35> a bf:Topic,
+        madsrdf:Topic ;
+    rdfs:label "Television adaptations." ;
+    bf:source [ a bf:Source ;
+            bf:code "lcsh" ] ;
+    madsrdf:authoritativeLabel "Television adaptations." ;
+    madsrdf:isMemberofMADSScheme <http://id.loc.gov/authorities/subjects> .
+
+<http://example.org/48075651#Topic650-36> a bf:Topic,
+        madsrdf:Topic ;
+    rdfs:label "Television mini-series." ;
+    bf:source [ a bf:Source ;
+            bf:code "lcsh" ] ;
+    madsrdf:authoritativeLabel "Television mini-series." ;
+    madsrdf:isMemberofMADSScheme <http://id.loc.gov/authorities/subjects> .
+
+<http://example.org/48075651#Topic651-37> a bf:Place,
+        madsrdf:ComplexSubject ;
+    rdfs:label "England--Social life and customs--19th century--Drama." ;
+    bf:source [ a bf:Source ;
+            bf:code "lcsh" ] ;
+    madsrdf:authoritativeLabel "England--Social life and customs--19th century--Drama." ;
+    madsrdf:componentList ( [ a madsrdf:Geographic ;
+                madsrdf:authoritativeLabel "England" ] [ a madsrdf:Topic ;
+                madsrdf:authoritativeLabel "Social life and customs" ] [ a madsrdf:Temporal ;
+                madsrdf:authoritativeLabel "19th century" ] [ a madsrdf:GenreForm ;
+                madsrdf:authoritativeLabel "Drama" ] ) ;
+    madsrdf:isMemberofMADSScheme <http://id.loc.gov/authorities/subjects> .
+
+<http://example.org/48075651#Work> a bf:MovingImage,
+        bf:Work ;
+    rdfs:label "Jane Austen's Pride and prejudice" ;
+    bf:adminMetadata [ a bf:AdminMetadata ;
+            bflc:encodingLevel [ a bflc:EncodingLevel ;
+                    bf:code "u" ] ;
+            bf:changeDate "2004-10-12T11:22:05"^^xsd:dateTime ;
+            bf:creationDate "2001-10-03"^^xsd:date ;
+            bf:descriptionConventions [ a bf:DescriptionConventions ;
+                    bf:code "aacr" ] ;
+            bf:descriptionModifier [ a bf:Agent ;
+                    rdfs:label "FVC" ],
+                [ a bf:Agent ;
+                    rdfs:label "IHI" ],
+                [ a bf:Agent ;
+                    rdfs:label "OCLCQ" ],
+                [ a bf:Agent ;
+                    rdfs:label "OCLCQ" ],
+                [ a bf:Agent ;
+                    rdfs:label "OCLCQ" ],
+                [ a bf:Agent ;
+                    rdfs:label "RLS" ],
+                [ a bf:Agent ;
+                    rdfs:label "OCLCQ" ] ;
+            bf:generationProcess [ a bf:GenerationProcess ;
+                    rdfs:label "DLC marc2bibframe2 v1.4.0-SNAPSHOT: 2018-02-13T11:07:39-05:00" ] ;
+            bf:identifiedBy [ a bf:Local ;
+                    rdf:value "48075651" ] ;
+            bf:source [ a bf:Source ;
+                    bf:code "OCoLC" ],
+                [ a bf:Agent,
+                        bf:Source ;
+                    rdfs:label "IFJ" ],
+                [ a bf:Agent,
+                        bf:Source ;
+                    rdfs:label "IFJ" ] ;
+            bf:status [ a bf:Status ;
+                    bf:code "c" ] ] ;
+    bf:contribution [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-45> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-47> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-46> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent710-52> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-49> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent710-54> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-41> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent710-53> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-48> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-44> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-50> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-43> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ],
+        [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-42> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ] ;
+    bf:credits "Cast: Colin Firth, Jennifer Ehle, Alison Steadman, Benjamin Whitrow, Susannah Harker, Crispin Bonham-Carter, Anna Chancellor, Julia Sawalha, David Bamber, David Bark-Jones.",
+        "Photography, John Kenway ; film editor, Peter Coulson ; music, Carl Davis." ;
+    bf:duration "300"^^xsd:duration ;
+    bf:genreForm [ a bf:GenreForm ;
+            rdfs:label "videorecording" ],
+        <http://example.org/48075651#GenreForm655-38>,
+        <http://id.loc.gov/authorities/genreForms/gf2011026723>,
+        <http://id.loc.gov/vocabulary/marcgt/vid> ;
+    bf:geographicCoverage <http://id.loc.gov/vocabulary/geographicAreas/e-uk-en> ;
+    bf:hasInstance <http://example.org/48075651#Instance> ;
+    bf:intendedAudience <http://id.loc.gov/vocabulary/maudience/gen> ;
+    bf:language <http://id.loc.gov/vocabulary/languages/eng> ;
+    bf:relatedTo <http://example.org/48075651#Work700-51> ;
+    bf:subject <http://example.org/48075651#Agent600-32>,
+        <http://example.org/48075651#Topic650-33>,
+        <http://example.org/48075651#Topic650-34>,
+        <http://example.org/48075651#Topic650-35>,
+        <http://example.org/48075651#Topic650-36>,
+        <http://example.org/48075651#Topic651-37> ;
+    bf:summary [ a bf:Summary ;
+            rdfs:label "The story of lively and rebellious Elizabeth, one of five unmarried daughters living in the countryside of 19th century England, in a world where an advantageous marriage is a woman's sole occupation." ] ;
+    bf:title [ a bf:Title ;
+            rdfs:label "Jane Austen's Pride and prejudice" ;
+            bflc:titleSortKey "Jane Austen's Pride and prejudice" ;
+            bf:mainTitle "Jane Austen's Pride and prejudice" ] .
+
+<http://example.org/48075651#Work700-51> a bf:Work ;
+    rdfs:label "Pride and prejudice." ;
+    bf:contribution [ a bf:Contribution ;
+            bf:agent <http://example.org/48075651#Agent700-51> ;
+            bf:role <http://id.loc.gov/vocabulary/relators/ctb> ] ;
+    bf:title [ a bf:Title ;
+            rdfs:label "Pride and prejudice." ;
+            bflc:title00MarcKey "7001 $aAusten, Jane,$d1775-1817.$tPride and prejudice." ;
+            bflc:title00MatchKey "Pride and prejudice." ;
+            bflc:titleSortKey "Pride and prejudice." ;
+            bf:mainTitle "Pride and prejudice" ] .
+
+<http://id.loc.gov/authorities/genreForms/gf2011026723> a bf:GenreForm .
+
+<http://id.loc.gov/vocabulary/carriers/vd> a bf:Carrier ;
+    rdfs:label "videodisc" .
+
+<http://id.loc.gov/vocabulary/countries/enk> a bf:Place .
+
+<http://id.loc.gov/vocabulary/geographicAreas/e-uk-en> a bf:GeographicCoverage .
+
+<http://id.loc.gov/vocabulary/issuance/mono> a bf:Issuance .
+
+<http://id.loc.gov/vocabulary/languages/eng> a bf:Language .
+
+<http://id.loc.gov/vocabulary/marcgt/vid> a bf:GenreForm ;
+    rdfs:label "videorecording" .
+
+<http://id.loc.gov/vocabulary/maudience/gen> a bf:IntendedAudience ;
+    rdfs:label "general" .
+
+<http://id.loc.gov/vocabulary/mediaTypes/v> a bf:Media .
+
+<http://id.loc.gov/vocabulary/relators/ctb> a bf:Role .
+
+
+>>> import bibcat.rml.processor as processor
+>>> processor
+<module 'bibcat.rml.processor' from '/home/jpnelson/2018/test-py3/lib/python3.6/site-packages/bibcat/rml/processor.py'>
+>>> rml_processor = processor.SPARQLProcessor(triplestore=first_rec_graph,
+... rml_rules=['loc-bf-to-lean-bf.ttl'])
+>>> rml_processor
+<bibcat.rml.processor.SPARQLProcessor object at 0x7f74b948ad68>
+>>> rml_processor.output
+>>> rml_processor.run()
+>>> rml_processor.output
+<Graph identifier=Ne7612dbb0ec84b60bd44792a24eb8860 (<class 'rdflib.graph.Graph'>)>
+>>> len(rml_processor.output)
+348
+>>> len(first_rec_graph)
+429
+>>> print(rml_processor.output.serialize(format='turtle').decode())
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix bc: <http://knowledgelinks.io/ns/bibcat/> .
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix kds: <http://knowledgelinks.io/ns/data-structures/> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix oslo: <http://purl.org/oslo/ns/localgov#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix relators: <http://id.loc.gov/vocabulary/relators/> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix schema: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/48075651#Instance> a bf:Instance ;
+    rdfs:label "Jane Austen's Pride and prejudice" ;
+    bf:carrier <http://id.loc.gov/vocabulary/carriers/vd> ;
+    bf:dimensions "4 3/4 in." ;
+    bf:editionStatement "Special ed" ;
+    bf:identifiedBy [ a bf:Isbn ;
+            rdf:value "0767038274 (v. 1)" ],
+        [ a bf:Isbn ;
+            rdf:value "0767038282 (v. 2)" ],
+        [ a bf:Isbn ;
+            rdf:value "0767038266" ] ;
+    bf:instanceOf <http://example.org/48075651#Work> ;
+    bf:issuance <http://id.loc.gov/vocabulary/issuance/mono> ;
+    bf:note [ a bf:Note ;
+            rdfs:label "Originally produced for 1995 miniseries television broadcast." ],
+        [ a bf:Note ;
+            rdfs:label "Based on the novel by Jane Austen." ],
+        [ a bf:Note ;
+            rdfs:label "sd., col." ;
+            bf:noteType "Physical details" ],
+        [ a bf:Note ;
+            rdfs:label "1 booklet." ;
+            bf:noteType "Accompanying materials" ],
+        [ a bf:Note ;
+            rdfs:label "Booklet (7 p.) includes list of chapters, and cast and crew reminiscences." ],
+        [ a bf:Note ;
+            rdfs:label "Special features: vol. 1: biographies ; vol. 2: featurette (The making of Pride and prejudice)" ],
+        [ a bf:Note ;
+            rdfs:label "Film format: anamorphic widescreen (2.35:1)" ],
+        [ a bf:Note ;
+            rdfs:label "live action" ;
+            bf:noteType "technique" ] ;
+    bf:provisionActivity [ a bf:ProvisionActivity,
+                bf:Publication ;
+            bf:date "2001"^^<http://id.loc.gov/datatypes/edtf> ;
+            bf:place <http://id.loc.gov/vocabulary/countries/enk> ],
+        [ a bf:ProvisionActivity,
+                bf:Publication ;
+            bf:date "2001" ;
+            bf:place "London?" ] ;
+    bf:provisionActivityStatement "[London?] : British Broadcasting Corp., 2001." ;
+    bf:responsibilityStatement "a co-production of BBC Television and BBC Worldwide Americas, Inc. in association with A & E Network ; screenplay by Andrew Davies ; directed by Simon Langton ; produced by Sue Birtwistle" ;
+    bf:title [ a bf:Title ;
+            rdfs:label "Jane Austen's Pride and prejudice" ;
+            bf:mainTitle "Jane Austen's Pride and prejudice" ],
+        [ a bf:Title ;
+            rdfs:label "Pride and prejudice." ;
+            bf:mainTitle "Pride and prejudice" ] .
+
+<http://example.org/48075651#Agent600-32> a bf:Agent ;
+    rdfs:label "Austen, Jane, 1775-1817" .
+
+<http://example.org/48075651#Topic650-33> a bf:Topic ;
+    rdfs:label "Young women--England--Drama." .
+
+<http://example.org/48075651#Topic650-34> a bf:Topic ;
+    rdfs:label "Courtship--England--Drama." .
+
+<http://example.org/48075651#Topic650-35> a bf:Topic ;
+    rdfs:label "Television adaptations." .
+
+<http://example.org/48075651#Topic650-36> a bf:Topic ;
+    rdfs:label "Television mini-series." .
+
+<http://example.org/48075651#Work> a bf:MovingImage,
+        bf:Work ;
+    bf:contribution [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ],
+        [ a bf:Contribution ;
+            bf:agent _:N8ceb769e2a4c410cb3526c15761e224c,
+                <http://example.org/48075651#Agent700-41>,
+                <http://example.org/48075651#Agent700-42>,
+                <http://example.org/48075651#Agent700-43>,
+                <http://example.org/48075651#Agent700-44>,
+                <http://example.org/48075651#Agent700-45>,
+                <http://example.org/48075651#Agent700-46>,
+                <http://example.org/48075651#Agent700-47>,
+                <http://example.org/48075651#Agent700-48>,
+                <http://example.org/48075651#Agent700-49>,
+                <http://example.org/48075651#Agent700-50>,
+                <http://example.org/48075651#Agent700-51>,
+                <http://example.org/48075651#Agent710-52>,
+                <http://example.org/48075651#Agent710-53>,
+                <http://example.org/48075651#Agent710-54> ;
+            bf:role relators:ctb ] ;
+    bf:subject <http://example.org/48075651#Agent600-32>,
+        <http://example.org/48075651#Topic650-33>,
+        <http://example.org/48075651#Topic650-34>,
+        <http://example.org/48075651#Topic650-35>,
+        <http://example.org/48075651#Topic650-36> ;
+    bf:summary [ a bf:Summary ;
+            rdfs:label "The story of lively and rebellious Elizabeth, one of five unmarried daughters living in the countryside of 19th century England, in a world where an advantageous marriage is a woman's sole occupation." ] .
+
+<http://example.org/48075651#Agent700-41> a bf:Agent ;
+    rdfs:label "Firth, Colin, 1960-" .
+
+<http://example.org/48075651#Agent700-42> a bf:Agent ;
+    rdfs:label "Ehle, Jennifer, 1969-" .
+
+<http://example.org/48075651#Agent700-43> a bf:Agent ;
+    rdfs:label "Steadman, Alison, 1946-" .
+
+<http://example.org/48075651#Agent700-44> a bf:Agent ;
+    rdfs:label "Whitrow, Benjamin." .
+
+<http://example.org/48075651#Agent700-45> a bf:Agent ;
+    rdfs:label "Harker, Susannah." .
+
+<http://example.org/48075651#Agent700-46> a bf:Agent ;
+    rdfs:label "Bonham-Carter, Crispin." .
+
+<http://example.org/48075651#Agent700-47> a bf:Agent ;
+    rdfs:label "Chancellor, Anna." .
+
+<http://example.org/48075651#Agent700-48> a bf:Agent ;
+    rdfs:label "Sawalha, Julia, 1968-" .
+
+<http://example.org/48075651#Agent700-49> a bf:Agent ;
+    rdfs:label "Bamber, David." .
+
+<http://example.org/48075651#Agent700-50> a bf:Agent ;
+    rdfs:label "Langton, Simon." .
+
+<http://example.org/48075651#Agent700-51> a bf:Agent ;
+    rdfs:label "Austen, Jane, 1775-1817." .
+
+<http://example.org/48075651#Agent710-52> a bf:Agent ;
+    rdfs:label "Arts and Entertainment Network." .
+
+<http://example.org/48075651#Agent710-53> a bf:Agent ;
+    rdfs:label "British Broadcasting Corporation." .
+
+<http://example.org/48075651#Agent710-54> a bf:Agent ;
+    rdfs:label "A & E Home Video (Firm)" .
+
+relators:ctb a bf:Role .
+
+_:N8ceb769e2a4c410cb3526c15761e224c a bf:Agent ;
+    rdfs:label "British Broadcasting Corp." .
+
+
+>>> 
+
