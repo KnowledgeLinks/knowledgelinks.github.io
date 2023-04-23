@@ -1,0 +1,56 @@
+<div class="main">
+    <div class="container tim-container">
+		<p><a href="/#/products/semantic-versioning">Back to semantic-versioning</a></p>
+		<h1>semantic-versioning versions</h1>
+		<hr />
+			<div class="versionsList"></div>
+	</div>
+</div>
+<style>
+	.versionList {
+		display: table;         
+	}
+	.versionRow {
+		display: table-row;
+		clear: both;
+	}
+	.versionCell {
+		float: left; /* fix for  buggy browsers */
+		display: table-column;         
+		width: 100px;  
+		border-bottom: 1px solid lightgray;
+	}
+</style>
+<script>
+	/*
+	The below script will find the latest version based on the version-list.txt file contents, then perform the following:
+	1. creates a table of versions with links
+	*/
+	var baseUrl = "/products/semantic-versioning";
+	var sourceBaseUrl = "https://bitbucket.org/knowledgelinks/semantic-versioning";
+	var versions = [];
+	var versionsUrl = baseUrl + "/version-list.txt";
+	console.log(versionsUrl);
+	$.ajax({
+		url: versionsUrl,
+		async: false,
+		success: function(result) {
+			var versionElement = $(".versionsList");
+			versions = result.trim().split("\n");
+			for (var i=versions.length - 1; i>-1; i--) {
+			//versions.forEach(element => {
+				var element = versions[i];
+				console.log(element);
+				var itemString = "<div class='versionRow'><div class='versionCell'>" + element + "</div><div class='versionCell'><a href='" + sourceBaseUrl + "/src/" + 
+					element + "/' target='_blank'>source</a></div><div class='versionCell'><a href='" + baseUrl + "/versions/" + element + "/' target='_blank'>documentation</a></div></div></li>";
+				console.log(itemString);
+				var item = $(itemString);
+				versionElement.append(item);
+			}
+			//);
+		},
+		failure: function(err) {
+			console.log(err);
+		}
+	});
+</script>

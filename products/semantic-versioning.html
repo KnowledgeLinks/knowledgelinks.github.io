@@ -1,0 +1,78 @@
+<div class="main">
+    <div class="container tim-container">
+		<h1>CI/CD semantic-versioning tool</h1>
+			<a id="currentDocsLink" class="btn btn-primary"  href="/products/semantic-versioning/current/index.html" target="_blank">
+				Developer Documentation
+			</a>
+			<p></p>
+			<p><a href="/#/products/semantic-versioning-versions" target="_blank">All Versions</a></p>
+		<hr>
+		<h2>References</h2>
+		<p><a id="sourceCodeLink" href="https://bitbucket.org/knowledgelinks/semantic-versioning/src/">Source Code and README</a></p>
+		<p>Search for the <b>tag</b> in the respository for the specific version</p>
+		<div id="readme"></div>
+	</div>
+</div>
+<script>
+	/*
+	The below script will find the latest version based on the version-list.txt file contents, then perform the following:
+	1. rewrite the links in the above html to point to the latest version
+	2. call the bitbucket api to determine the commit hash for the latest version to calculate the raw readme file
+	3. load the README on to the page and update any relative links in the readme to point to the bitbucket url
+	*/
+	var baseUrl = "/products/semantic-versioning";
+	var sourceBaseUrl = "https://bitbucket.org/knowledgelinks/semantic-versioning";
+	var apiUrl = "https://bitbucket.org/!api/2.0/repositories/knowledgelinks/semantic-versioning";
+	var versions = [];
+	var versionsUrl = baseUrl + "/version-list.txt";
+	console.log(versionsUrl);
+	$.ajax({
+		url: versionsUrl,
+		async: false,
+		success: function(result) {
+			console.log(result);
+			versions = result.trim().split("\n");
+			console.log(versions);
+			$("#sourceCodeLink").attr("href", sourceBaseUrl + "/src/" + versions[versions.length -1] + "/");
+			$("#currentDocsLink").attr("href", baseUrl + "/versions/" + versions[versions.length -1]);
+		},
+		failure: function(err) {
+			console.log(err);
+		}
+	});
+	
+	var loadReadme = function(rawUrl) {
+		$.ajax({
+			url: rawUrl,
+			success: function(result) {
+				var converted = new showdown.Converter().makeHtml(result);
+				$("#readme").append(converted);
+				$("#readme").find("a").each(function() {
+					var el = $(this);
+					var href = el.attr("href");
+					if (href != undefined && !href.toLocaleLowerCase().startsWith("http")) {
+						el.attr("href", sourceBaseUrl + "/" + currentVersion + "/" + href);
+					}
+				});
+			},
+			failure: function(err) {
+				console.log(err);
+			} 
+		});
+	}
+	var currentVersion = versions[versions.length - 1];
+	var readmeUrl = apiUrl + "/refs/tags/" + currentVersion;
+	console.log(readmeUrl);
+	$.ajax({
+		url: readmeUrl,
+		success: function(result) { 			
+			console.log(result);
+			var rawUrl = sourceBaseUrl + "/raw/" + result.target.hash + "/README.md";
+			console.log(rawUrl);
+			loadReadme(rawUrl);
+		},
+		failure: function(err) {
+			console.log(err);
+		}
+	});
+</script>
