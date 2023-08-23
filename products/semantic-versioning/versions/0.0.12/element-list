@@ -1,0 +1,9 @@
+io.knowledgelinks.cicd.semantic.versioning.api
+io.knowledgelinks.cicd.semantic.versioning.commandline
+io.knowledgelinks.cicd.semantic.versioning.config
+io.knowledgelinks.cicd.semantic.versioning.enums
+io.knowledgelinks.cicd.semantic.versioning.exceptions
+io.knowledgelinks.cicd.semantic.versioning.formatters
+io.knowledgelinks.cicd.semantic.versioning.git
+io.knowledgelinks.cicd.semantic.versioning.parsers
+io.knowledgelinks.cicd.semantic.versioning.versions
